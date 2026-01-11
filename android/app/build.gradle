@@ -178,5 +178,4 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation project(':expo')
     implementation project(':expo-modules-core')
-    implementation project(':expo-splash-screen')
 }
