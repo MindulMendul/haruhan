@@ -8,7 +8,9 @@
     "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
     "apk": "eas build -p android --profile preview",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
