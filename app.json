@@ -3,6 +3,7 @@
     "name": "HaruHan",
     "slug": "HaruHan",
     "version": "1.0.0",
+    "sdkVersion": "53.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "haruhan",
@@ -19,9 +20,7 @@
       "edgeToEdgeEnabled": true,
       "package": "com.haruhan.app",
       "versionCode": 1,
-      "permissions": [
-        "INTERNET"
-      ]
+      "permissions": ["INTERNET"]
     },
     "web": {
       "bundler": "metro",
