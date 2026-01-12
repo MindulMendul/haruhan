@@ -5,8 +5,8 @@
   "scripts": {
     "setup": "corepack enable && pnpm install && npx expo install --fix",
     "start": "expo start",
+    "web": "expo start -p web",
     "and": "npx expo start --dev-client",
-    "web": "expo start --web",
     "apk": "eas build -p android --profile development --clear-cache",
     "lint": "expo lint"
   },
