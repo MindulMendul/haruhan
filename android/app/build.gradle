@@ -174,4 +174,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation project(':expo')
+    implementation project(':expo-modules-core')
 }
