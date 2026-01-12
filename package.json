@@ -8,7 +8,8 @@
     "web": "expo start -p web",
     "and": "npx expo start --dev-client",
     "apk": "eas build -p android --profile development --clear-cache",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build": "expo export -p web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
