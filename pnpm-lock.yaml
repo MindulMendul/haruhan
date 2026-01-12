@@ -29,9 +29,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      cypress:
-        specifier: ^15.8.2
-        version: 15.8.2
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -123,6 +120,12 @@ importers:
       '@types/react':
         specifier: ~19.1.17
         version: 19.1.17
+      cypress:
+        specifier: ^15.8.2
+        version: 15.8.2
+      esbuild:
+        specifier: ^0.27.2
+        version: 0.27.2
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@1.21.7)

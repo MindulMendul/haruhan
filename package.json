@@ -19,7 +19,6 @@
     "@react-navigation/native": "^7.1.6",
     "@supabase/supabase-js": "^2.90.1",
     "buffer": "^6.0.3",
-    "cypress": "^15.8.2",
     "dotenv": "^17.2.3",
     "expo": "~54.0.31",
     "expo-blur": "~15.0.8",
@@ -52,6 +51,8 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@types/react": "~19.1.17",
+    "cypress": "^15.8.2",
+    "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "eslint-config-expo": "~10.0.0",
     "prettier-plugin-tailwindcss": "0.5.11",
