@@ -1,10 +1,5 @@
-const { getDefaultConfig } = require("expo/metro-config");
-const { withNativeWind } = require("nativewind/metro");
-const path = require("path");
-
+// metro.config.js (NativeWind 뺀 기본 설정)
+const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);
-
-config.resolver.nodeModulesPaths = [path.resolve(__dirname, "node_modules")];
-config.resolver.disableHierarchicalLookup = true;
-
-module.exports = withNativeWind(config, { input: "./global.css" });
+// pnpm 호이스팅 모드니까 복잡한 설정 다 빼고 이것만!
+module.exports = config;
