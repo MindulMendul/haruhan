@@ -17,13 +17,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🏠</Text>,
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "탐색",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🔍</Text>,
-        }}
-      />
     </Tabs>
   );
 }
