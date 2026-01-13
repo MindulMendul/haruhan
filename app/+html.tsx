@@ -21,7 +21,7 @@ export default function Root({ children }: PropsWithChildren) {
         <meta property="og:url" content="https://haruhan.vercel.app" />
         <meta property="og:title" content="하루한 - 오늘 당신의 주제는?" />
         <meta property="og:description" content="오늘의 주제를 확인하고 실력을 쌓아보세요!" />
-        <meta property="og:image" content="https://haruhan.vercel.app/assets/images/haruhan-logo.png" />
+        <meta property="og:image" content="https://haruhan.vercel.app/haruhan-logo.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
