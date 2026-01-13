@@ -1,9 +1,10 @@
+import * as Sentry from "@sentry/react-native";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Stack } from "expo-router";
 import "./global.css";
-import * as Sentry from '@sentry/react-native';
 
 Sentry.init({
-  dsn: 'https://0ac9fad34b52f00f400fc434b995a810@o4510701591527424.ingest.us.sentry.io/4510701593755648',
+  dsn: "https://0ac9fad34b52f00f400fc434b995a810@o4510701591527424.ingest.us.sentry.io/4510701593755648",
 
   // Adds more context data to events (IP address, cookies, user, etc.)
   // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
@@ -23,8 +24,11 @@ Sentry.init({
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+      <SpeedInsights />
+    </>
   );
 });

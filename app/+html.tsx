@@ -1,8 +1,7 @@
 import { ScrollViewStyleReset } from "expo-router/html";
 import React, { type PropsWithChildren } from "react";
 
-// 👇 여기에 아까 복사한 GTM ID를 넣으세요!
-const GTM_ID = "GTM-P2K7M3D6";
+const GTM_ID = "GTM-T9JFVQ35";
 
 export default function Root({ children }: PropsWithChildren) {
   return (
@@ -12,7 +11,6 @@ export default function Root({ children }: PropsWithChildren) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-        {/* 👇 [1] GTM Head 스크립트 (데이터 수집용) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -26,7 +24,6 @@ export default function Root({ children }: PropsWithChildren) {
         <ScrollViewStyleReset />
       </head>
       <body>
-        {/* 👇 [2] GTM Body 스크립트 (자바스크립트 없을 때 대비용) */}
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
