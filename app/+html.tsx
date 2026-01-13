@@ -16,12 +16,21 @@ export default function Root({ children }: PropsWithChildren) {
           content="하루 한 주제를 하나씩 익히며 실력을 키워보세요. 부담 없이 시작하는 공부, 하루한."
         />
         <meta name="keywords" content="공부, 하루, 하루한, HaruHan" />
-
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://haruhan.vercel.app" />
         <meta property="og:title" content="하루한 - 오늘 당신의 주제는?" />
         <meta property="og:description" content="오늘의 주제를 확인하고 실력을 쌓아보세요!" />
         <meta property="og:image" content="https://haruhan.vercel.app/haruhan-logo.png" />
+        <meta property="og:image:width" content="1024" />
+        <meta property="og:image:height" content="559" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:site_name" content="하루한" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="하루한 - 오늘 당신의 주제는?" />
+        <meta name="twitter:description" content="오늘의 주제를 확인하고 실력을 쌓아보세요!" />
+        <meta name="twitter:image" content="https://haruhan.vercel.app/haruhan-logo.png" />
+        <meta name="theme-color" content="#89CFF0" />
+        <meta name="robots" content="index, follow" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
