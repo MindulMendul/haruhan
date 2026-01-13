@@ -10,7 +10,18 @@ export default function Root({ children }: PropsWithChildren) {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>하루한</title>
+        <meta
+          name="description"
+          content="하루 한 주제를 하나씩 익히며 실력을 키워보세요. 부담 없이 시작하는 공부, 하루한."
+        />
+        <meta name="keywords" content="공부, 하루, 하루한, HaruHan" />
 
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://haruhan.vercel.app" />
+        <meta property="og:title" content="하루한 - 오늘 당신의 주제는?" />
+        <meta property="og:description" content="오늘의 주제를 확인하고 실력을 쌓아보세요!" />
+        <meta property="og:image" content="https://haruhan.vercel.app/assets/images/haruhan-logo.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
