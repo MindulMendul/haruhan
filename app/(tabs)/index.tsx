@@ -1,62 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { supabase } from "../../lib/supabase"; // 경로 확인 필요!
+import { Link } from "expo-router";
+import React from "react";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-// 단어 데이터 타입 정의
-type Word = {
-  text: { text: string };
-};
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-export default function App() {
-  const [todaysWord, setTodaysWord] = useState<Word | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  // 단어 가져오기 함수
-  const fetchRandomWord = async () => {
-    setLoading(true);
-    try {
-      // 'words' 테이블에서 랜덤하게 하나 가져오는 쿼리 (가정)
-      // 실제로는 테이블에 데이터가 있어야 합니다.
-      const { data, error } = await supabase.from("memo").select("text").limit(1).single(); // 일단 하나만 가져와 봅니다.
-
-      if (error) {
-        console.error("에러 발생:", error);
-        // 에러 시 가짜 데이터라도 보여주기 (개발용)
-        setTodaysWord({ text: { text: "데이터를 불러오지 못했습니다." } });
-      } else {
-        setTodaysWord(data);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRandomWord();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={{ marginTop: 10 }}>오늘의 단어 배달 중...</Text>
-      </View>
-    );
-  }
-
+export default function Home() {
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>오늘의 주제</Text>
-
-        <Text style={styles.text}>{todaysWord?.text.text || "Empty"}</Text>
+      <View style={styles.hero}>
+        <Text style={styles.logoText}>하루한</Text>
+        <Text style={styles.subtitle}>오늘 하나의 개념을 가볍게 정리해보는 시간</Text>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={fetchRandomWord}>
-        <Text style={styles.buttonText}>다른 주제 보기</Text>
-      </TouchableOpacity>
+      <View style={styles.descriptionBox}>
+        <Text style={styles.description}>PoC용 서비스입니다. 아래의 버튼을 통해 개념을 학습할 수 있습니다.</Text>
+      </View>
+
+      <Link href="/network" asChild>
+        <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+          <Text style={styles.primaryButtonText}>네트워크 개념 학습하러 가기</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -65,45 +29,87 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    paddingHorizontal: 24,
+    paddingTop: 80,
+  },
+  hero: {
+    marginBottom: 32,
+  },
+  logoText: {
+    fontSize: 40,
+    fontWeight: "700",
+  },
+  subtitle: {
+    marginTop: 8,
+    fontSize: 14,
+  },
+  descriptionBox: {
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
+  description: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  primaryButton: {
+    backgroundColor: "#6a96ff",
+    paddingVertical: 14,
+    borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
-  card: {
-    backgroundColor: "white",
-    width: "100%",
-    padding: 30,
-    borderRadius: 20,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    marginBottom: 30,
-  },
-  title: {
-    fontSize: 14,
-    color: "#888",
-    marginBottom: 10,
+  primaryButtonText: {
+    color: "#ffffff",
+    fontSize: 15,
     fontWeight: "600",
   },
+  listContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 24,
+  },
+  card: {
+    width: SCREEN_WIDTH - 40,
+    padding: 30,
+    borderRadius: 20,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    elevation: 5,
+    marginBottom: 20,
+    minHeight: 150,
+  },
+  title: {
+    fontSize: 21,
+    color: "#3b3b3b",
+    marginBottom: 10,
+    fontWeight: "600",
+    textAlign: "center",
+  },
   text: {
-    fontSize: 42,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 10,
+    marginTop: 10,
+    textAlign: "center",
   },
-  button: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 30,
+  hintText: {
+    fontSize: 12,
+    color: "#a7b0d9",
+    marginTop: 10,
+    fontStyle: "italic",
   },
-  buttonText: {
-    color: "white",
+  emptyText: {
     fontSize: 16,
-    fontWeight: "bold",
+    color: "#b38b5f",
+    textAlign: "center",
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#b38b5f",
+    textAlign: "center",
   },
 });
