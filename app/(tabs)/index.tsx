@@ -1,62 +1,102 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import { supabase } from "../../lib/supabase"; // 경로 확인 필요!
 
 // 단어 데이터 타입 정의
 type Word = {
-  text: { text: string };
+  term: string;
+  definition: string;
 };
 
-export default function App() {
-  const [todaysWord, setTodaysWord] = useState<Word | null>(null);
-  const [loading, setLoading] = useState(true);
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-  // 단어 가져오기 함수
-  const fetchRandomWord = async () => {
+export default function App() {
+  const [words, setWords] = useState<Word[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+
+  // 모든 단어 가져오기 함수
+  const fetchAllWords = async () => {
     setLoading(true);
     try {
-      // 'words' 테이블에서 랜덤하게 하나 가져오는 쿼리 (가정)
-      // 실제로는 테이블에 데이터가 있어야 합니다.
-      const { data, error } = await supabase.from("memo").select("text").limit(1).single(); // 일단 하나만 가져와 봅니다.
+      const { data, error } = await supabase.from("network_terms").select("*");
 
       if (error) {
         console.error("에러 발생:", error);
-        // 에러 시 가짜 데이터라도 보여주기 (개발용)
-        setTodaysWord({ text: { text: "데이터를 불러오지 못했습니다." } });
+        setWords([]);
       } else {
-        setTodaysWord(data);
+        setWords(data || []);
       }
     } catch (e) {
       console.log(e);
+      setWords([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRandomWord();
+    fetchAllWords();
   }, []);
+
+  // 카드 접기/펼치기 토글 함수
+  const toggleExpand = (index: number) => {
+    const newExpanded = new Set(expandedItems);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedItems(newExpanded);
+  };
+
+  // 카드 렌더링 함수
+  const renderCard = ({ item, index }: { item: Word; index: number }) => {
+    const isExpanded = expandedItems.has(index);
+    
+    return (
+      <TouchableOpacity 
+        style={styles.card}
+        onPress={() => toggleExpand(index)}
+        activeOpacity={0.9}
+      >
+        <Text style={styles.title}>{item.term || "Title"}</Text>
+        {isExpanded && (
+          <Text style={styles.text}>{item.definition || "Empty"}</Text>
+        )}
+        {!isExpanded && (
+          <Text style={styles.hintText}>탭하여 설명 보기</Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   if (loading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={{ marginTop: 10 }}>오늘의 단어 배달 중...</Text>
+        <Text style={{ marginTop: 10 }}>단어 목록 불러오는 중...</Text>
+      </View>
+    );
+  }
+
+  if (words.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.emptyText}>표시할 데이터가 없습니다.</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>오늘의 주제</Text>
-
-        <Text style={styles.text}>{todaysWord?.text.text || "Empty"}</Text>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={fetchRandomWord}>
-        <Text style={styles.buttonText}>다른 주제 보기</Text>
-      </TouchableOpacity>
+      <FlatList
+        data={words}
+        renderItem={renderCard}
+        keyExtractor={(item, index) => `${item.term}-${index}`}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={styles.listContent}
+      />
     </View>
   );
 }
@@ -66,44 +106,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   card: {
     backgroundColor: "white",
-    width: "100%",
+    width: SCREEN_WIDTH - 40,
     padding: 30,
     borderRadius: 20,
     alignItems: "center",
+    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
-    marginBottom: 30,
+    marginBottom: 20,
+    minHeight: 150,
   },
   title: {
-    fontSize: 14,
-    color: "#888",
+    fontSize: 21,
+    color: "#000",
     marginBottom: 10,
     fontWeight: "600",
+    textAlign: "center",
   },
   text: {
-    fontSize: 42,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 10,
+    marginTop: 10,
+    textAlign: "center",
   },
-  button: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 30,
+  hintText: {
+    fontSize: 12,
+    color: "#aaa",
+    marginTop: 10,
+    fontStyle: "italic",
   },
-  buttonText: {
-    color: "white",
+  emptyText: {
     fontSize: 16,
-    fontWeight: "bold",
+    color: "#888",
+    textAlign: "center",
   },
 });
