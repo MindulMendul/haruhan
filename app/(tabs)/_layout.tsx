@@ -7,7 +7,13 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: true,
-        tabBarActiveTintColor: "#007AFF",
+
+        headerTitleStyle: {
+          fontWeight: "600",
+        },
+        tabBarStyle: {
+          borderTopWidth: 1,
+        },
       }}
     >
       <Tabs.Screen
@@ -15,6 +21,13 @@ export default function TabLayout() {
         options={{
           title: "홈",
           tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🏠</Text>,
+        }}
+      />
+      <Tabs.Screen
+        name="network"
+        options={{
+          title: "네트워크",
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>📚</Text>,
         }}
       />
     </Tabs>

@@ -1,102 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from "react-native";
-import { supabase } from "../../lib/supabase"; // 경로 확인 필요!
-
-// 단어 데이터 타입 정의
-type Word = {
-  term: string;
-  definition: string;
-};
+import { Link } from "expo-router";
+import React from "react";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-export default function App() {
-  const [words, setWords] = useState<Word[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
-
-  // 모든 단어 가져오기 함수
-  const fetchAllWords = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from("network_terms").select("*");
-
-      if (error) {
-        console.error("에러 발생:", error);
-        setWords([]);
-      } else {
-        setWords(data || []);
-      }
-    } catch (e) {
-      console.log(e);
-      setWords([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllWords();
-  }, []);
-
-  // 카드 접기/펼치기 토글 함수
-  const toggleExpand = (index: number) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(index)) {
-      newExpanded.delete(index);
-    } else {
-      newExpanded.add(index);
-    }
-    setExpandedItems(newExpanded);
-  };
-
-  // 카드 렌더링 함수
-  const renderCard = ({ item, index }: { item: Word; index: number }) => {
-    const isExpanded = expandedItems.has(index);
-    
-    return (
-      <TouchableOpacity 
-        style={styles.card}
-        onPress={() => toggleExpand(index)}
-        activeOpacity={0.9}
-      >
-        <Text style={styles.title}>{item.term || "Title"}</Text>
-        {isExpanded && (
-          <Text style={styles.text}>{item.definition || "Empty"}</Text>
-        )}
-        {!isExpanded && (
-          <Text style={styles.hintText}>탭하여 설명 보기</Text>
-        )}
-      </TouchableOpacity>
-    );
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={{ marginTop: 10 }}>단어 목록 불러오는 중...</Text>
-      </View>
-    );
-  }
-
-  if (words.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.emptyText}>표시할 데이터가 없습니다.</Text>
-      </View>
-    );
-  }
-
+export default function Home() {
   return (
     <View style={styles.container}>
-      <FlatList
-        data={words}
-        renderItem={renderCard}
-        keyExtractor={(item, index) => `${item.term}-${index}`}
-        showsVerticalScrollIndicator={true}
-        contentContainerStyle={styles.listContent}
-      />
+      <View style={styles.hero}>
+        <Text style={styles.logoText}>하루한</Text>
+        <Text style={styles.subtitle}>오늘 하나의 개념을 가볍게 정리해보는 시간</Text>
+      </View>
+
+      <View style={styles.descriptionBox}>
+        <Text style={styles.description}>PoC용 서비스입니다. 아래의 버튼을 통해 개념을 학습할 수 있습니다.</Text>
+      </View>
+
+      <Link href="/network" asChild>
+        <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+          <Text style={styles.primaryButtonText}>네트워크 개념 학습하러 가기</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -105,31 +29,61 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    paddingHorizontal: 24,
+    paddingTop: 80,
+  },
+  hero: {
+    marginBottom: 32,
+  },
+  logoText: {
+    fontSize: 40,
+    fontWeight: "700",
+  },
+  subtitle: {
+    marginTop: 8,
+    fontSize: 14,
+  },
+  descriptionBox: {
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
+  description: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  primaryButton: {
+    backgroundColor: "#6a96ff",
+    paddingVertical: 14,
+    borderRadius: 999,
+    alignItems: "center",
     justifyContent: "center",
+  },
+  primaryButtonText: {
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: "600",
   },
   listContent: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingBottom: 24,
   },
   card: {
-    backgroundColor: "white",
     width: SCREEN_WIDTH - 40,
     padding: 30,
     borderRadius: 20,
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
+    borderWidth: 1,
     elevation: 5,
     marginBottom: 20,
     minHeight: 150,
   },
   title: {
     fontSize: 21,
-    color: "#000",
+    color: "#3b3b3b",
     marginBottom: 10,
     fontWeight: "600",
     textAlign: "center",
@@ -143,13 +97,19 @@ const styles = StyleSheet.create({
   },
   hintText: {
     fontSize: 12,
-    color: "#aaa",
+    color: "#a7b0d9",
     marginTop: 10,
     fontStyle: "italic",
   },
   emptyText: {
     fontSize: 16,
-    color: "#888",
+    color: "#b38b5f",
+    textAlign: "center",
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#b38b5f",
     textAlign: "center",
   },
 });
