@@ -1,6 +1,8 @@
 import * as Sentry from "@sentry/react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Stack } from "expo-router";
+import React from "react";
 import "./global.css";
 
 Sentry.init({
@@ -22,13 +24,15 @@ Sentry.init({
   // spotlight: __DEV__,
 });
 
+const queryClient = new QueryClient();
+
 export default Sentry.wrap(function RootLayout() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <SpeedInsights />
-    </>
+    </QueryClientProvider>
   );
 });
