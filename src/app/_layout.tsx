@@ -1,8 +1,10 @@
+import { ErrorFallback } from "@/components/common/ErrorFallback";
 import * as Sentry from "@sentry/react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Stack } from "expo-router";
 import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import "./global.css";
 
 Sentry.init({
@@ -28,11 +30,18 @@ const queryClient = new QueryClient();
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <SpeedInsights />
-    </QueryClientProvider>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        // 여기서 캐시를 비우거나 초기 상태로 되돌리는 로직을 넣을 수 있습니다.
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+        <SpeedInsights />
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 });
