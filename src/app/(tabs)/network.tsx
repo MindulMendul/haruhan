@@ -40,7 +40,7 @@ export default function App() {
 
   if (isError) return <ErrorView message={error?.message} onRetry={refetch} />;
   return (
-    <View className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50 ">
       <FlatList
         data={words}
         renderItem={({ item }) => <WordCard item={item} />}
@@ -52,7 +52,7 @@ export default function App() {
           }
         }}
         onEndReachedThreshold={0.5} // 리스트 끝의 50% 지점에 도달하면 미리 로드
-        contentContainerStyle={words.length === 0 ? { flexGrow: 1 } : { paddingBottom: 20 }}
+        contentContainerStyle={words.length === 0 ? { flexGrow: 1 } : { paddingBottom: 20, paddingHorizontal: 40 }}
         ListFooterComponent={
           isFetchingNextPage ? (
             <View className="px-5 pb-10">
@@ -63,6 +63,8 @@ export default function App() {
         ListEmptyComponent={isLoading ? <LoadingView /> : <EmptyView />}
         refreshing={isLoading}
         onRefresh={refetch}
+        // showsVerticalScrollIndicator={false}
+        // showsHorizontalScrollIndicator={false}
       />
     </View>
   );

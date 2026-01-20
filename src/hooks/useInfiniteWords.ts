@@ -31,7 +31,6 @@ export const useInfiniteWords = (dataKey: string) => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      // 데이터가 ITEMS_PER_PAGE보다 적게 왔다면 마지막 페이지입니다.
       return lastPage.length < 20 ? undefined : allPages.length;
     },
     retry: (failureCount, error: any) => {
