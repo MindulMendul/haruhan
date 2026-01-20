@@ -1,12 +1,14 @@
 import WordCard from "@/components/word/WordCard";
+import { WordCardSkeleton } from "@/components/word/WordCardSkeleton";
 import { useInfiniteWords } from "@/hooks/useInfiniteWords";
 import React from "react";
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 const LoadingView = () => (
-  <View className="flex-1 justify-center items-center bg-white">
-    <ActivityIndicator size="large" color="#f2a65a" />
-    <Text className="mt-3 text-sm text-[#b38b5f]">불러오는 중...</Text>
+  <View className="self-stretch px-5 pt-5">
+    {[1, 2, 3, 4, 5].map((key) => (
+      <WordCardSkeleton key={key} />
+    ))}
   </View>
 );
 
@@ -30,6 +32,12 @@ export default function App() {
   const { words, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error, refetch } =
     useInfiniteWords("network_terms_test");
 
+  console.log("렌더링 상태:", {
+    wordCount: words.length,
+    isLoading,
+    showSkeleton: isLoading && words.length === 0,
+  });
+
   if (isError) return <ErrorView message={error?.message} onRetry={refetch} />;
   return (
     <View className="flex-1 bg-gray-50">
@@ -44,9 +52,13 @@ export default function App() {
           }
         }}
         onEndReachedThreshold={0.5} // 리스트 끝의 50% 지점에 도달하면 미리 로드
-        // 아래쪽에 로딩 인디케이터 표시
+        contentContainerStyle={words.length === 0 ? { flexGrow: 1 } : { paddingBottom: 20 }}
         ListFooterComponent={
-          isFetchingNextPage ? <ActivityIndicator size="small" color="#f2a65a" className="py-4" /> : null
+          isFetchingNextPage ? (
+            <View className="px-5 pb-10">
+              <WordCardSkeleton />
+            </View>
+          ) : null
         }
         ListEmptyComponent={isLoading ? <LoadingView /> : <EmptyView />}
         refreshing={isLoading}

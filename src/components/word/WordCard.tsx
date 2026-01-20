@@ -7,7 +7,7 @@ interface WordCardProps {
   item: Word;
 }
 
-const WordCard = ({ item }: WordCardProps) => {
+const WordCard = React.memo(({ item }: WordCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -27,6 +27,6 @@ const WordCard = ({ item }: WordCardProps) => {
       )}
     </TouchableOpacity>
   );
-};
+});
 
 export default WordCard;
