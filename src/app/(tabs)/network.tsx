@@ -30,7 +30,7 @@ const ErrorView = ({ message, onRetry }: { message: string; onRetry: () => void 
 
 export default function App() {
   const { words, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error, refetch } =
-    useInfiniteWords("network_terms_test");
+    useInfiniteWords("network_terms");
 
   console.log("렌더링 상태:", {
     wordCount: words.length,
