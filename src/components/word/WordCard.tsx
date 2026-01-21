@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import Markdown from "react-native-markdown-display";
 
 interface WordCardProps {
   item: Word;
@@ -20,7 +21,15 @@ const WordCard = React.memo(({ item }: WordCardProps) => {
           <View className="w-full px-5">
             <Text className="text-[21px] text-[#3b3b3b] mb-2 font-semibold text-center">{item.term || "Title"}</Text>
             {isExpanded ? (
-              <Text className="text-sm font-bold text-[#333] mt-2 text-center">{item.definition || "Empty"}</Text>
+              <Markdown
+                style={{
+                  body: { color: "#333", fontSize: 14 },
+                  strong: { fontWeight: "bold", color: "#f2a65a" },
+                  code_inline: { backgroundColor: "#f3f4f6", padding: 2 },
+                }}
+              >
+                {item.definition}
+              </Markdown>
             ) : (
               <Text className="text-[12px] text-[#a7b0d9] mt-2 text-center italic">탭하여 설명 보기</Text>
             )}

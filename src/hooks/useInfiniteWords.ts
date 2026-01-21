@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/api";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -6,18 +6,8 @@ export const useInfiniteWords = (dataKey: string) => {
   const query = useInfiniteQuery({
     queryKey: [dataKey, "infinite"],
     queryFn: async ({ pageParam = 0 }): Promise<Word[]> => {
-      const ITEMS_PER_PAGE = 20;
-      const from = pageParam * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE - 1;
-
       try {
-        const { data, error } = await supabase
-          .from<string, Word>(dataKey)
-          .select("*")
-          .range(from, to)
-          .order("id", { ascending: true });
-        console.log(data);
-
+        const { data, error } = await getSupabase(pageParam, dataKey);
         if (error) {
           console.error("Supabase API 에러:", error);
           throw error;

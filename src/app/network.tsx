@@ -32,12 +32,6 @@ export default function App() {
   const { words, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error, refetch } =
     useInfiniteWords("network_terms");
 
-  console.log("렌더링 상태:", {
-    wordCount: words.length,
-    isLoading,
-    showSkeleton: isLoading && words.length === 0,
-  });
-
   if (isError) return <ErrorView message={error?.message} onRetry={refetch} />;
   return (
     <View className="flex-1 bg-gray-50 ">
