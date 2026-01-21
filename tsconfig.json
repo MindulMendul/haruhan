@@ -4,6 +4,7 @@
     "jsx": "react",
     "strict": true,
     "moduleResolution": "node",
+    "module": "esnext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
