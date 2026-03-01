@@ -38,16 +38,7 @@
         }
       ],
       "expo-font",
-      "expo-web-browser",
-      "@sentry/react-native",
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "react-native",
-          "organization": "mindulmendul"
-        }
-      ]
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
