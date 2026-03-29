@@ -1,8 +1,6 @@
 import { ErrorFallback } from "@/components/common/ErrorFallback";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import * as Sentry from "@sentry/react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import React, { useState } from "react";
@@ -10,25 +8,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./global.css";
-
-Sentry.init({
-  dsn: "https://0ac9fad34b52f00f400fc434b995a810@o4510701591527424.ingest.us.sentry.io/4510701593755648",
-
-  // Adds more context data to events (IP address, cookies, user, etc.)
-  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
-  sendDefaultPii: true,
-
-  // Enable Logs
-  enableLogs: true,
-
-  // Configure Session Replay
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1,
-  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
-
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // spotlight: __DEV__,
-});
 
 interface Menu {
   id: "" | "network";
@@ -66,7 +45,7 @@ function CustomDrawerContent({ props, menuSettings }: { props: any; menuSettings
 
 const queryClient = new QueryClient();
 
-export default Sentry.wrap(function RootLayout() {
+export default function RootLayout() {
   const [menuSettings, setMenuSettings] = useState<Menu[]>([
     { id: "network", label: "🌐 네트워크", visible: true },
     // { id: "os", label: "⚙️ 운영체제", visible: true },
@@ -115,8 +94,7 @@ export default Sentry.wrap(function RootLayout() {
             />
           </Drawer>
         </GestureHandlerRootView>
-        <SpeedInsights />
       </QueryClientProvider>
     </ErrorBoundary>
   );
-});
+}
