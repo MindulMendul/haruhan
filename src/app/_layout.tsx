@@ -1,7 +1,6 @@
 import { ErrorFallback } from "@/components/common/ErrorFallback";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import React, { useState } from "react";
@@ -95,7 +94,6 @@ export default function RootLayout() {
             />
           </Drawer>
         </GestureHandlerRootView>
-        <SpeedInsights />
       </QueryClientProvider>
     </ErrorBoundary>
   );

@@ -6,18 +6,13 @@ export const useInfiniteWords = (dataKey: string) => {
   const query = useInfiniteQuery({
     queryKey: [dataKey, "infinite"],
     queryFn: async ({ pageParam = 0 }): Promise<Word[]> => {
-      try {
-        const { data, error } = await getSupabase(pageParam, dataKey);
-        if (error) {
-          console.error("Supabase API 에러:", error);
-          throw error;
-        }
-
-        return data || [];
-      } catch (error) {
-        console.error("QueryFn 내부 에러 캐치:", error);
+      const { data, error } = await getSupabase(pageParam, dataKey);
+      if (error) {
+        // Supabase PostgREST 오류 — 콘솔에 code/message 확인 (테이블명·RLS·환경변수 등)
+        console.error(`[useInfiniteWords:${dataKey}]`, error.message ?? error);
         throw error;
       }
+      return data || [];
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
