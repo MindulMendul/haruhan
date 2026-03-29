@@ -5,7 +5,7 @@ import Markdown from "react-native-markdown-display";
 interface WordCardProps {
   item: Word;
 }
-const WordCard = React.memo(({ item }: WordCardProps) => {
+const WordCardInner = ({ item }: WordCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -38,6 +38,9 @@ const WordCard = React.memo(({ item }: WordCardProps) => {
       </View>
     </View>
   );
-});
+};
+
+const WordCard = React.memo(WordCardInner);
+WordCard.displayName = "WordCard";
 
 export default WordCard;

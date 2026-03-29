@@ -1,44 +1,45 @@
 import { ErrorFallback } from "@/components/common/ErrorFallback";
+import { CS_TOPICS } from "@/content/cs";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import React, { useState } from "react";
+import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./global.css";
 
-interface Menu {
-  id: "" | "network";
-  label: string;
-  visible: boolean;
-}
-
-function CustomDrawerContent({ props, menuSettings }: { props: any; menuSettings: Menu[] }) {
+function CustomDrawerContent({ props }: { props: object }) {
   const router = useRouter();
 
   return (
     <DrawerContentScrollView {...props}>
-      {/* 상단 헤더 영역 */}
-      <View className="p-6 border-b border-gray-100 mb-4">
+      <View className="p-6 border-b border-gray-100 mb-2">
         <Text className="text-2xl font-bold text-blue-500">하루한 메뉴</Text>
+        <Text className="text-xs text-gray-400 mt-1">FE CS 면접 노트 (번들)</Text>
       </View>
 
-      {/* 홈 버튼은 기본으로 배치 */}
       <DrawerItem label="🏠 홈" onPress={() => router.push("/")} labelStyle={{ fontWeight: "600" }} />
 
-      {/* 2. 사용자가 설정한 menuSettings에 따라 동적 렌더링 */}
-      {menuSettings
-        .filter((menu: Menu) => menu.visible)
-        .map((menu: Menu) => (
-          <DrawerItem
-            key={menu.id}
-            label={menu.label}
-            onPress={() => router.push(`/${menu.id}`)}
-            labelStyle={{ fontWeight: "600" }}
-          />
-        ))}
+      <DrawerItem
+        label="📚 CS 개념 목록"
+        onPress={() => router.push("/cs")}
+        labelStyle={{ fontWeight: "600" }}
+      />
+
+      <View className="px-4 py-2 mt-2 border-t border-gray-100">
+        <Text className="text-xs font-semibold text-gray-400 uppercase tracking-wide">주제 바로가기</Text>
+      </View>
+
+      {CS_TOPICS.map((topic) => (
+        <DrawerItem
+          key={topic.id}
+          label={`${topic.emoji} ${topic.title}`}
+          onPress={() => router.push(`/cs/${topic.id}`)}
+          labelStyle={{ fontWeight: "500", fontSize: 13 }}
+        />
+      ))}
     </DrawerContentScrollView>
   );
 }
@@ -46,50 +47,43 @@ function CustomDrawerContent({ props, menuSettings }: { props: any; menuSettings
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const [menuSettings, setMenuSettings] = useState<Menu[]>([
-    { id: "network", label: "🌐 네트워크", visible: true },
-    // { id: "os", label: "⚙️ 운영체제", visible: true },
-    // { id: "db", label: "🏛️ 데이터베이스", visible: false },
-  ]);
-
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
       onReset={() => {
-        // 여기서 캐시를 비우거나 초기 상태로 되돌리는 로직을 넣을 수 있습니다.
+        // 캐시 초기화 등
       }}
     >
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Drawer
-            drawerContent={(props) => <CustomDrawerContent props={props} menuSettings={menuSettings} />}
+            drawerContent={(props) => <CustomDrawerContent props={props} />}
             screenOptions={{
-              headerShown: true, // 상단 햄버거 메뉴 버튼 활성화
+              headerShown: true,
               drawerActiveTintColor: "#6a96ff",
               drawerLabelStyle: { fontWeight: "600" },
             }}
           >
-            {/* 각 Drawer.Screen은 app 폴더 내의 파일들과 매칭됩니다. */}
             <Drawer.Screen
-              name="index" // app/index.tsx (홈)
+              name="index"
               options={{
                 drawerLabel: "홈",
                 title: "하루한",
               }}
             />
             <Drawer.Screen
-              name="network" // app/network.tsx (네트워크 리스트)
+              name="network"
               options={{
-                drawerLabel: "🌐 네트워크",
-                title: "네트워크 개념 학습",
+                title: "네트워크",
+                drawerItemStyle: { display: "none" },
+                drawerLabel: () => null,
               }}
             />
-            {/* 추후 추가될 카테고리들 */}
             <Drawer.Screen
-              name="os"
+              name="cs"
               options={{
-                drawerLabel: "⚙️ 운영체제",
-                title: "OS 개념 학습",
+                drawerLabel: "CS 면접 노트",
+                title: "FE CS 면접 노트",
               }}
             />
           </Drawer>

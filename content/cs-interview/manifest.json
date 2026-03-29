@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "title": "FE CS 면접 노트",
+  "topics": [
+    {
+      "id": "critical-render-path",
+      "title": "CRP (Critical Render Path)",
+      "subtitle": "브라우저 렌더링 파이프라인",
+      "cardSummary": "HTML·CSS·JS가 화면 픽셀이 되기까지의 필수 경로와 병목.",
+      "emoji": "🖼️",
+      "file": "topics/critical-render-path.md"
+    },
+    {
+      "id": "seo",
+      "title": "SEO (Search Engine Optimization)",
+      "subtitle": "검색 엔진 최적화",
+      "cardSummary": "크롤링·인덱싱·랭킹과 FE가 할 수 있는 일.",
+      "emoji": "🔍",
+      "file": "topics/seo.md"
+    },
+    {
+      "id": "folder-structure-architecture",
+      "title": "Folder Structure & Architecture",
+      "subtitle": "폴더 구조와 아키텍처",
+      "cardSummary": "기능 중심 vs 계층 중심, 경계 설정과 확장성.",
+      "emoji": "📁",
+      "file": "topics/folder-structure-architecture.md"
+    },
+    {
+      "id": "design-pattern-mvc-flux",
+      "title": "Design Pattern (MVC & FLUX)",
+      "subtitle": "디자인 패턴",
+      "cardSummary": "MVC와 단방향 데이터 흐름(Flux)의 역할 분리.",
+      "emoji": "🧩",
+      "file": "topics/design-pattern-mvc-flux.md"
+    },
+    {
+      "id": "csr-ssr",
+      "title": "CSR & SSR",
+      "subtitle": "Client / Server Side Rendering",
+      "cardSummary": "렌더링 위치에 따른 장단점과 하이브리드 전략.",
+      "emoji": "⚡",
+      "file": "topics/csr-ssr.md"
+    },
+    {
+      "id": "event-loop",
+      "title": "Event Loop",
+      "subtitle": "Call Stack & Task Queue",
+      "cardSummary": "JS 단일 스레드 모델과 비동기 스케줄링.",
+      "emoji": "🔁",
+      "file": "topics/event-loop.md"
+    },
+    {
+      "id": "functional-programming-prototype",
+      "title": "Functional Programming & Prototype",
+      "subtitle": "함수형·프로토타입",
+      "cardSummary": "불변성·고차함수와 JS 프로토타입 체인.",
+      "emoji": "λ",
+      "file": "topics/functional-programming-prototype.md"
+    },
+    {
+      "id": "garbage-collection",
+      "title": "GC (Garbage Collection)",
+      "subtitle": "가비지 컬렉션",
+      "cardSummary": "도달 가능성, 세대별 GC, FE와의 연결.",
+      "emoji": "🗑️",
+      "file": "topics/garbage-collection.md"
+    },
+    {
+      "id": "state-management",
+      "title": "State Management",
+      "subtitle": "상태 관리",
+      "cardSummary": "로컬·서버·URL 상태와 전역 스토어 선택 기준.",
+      "emoji": "📦",
+      "file": "topics/state-management.md"
+    },
+    {
+      "id": "authn-authz",
+      "title": "Authorization & Authentication",
+      "subtitle": "인증·인가",
+      "cardSummary": "본인 확인 vs 권한 부여, 토큰·세션·OAuth 흐름.",
+      "emoji": "🔐",
+      "file": "topics/authn-authz.md"
+    },
+    {
+      "id": "cicd-cdn",
+      "title": "CI/CD & CDN",
+      "subtitle": "배포 파이프라인·콘텐츠 전송",
+      "cardSummary": "자동 빌드·테스트·배포와 엣지 캐싱.",
+      "emoji": "🚀",
+      "file": "topics/cicd-cdn.md"
+    }
+  ]
+}

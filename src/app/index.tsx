@@ -13,16 +13,17 @@ export default function Home() {
 
         <View className="bg-white rounded-2xl p-4 border border-gray-200 mb-6 shadow-sm">
           <Text className="text-sm text-gray-600 leading-5 text-center">
-            면접 대비를 위한 CS 개념 학습 도구입니다. 아래의 버튼을 통해 핵심 개념을 마스터해보세요.
+            면접 대비용 CS 노트는 앱에 번들되어 있어요. 카드 목록·무한 스크롤로 읽거나, 드로어에서 주제로 바로 이동할 수
+            있습니다.
           </Text>
         </View>
 
-        <Link href="/network" asChild>
+        <Link href="/cs" asChild>
           <TouchableOpacity
-            className="bg-blue-500 py-4 rounded-full items-center justify-center shadow-md active:bg-blue-600"
+            className="bg-indigo-600 py-4 rounded-full items-center justify-center shadow-md active:bg-indigo-700"
             activeOpacity={0.85}
           >
-            <Text className="text-white text-[15px] font-semibold">네트워크 개념 학습하러 가기</Text>
+            <Text className="text-white text-[15px] font-semibold">CS 면접 노트 보러 가기</Text>
           </TouchableOpacity>
         </Link>
       </View>
