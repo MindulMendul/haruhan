@@ -89,6 +89,102 @@
       "cardSummary": "자동 빌드·테스트·배포와 엣지 캐싱.",
       "emoji": "🚀",
       "file": "topics/cicd-cdn.md"
+    },
+    {
+      "id": "web-fe-question-map",
+      "title": "Web FE Question Map",
+      "subtitle": "웹 프론트엔드 질문 지도",
+      "cardSummary": "브라우저·네트워크·React·Next.js·JS 질문을 한 번에 훑는 목차.",
+      "emoji": "🧭",
+      "file": "topics/web-fe-question-map.md"
+    },
+    {
+      "id": "computer-architecture-question-map",
+      "title": "Computer Architecture Question Map",
+      "subtitle": "컴퓨터 구조 질문 지도",
+      "cardSummary": "CPU, 캐시, 가상 메모리, 데이터 표현을 묶어 보는 컴퓨터 구조 목차.",
+      "emoji": "🧠",
+      "file": "topics/computer-architecture-question-map.md"
+    },
+    {
+      "id": "os-question-map",
+      "title": "OS Question Map",
+      "subtitle": "운영체제 질문 지도",
+      "cardSummary": "프로세스·스레드·메모리·동시성·스케줄링 핵심 질문.",
+      "emoji": "💻",
+      "file": "topics/os-question-map.md"
+    },
+    {
+      "id": "software-engineering-question-map",
+      "title": "Software Engineering Question Map",
+      "subtitle": "소프트웨어 엔지니어링 질문 지도",
+      "cardSummary": "클린코드, 리팩토링, 패러다임, DevOps, TDD를 훑는 질문 목차.",
+      "emoji": "🛠️",
+      "file": "topics/software-engineering-question-map.md"
+    },
+    {
+      "id": "security-question-map",
+      "title": "Security Question Map",
+      "subtitle": "보안 질문 지도",
+      "cardSummary": "웹 취약점, 네트워크 공격, 암호화 개념을 묶어 보는 보안 목차.",
+      "emoji": "🛡️",
+      "file": "topics/security-question-map.md"
+    },
+    {
+      "id": "data-structure-question-map",
+      "title": "Data Structure Question Map",
+      "subtitle": "자료구조 질문 지도",
+      "cardSummary": "배열, 리스트, 스택, 큐, 힙, 해시테이블, 그래프 핵심 질문.",
+      "emoji": "🏗️",
+      "file": "topics/data-structure-question-map.md"
+    },
+    {
+      "id": "algorithm-question-map",
+      "title": "Algorithm Question Map",
+      "subtitle": "알고리즘 질문 지도",
+      "cardSummary": "정렬, 탐색, DP, 그리디, 그래프, 구간 알고리즘을 훑는 질문 목차.",
+      "emoji": "🧮",
+      "file": "topics/algorithm-question-map.md"
+    },
+    {
+      "id": "cpp-question-map",
+      "title": "C++ Question Map",
+      "subtitle": "C++ 질문 지도",
+      "cardSummary": "메모리 관리, 스마트 포인터, 컨테이너 내부 동작, 정렬 질문.",
+      "emoji": "⚙️",
+      "file": "topics/cpp-question-map.md"
+    },
+    {
+      "id": "jit-question-map",
+      "title": "JIT Question Map",
+      "subtitle": "JIT 컴파일러 질문 지도",
+      "cardSummary": "런타임 최적화, 인터프리터와 컴파일러의 절충을 보는 질문.",
+      "emoji": "⚡",
+      "file": "topics/jit-question-map.md"
+    },
+    {
+      "id": "behavioral-interview-question-map",
+      "title": "Behavioral Interview Question Map",
+      "subtitle": "인성 면접 질문 지도",
+      "cardSummary": "자기소개, 지원동기, 협업, 갈등, 실패, AI 활용 질문을 답변 프레임과 함께 정리.",
+      "emoji": "🤝",
+      "file": "topics/behavioral-interview-question-map.md"
+    },
+    {
+      "id": "general-cs-practical-deep-dive",
+      "title": "General CS Practical Deep Dive",
+      "subtitle": "일반 CS 실무 면접 심화",
+      "cardSummary": "네트워크, OS, DB, 자료구조, 보안, 시스템 설계를 실무 답변 흐름으로 정리.",
+      "emoji": "📚",
+      "file": "topics/general-cs-practical-deep-dive.md"
+    },
+    {
+      "id": "ai-prompt-engineering-practical-interview",
+      "title": "AI Prompt Engineering Practical Interview",
+      "subtitle": "AI 활용·프롬프트 엔지니어링 실무 면접",
+      "cardSummary": "프롬프트 설계, RAG, 평가, 보안, 에이전트, 비용 최적화를 실무 관점으로 정리.",
+      "emoji": "🤖",
+      "file": "topics/ai-prompt-engineering-practical-interview.md"
     }
   ]
 }
