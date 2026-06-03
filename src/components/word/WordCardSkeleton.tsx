@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
+import { useColorScheme } from "nativewind";
 
 export const WordCardSkeleton = () => {
   const opacity = useRef(new Animated.Value(0.3)).current;
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   useEffect(() => {
     Animated.loop(
@@ -21,7 +24,7 @@ export const WordCardSkeleton = () => {
             opacity,
             height: 150,
             width: "100%",
-            backgroundColor: "#e4e4e7",
+            backgroundColor: isDark ? "#1e293b" : "#e4e4e7",
             borderRadius: 20,
             marginBottom: 20,
             padding: 24,
@@ -36,7 +39,7 @@ export const WordCardSkeleton = () => {
             style={{
               width: "70%",
               height: 24,
-              backgroundColor: "#d4d4d8",
+              backgroundColor: isDark ? "#334155" : "#d4d4d8",
               borderRadius: 8,
               marginBottom: 16,
             }}
@@ -47,7 +50,7 @@ export const WordCardSkeleton = () => {
             style={{
               width: "45%",
               height: 16,
-              backgroundColor: "#d4d4d8",
+              backgroundColor: isDark ? "#334155" : "#d4d4d8",
               borderRadius: 8,
             }}
           />

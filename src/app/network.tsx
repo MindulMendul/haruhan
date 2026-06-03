@@ -13,16 +13,16 @@ const LoadingView = () => (
 );
 
 const EmptyView = () => (
-  <View className="flex-1 justify-center items-center bg-white">
-    <Text className="text-base text-[#b38b5f] text-center">아직 준비된 단어가 없어요.</Text>
+  <View className="flex-1 justify-center items-center bg-paper dark:bg-ink-900">
+    <Text className="text-base font-semibold text-brand-700 text-center dark:text-brand-200">아직 준비된 단어가 없어요.</Text>
   </View>
 );
 
 const ErrorView = ({ message, onRetry }: { message: string; onRetry: () => void }) => (
-  <View className="flex-1 justify-center items-center p-5 bg-white">
-    <Text className="text-xl font-bold">에러가 발생했어요</Text>
-    <Text className="text-gray-400 mb-5">{message}</Text>
-    <TouchableOpacity onPress={onRetry} className="bg-[#f2a65a] px-6 py-2 rounded-full">
+  <View className="flex-1 justify-center items-center p-5 bg-paper dark:bg-ink-900">
+    <Text className="text-xl font-bold text-ink-900 dark:text-white">에러가 발생했어요</Text>
+    <Text className="text-ink-500 mb-5 dark:text-ink-300">{message}</Text>
+    <TouchableOpacity onPress={onRetry} className="bg-brand-600 px-6 py-2 rounded-full">
       <Text className="text-white">다시 시도</Text>
     </TouchableOpacity>
   </View>
@@ -34,7 +34,7 @@ export default function App() {
 
   if (isError) return <ErrorView message={error?.message} onRetry={refetch} />;
   return (
-    <View className="flex-1 bg-gray-50 ">
+    <View className="flex-1 bg-paper dark:bg-ink-900">
       <FlatList
         data={words}
         renderItem={({ item }) => <WordCard item={item} />}
