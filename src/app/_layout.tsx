@@ -2,6 +2,7 @@ import { ErrorFallback } from "@/components/common/ErrorFallback";
 import { BottomNavBar } from "@/components/navigation/BottomNavBar";
 import { ThemeBootstrap } from "@/components/theme/ThemeBootstrap";
 import { ToastProvider } from "@/components/ui";
+import { ROUTES, getCsTopicRoute, getJobPositionRoute } from "@/constants/routes";
 import { COMMON_CS_TOPICS } from "@/content/cs";
 import { INTERVIEW_POSITIONS } from "@/content/positions";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
@@ -21,8 +22,8 @@ function CustomDrawerContent({ props }: { props: object }) {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
   const drawerTextColor = isDark ? "#e2e8f0" : "#334155";
-  const showCommonCsMenu = pathname.startsWith("/cs");
-  const showPositionMenu = pathname.startsWith("/job-positions");
+  const showCommonCsMenu = pathname.startsWith(ROUTES.CS);
+  const showPositionMenu = pathname.startsWith(ROUTES.JOB_POSITIONS);
 
   return (
     <DrawerContentScrollView {...props} className="bg-paper dark:bg-ink-900">
@@ -33,7 +34,7 @@ function CustomDrawerContent({ props }: { props: object }) {
 
       <DrawerItem
         label="🏠 홈"
-        onPress={() => router.push("/")}
+        onPress={() => router.push(ROUTES.HOME)}
         inactiveTintColor={drawerTextColor}
         activeTintColor="#6a96ff"
         labelStyle={{ fontWeight: "600" }}
@@ -41,21 +42,21 @@ function CustomDrawerContent({ props }: { props: object }) {
 
       <DrawerItem
         label="📚 공통 CS"
-        onPress={() => router.push("/cs")}
+        onPress={() => router.push(ROUTES.CS)}
         inactiveTintColor={drawerTextColor}
         activeTintColor="#6a96ff"
         labelStyle={{ fontWeight: "600" }}
       />
       <DrawerItem
         label="🧭 JD 포지션"
-        onPress={() => router.push("/job-positions")}
+        onPress={() => router.push(ROUTES.JOB_POSITIONS)}
         inactiveTintColor={drawerTextColor}
         activeTintColor="#6a96ff"
         labelStyle={{ fontWeight: "600" }}
       />
       <DrawerItem
         label="⚙️ 설정"
-        onPress={() => router.push("/settings")}
+        onPress={() => router.push(ROUTES.SETTINGS)}
         inactiveTintColor={drawerTextColor}
         activeTintColor="#6a96ff"
         labelStyle={{ fontWeight: "600" }}
@@ -71,7 +72,7 @@ function CustomDrawerContent({ props }: { props: object }) {
             <DrawerItem
               key={topic.id}
               label={`${topic.emoji} ${topic.title}`}
-              onPress={() => router.push(`/cs/${topic.id}`)}
+              onPress={() => router.push(getCsTopicRoute(topic.id))}
               inactiveTintColor={drawerTextColor}
               activeTintColor="#6a96ff"
               labelStyle={{ fontWeight: "500", fontSize: 13 }}
@@ -90,7 +91,7 @@ function CustomDrawerContent({ props }: { props: object }) {
             <DrawerItem
               key={position.id}
               label={`${position.label} · ${position.title}`}
-              onPress={() => router.push(`/job-positions?position=${position.id}`)}
+              onPress={() => router.push(getJobPositionRoute(position.id))}
               inactiveTintColor={drawerTextColor}
               activeTintColor="#6a96ff"
               labelStyle={{ fontWeight: "500", fontSize: 13 }}

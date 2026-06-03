@@ -1,6 +1,8 @@
 import WordCard from "@/components/word/WordCard";
 import { WordCardSkeleton } from "@/components/word/WordCardSkeleton";
+import { PAGE_SEO } from "@/constants/seo";
 import { useInfiniteWords } from "@/hooks/useInfiniteWords";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
 import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
@@ -34,32 +36,51 @@ export default function App() {
 
   if (isError) return <ErrorView message={error?.message} onRetry={refetch} />;
   return (
-    <View className="flex-1 bg-paper dark:bg-ink-900">
-      <FlatList
-        data={words}
-        renderItem={({ item }) => <WordCard item={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        // 데이터가 끝에 도달했을 때 실행
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5} // 리스트 끝의 50% 지점에 도달하면 미리 로드
-        contentContainerStyle={words.length === 0 ? { flexGrow: 1 } : { paddingBottom: 20, paddingHorizontal: 40 }}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <View className="px-5 pb-10">
-              <WordCardSkeleton />
-            </View>
-          ) : null
-        }
-        ListEmptyComponent={isLoading ? <LoadingView /> : <EmptyView />}
-        refreshing={isLoading}
-        onRefresh={refetch}
-        // showsVerticalScrollIndicator={false}
-        // showsHorizontalScrollIndicator={false}
+    <>
+      <Seo
+        title={PAGE_SEO.NETWORK.title}
+        description={PAGE_SEO.NETWORK.description}
+        path={PAGE_SEO.NETWORK.path}
+        keywords={[...PAGE_SEO.NETWORK.keywords]}
+        jsonLd={[
+          buildWebPageJsonLd({
+            title: PAGE_SEO.NETWORK.title,
+            description: PAGE_SEO.NETWORK.description,
+            path: PAGE_SEO.NETWORK.path,
+          }),
+          buildBreadcrumbJsonLd([
+            { name: PAGE_SEO.HOME.title, path: PAGE_SEO.HOME.path },
+            { name: PAGE_SEO.NETWORK.title, path: PAGE_SEO.NETWORK.path },
+          ]),
+        ]}
       />
-    </View>
+      <View className="flex-1 bg-paper dark:bg-ink-900">
+        <FlatList
+          data={words}
+          renderItem={({ item }) => <WordCard item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          // 데이터가 끝에 도달했을 때 실행
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          onEndReachedThreshold={0.5} // 리스트 끝의 50% 지점에 도달하면 미리 로드
+          contentContainerStyle={words.length === 0 ? { flexGrow: 1 } : { paddingBottom: 20, paddingHorizontal: 40 }}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <View className="px-5 pb-10">
+                <WordCardSkeleton />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={isLoading ? <LoadingView /> : <EmptyView />}
+          refreshing={isLoading}
+          onRefresh={refetch}
+          // showsVerticalScrollIndicator={false}
+          // showsHorizontalScrollIndicator={false}
+        />
+      </View>
+    </>
   );
 }

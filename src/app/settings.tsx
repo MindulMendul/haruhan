@@ -1,4 +1,7 @@
 import { Badge, Button, Card, Screen, Section } from "@/components/ui";
+import { ROUTES } from "@/constants/routes";
+import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
+import { Seo, buildWebPageJsonLd } from "@/lib/seo";
 import { APP_COLOR_SCHEME_KEY, type AppColorScheme } from "@/lib/theme";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,11 +21,23 @@ export default function SettingsScreen() {
   }
 
   return (
-    <Screen>
-      <Card tone="inverted">
-        <Badge variant="inverse">
-          SETTINGS
-        </Badge>
+    <>
+      <Seo
+        title={PAGE_SEO.SETTINGS.title}
+        description={PAGE_SEO.SETTINGS.description}
+        path={PAGE_SEO.SETTINGS.path}
+        robots={SEO_ROBOTS.NO_INDEX}
+        jsonLd={buildWebPageJsonLd({
+          title: PAGE_SEO.SETTINGS.title,
+          description: PAGE_SEO.SETTINGS.description,
+          path: PAGE_SEO.SETTINGS.path,
+        })}
+      />
+      <Screen>
+        <Card tone="inverted">
+          <Badge variant="inverse">
+            SETTINGS
+          </Badge>
         <Text className="mt-5 text-[30px] font-extrabold leading-9 text-white">설정</Text>
         <Text className="mt-2 text-sm leading-6 text-ink-200 dark:text-ink-300">
           앱의 보기 방식과 탐색 UX를 조정합니다.
@@ -70,11 +85,12 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title="개발용 UI 샘플" description="Toast, Alert, Modal 컴포넌트를 확인하는 숨김 데모 페이지입니다.">
-        <Button variant="outline" onPress={() => router.push("/feedback")}>
+        <Button variant="outline" onPress={() => router.push(ROUTES.FEEDBACK)}>
           UI 컴포넌트 샘플 보기
         </Button>
       </Section>
-    </Screen>
+      </Screen>
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+import { ROUTES } from "@/constants/routes";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -6,7 +7,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type BottomNavItem = {
-  href: "/" | "/cs" | "/settings";
+  href: typeof ROUTES.HOME | typeof ROUTES.CS | typeof ROUTES.SETTINGS;
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
   match: (pathname: string) => boolean;
@@ -15,23 +16,23 @@ type BottomNavItem = {
 
 const NAV_ITEMS: BottomNavItem[] = [
   {
-    href: "/cs",
+    href: ROUTES.CS,
     label: "공부",
     icon: "book-outline",
-    match: (pathname) => pathname.startsWith("/cs") || pathname.startsWith("/job-positions"),
+    match: (pathname) => pathname.startsWith(ROUTES.CS) || pathname.startsWith(ROUTES.JOB_POSITIONS),
   },
   {
-    href: "/",
+    href: ROUTES.HOME,
     label: "홈",
     icon: "home",
-    match: (pathname) => pathname === "/",
+    match: (pathname) => pathname === ROUTES.HOME,
     featured: true,
   },
   {
-    href: "/settings",
+    href: ROUTES.SETTINGS,
     label: "설정",
     icon: "settings-outline",
-    match: (pathname) => pathname.startsWith("/settings"),
+    match: (pathname) => pathname.startsWith(ROUTES.SETTINGS),
   },
 ];
 

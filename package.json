@@ -10,6 +10,10 @@
     "apk": "eas build -p android --profile development --clear-cache",
     "content:cs": "node scripts/bundle-cs-content.mjs",
     "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "build": "expo export -p web",
     "android": "expo run:android",
     "ios": "expo run:ios"
@@ -59,6 +63,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@types/react": "~19.1.17",
+    "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "^10.4.23",
     "cypress": "^15.8.2",
     "dotenv": "^17.2.3",
@@ -69,7 +74,7 @@
     "storybook": "^10.1.11",
     "tailwindcss": "3.4.17",
     "typescript": "~5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.8"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",

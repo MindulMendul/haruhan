@@ -1,6 +1,9 @@
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Screen } from "@/components/ui/Screen";
+import { ROUTES } from "@/constants/routes";
+import { PAGE_SEO } from "@/constants/seo";
+import { Seo, buildOrganizationJsonLd, buildWebPageJsonLd, buildWebSiteJsonLd } from "@/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
@@ -16,7 +19,7 @@ function QuickCard({
   title: string;
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
-  href: "/cs" | "/job-positions";
+  href: typeof ROUTES.CS | typeof ROUTES.JOB_POSITIONS;
   accent: string;
 }) {
   return (
@@ -45,11 +48,27 @@ function QuickCard({
 
 export default function Home() {
   return (
-    <Screen>
-      <Card tone="inverted" className="overflow-hidden p-6">
-        <Badge variant="inverse">
-          INTERVIEW PREP
-        </Badge>
+    <>
+      <Seo
+        title={PAGE_SEO.HOME.title}
+        description={PAGE_SEO.HOME.description}
+        path={PAGE_SEO.HOME.path}
+        keywords={[...PAGE_SEO.HOME.keywords]}
+        jsonLd={[
+          buildOrganizationJsonLd(),
+          buildWebSiteJsonLd(),
+          buildWebPageJsonLd({
+            title: PAGE_SEO.HOME.title,
+            description: PAGE_SEO.HOME.description,
+            path: PAGE_SEO.HOME.path,
+          }),
+        ]}
+      />
+      <Screen>
+        <Card tone="inverted" className="overflow-hidden p-6">
+          <Badge variant="inverse">
+            INTERVIEW PREP
+          </Badge>
           <Text className="mt-6 text-[42px] font-extrabold leading-[48px] text-white">하루한</Text>
           <Text className="mt-3 text-base leading-6 text-ink-200 dark:text-ink-300">
             공통 CS는 기본기로, 포지션별 질문은 실무 맥락으로 나눠 준비해요.
@@ -66,14 +85,14 @@ export default function Home() {
               <Text className="text-xs font-bold text-white">꼬리 개념</Text>
             </View>
           </View>
-      </Card>
+        </Card>
 
         <View className="mt-5">
           <QuickCard
             title="공통 CS"
             description="네트워크, OS, 자료구조, 보안처럼 모든 포지션에 걸리는 기본기를 봅니다."
             icon="library-outline"
-            href="/cs"
+            href={ROUTES.CS}
             accent="bg-brand-600"
           />
 
@@ -81,7 +100,7 @@ export default function Home() {
             title="포지션별 면접"
             description="FE, BE, Infra, SRE, AI/ML 등 JD별로 자주 물어보는 영역을 정리합니다."
             icon="briefcase-outline"
-            href="/job-positions"
+            href={ROUTES.JOB_POSITIONS}
             accent="bg-ink-900"
           />
         </View>
@@ -92,6 +111,7 @@ export default function Home() {
             먼저 공통 CS에서 기본 개념을 잡고, 포지션 탭에서 내 JD에 맞는 질문과 관련 노트를 이어서 확인해보세요.
           </Text>
         </View>
-    </Screen>
+      </Screen>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-export const APP_COLOR_SCHEME_KEY = "haruhan.colorScheme";
+export { APP_COLOR_SCHEME_KEY } from "@/constants/app";
 
 export type AppColorScheme = "light" | "dark";
 

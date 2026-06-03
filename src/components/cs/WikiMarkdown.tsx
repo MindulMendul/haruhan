@@ -20,15 +20,20 @@ function cleanHeading(value: string) {
 }
 
 export function getWikiHeadings(body: string): WikiHeading[] {
-  return body
-    .split("\n")
-    .map((line) => line.match(/^(#{2,3})\s+(.+)$/))
-    .filter((match): match is RegExpMatchArray => Boolean(match))
-    .map((match, index) => ({
-      id: `${index + 1}`,
-      level: match[1].length,
-      title: cleanHeading(match[2]),
-    }));
+  const headings = body.split("\n").flatMap((line) => {
+    const level = line.startsWith("### ") ? 3 : line.startsWith("## ") ? 2 : 0;
+    if (level === 0) return [];
+
+    const title = cleanHeading(line.slice(level + 1));
+    if (!title) return [];
+
+    return [{ level, title }];
+  });
+
+  return headings.map((heading, index) => ({
+    id: `${index + 1}`,
+    ...heading,
+  }));
 }
 
 const baseMarkdownStyles = {

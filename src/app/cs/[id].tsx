@@ -1,6 +1,9 @@
 import { RelatedConcepts } from "@/components/cs/RelatedConcepts";
 import { WikiMarkdown } from "@/components/cs/WikiMarkdown";
+import { getCsTopicRoute } from "@/constants/routes";
+import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
 import { getCsMarkdown, getTopicById } from "@/content/cs";
+import { Seo, buildArticleJsonLd, buildBreadcrumbJsonLd, toSeoDescription } from "@/lib/seo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -13,16 +16,42 @@ export default function CsTopicDetailScreen() {
 
   if (!id || !topic) {
     return (
-      <View className="flex-1 justify-center items-center p-6 bg-paper dark:bg-ink-900">
-        <Text className="text-ink-600 dark:text-ink-300">존재하지 않는 주제입니다.</Text>
-      </View>
+      <>
+        <Seo title="존재하지 않는 CS 노트" description="요청한 CS 면접 노트를 찾을 수 없습니다." path={PAGE_SEO.CS_INDEX.path} robots={SEO_ROBOTS.NO_INDEX} />
+        <View className="flex-1 justify-center items-center p-6 bg-paper dark:bg-ink-900">
+          <Text className="text-ink-600 dark:text-ink-300">존재하지 않는 주제입니다.</Text>
+        </View>
+      </>
     );
   }
 
   const shortTitle = `${topic.emoji} ${topic.title.split("(")[0].trim()}`;
+  const seoTitle = `${topic.title} 면접 노트`;
+  const seoDescription = toSeoDescription(`${topic.cardSummary} ${topic.subtitle} ${body}`);
+  const path = getCsTopicRoute(topic.id);
 
   return (
     <>
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        path={path}
+        type="article"
+        keywords={[topic.title, topic.subtitle, "CS 면접", "개발자 면접", "하루한"]}
+        jsonLd={[
+          buildArticleJsonLd({
+            title: seoTitle,
+            description: seoDescription,
+            path,
+            keywords: [topic.title, topic.subtitle, "CS 면접"],
+          }),
+          buildBreadcrumbJsonLd([
+            { name: PAGE_SEO.HOME.title, path: PAGE_SEO.HOME.path },
+            { name: "공통 CS", path: PAGE_SEO.CS_INDEX.path },
+            { name: topic.title, path },
+          ]),
+        ]}
+      />
       <Stack.Screen options={{ title: shortTitle }} />
       <ScrollView className="flex-1 bg-paper dark:bg-ink-900" contentContainerStyle={{ padding: 14, paddingBottom: 52 }}>
         <View className="overflow-hidden rounded-2xl border border-ink-200 bg-white shadow-sm dark:border-ink-700 dark:bg-ink-800">

@@ -1,3 +1,5 @@
+import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
+import { Seo } from "@/lib/seo";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -5,6 +7,12 @@ import { Text, TouchableOpacity, View } from "react-native";
 export default function NotFoundScreen() {
   return (
     <>
+      <Seo
+        title={PAGE_SEO.NOT_FOUND.title}
+        description={PAGE_SEO.NOT_FOUND.description}
+        path={PAGE_SEO.NOT_FOUND.path}
+        robots={SEO_ROBOTS.NO_INDEX}
+      />
       {/* 상단 헤더 타이틀 설정 */}
       <Stack.Screen options={{ title: "길을 잃었어요!" }} />
 
