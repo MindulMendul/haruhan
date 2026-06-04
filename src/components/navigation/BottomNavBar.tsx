@@ -57,7 +57,7 @@ export function BottomNavBar() {
           return (
             <TouchableOpacity
               key={item.href}
-              className={`min-w-0 flex-1 items-center justify-center rounded-[22px] px-2 ${
+              className={`min-w-[88px] flex-1 items-center justify-center rounded-[22px] px-3 ${
                 item.featured ? "-mt-5 py-3" : "py-2.5"
               } ${active ? "bg-brand-600" : item.featured ? "bg-ink-900 dark:bg-brand-600" : "bg-transparent"}`}
               activeOpacity={0.82}
@@ -78,7 +78,6 @@ export function BottomNavBar() {
                 />
               </View>
               <Text
-                numberOfLines={1}
                 className={`mt-1 text-[11px] font-extrabold ${
                   active ? "text-white" : item.featured ? "text-white" : "text-ink-500 dark:text-ink-300"
                 }`}
