@@ -5,6 +5,7 @@ export const ROUTES = {
   NETWORK: "/network",
   SETTINGS: "/settings",
   FEEDBACK: "/feedback",
+  PRIVACY: "/privacy",
   NOT_FOUND: "/404",
 } as const;
 

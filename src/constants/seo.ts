@@ -19,6 +19,7 @@ export const SEO_PATHS = {
   NETWORK: ROUTES.NETWORK,
   SETTINGS: ROUTES.SETTINGS,
   FEEDBACK: ROUTES.FEEDBACK,
+  PRIVACY: ROUTES.PRIVACY,
   NOT_FOUND: ROUTES.NOT_FOUND,
 } as const;
 
@@ -56,6 +57,11 @@ export const PAGE_SEO = {
     title: "Feedback UI",
     description: "하루한 앱에서 사용하는 Toast, Alert, Modal 컴포넌트를 확인하는 개발용 UI 데모 화면입니다.",
     path: SEO_PATHS.FEEDBACK,
+  },
+  PRIVACY: {
+    title: "개인정보처리방침",
+    description: "하루한 앱과 웹 서비스의 개인정보 처리 기준을 안내합니다.",
+    path: SEO_PATHS.PRIVACY,
   },
   NOT_FOUND: {
     title: "페이지를 찾을 수 없습니다",

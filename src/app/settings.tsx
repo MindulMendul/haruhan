@@ -5,7 +5,7 @@ import { Seo, buildWebPageJsonLd } from "@/lib/seo";
 import { APP_COLOR_SCHEME_KEY, type AppColorScheme } from "@/lib/theme";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Switch, Text, View } from "react-native";
@@ -82,6 +82,12 @@ export default function SettingsScreen() {
             </Text>
           </View>
         </View>
+      </Section>
+
+      <Section title="정책">
+        <Button variant="outline" onPress={() => router.push(ROUTES.PRIVACY as Href)}>
+          개인정보처리방침 보기
+        </Button>
       </Section>
 
       <Section title="개발용 UI 샘플" description="Toast, Alert, Modal 컴포넌트를 확인하는 숨김 데모 페이지입니다.">

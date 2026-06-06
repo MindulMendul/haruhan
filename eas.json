@@ -20,6 +20,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {},
+    "closed-test": {
+      "android": {
+        "track": "alpha",
+        "releaseStatus": "completed"
+      }
+    }
   }
 }

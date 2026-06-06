@@ -162,6 +162,14 @@ export default function RootLayout() {
                   }}
                 />
                 <Drawer.Screen
+                  name="privacy"
+                  options={{
+                    title: "개인정보처리방침",
+                    drawerItemStyle: { display: "none" },
+                    drawerLabel: () => null,
+                  }}
+                />
+                <Drawer.Screen
                   name="job-positions"
                   options={{
                     drawerLabel: "JD 포지션",
