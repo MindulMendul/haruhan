@@ -23,6 +23,7 @@ function CustomDrawerContent({ props }: { props: object }) {
   const isDark = colorScheme === "dark";
   const drawerTextColor = isDark ? "#e2e8f0" : "#334155";
   const showCommonCsMenu = pathname.startsWith(ROUTES.CS);
+  const showInterviewMenu = pathname.startsWith(ROUTES.INTERVIEW);
   const showPositionMenu = pathname.startsWith(ROUTES.JOB_POSITIONS);
 
   return (
@@ -55,6 +56,13 @@ function CustomDrawerContent({ props }: { props: object }) {
         labelStyle={{ fontWeight: "600" }}
       />
       <DrawerItem
+        label="🎙️ 면접"
+        onPress={() => router.push(ROUTES.INTERVIEW)}
+        inactiveTintColor={drawerTextColor}
+        activeTintColor="#6a96ff"
+        labelStyle={{ fontWeight: "600" }}
+      />
+      <DrawerItem
         label="⚙️ 설정"
         onPress={() => router.push(ROUTES.SETTINGS)}
         inactiveTintColor={drawerTextColor}
@@ -62,10 +70,43 @@ function CustomDrawerContent({ props }: { props: object }) {
         labelStyle={{ fontWeight: "600" }}
       />
 
+      {showInterviewMenu ? (
+        <>
+          <View className="px-4 py-2 mt-2 border-t border-ink-200 dark:border-ink-700">
+            <Text className="text-xs font-semibold text-ink-400 uppercase tracking-wide dark:text-ink-300">
+              면접 바로가기
+            </Text>
+          </View>
+          <DrawerItem
+            label="문제 풀이"
+            onPress={() => router.push(`${ROUTES.INTERVIEW}/practice`)}
+            inactiveTintColor={drawerTextColor}
+            activeTintColor="#6a96ff"
+            labelStyle={{ fontWeight: "500", fontSize: 13 }}
+          />
+          <DrawerItem
+            label="복기 분석"
+            onPress={() => router.push(`${ROUTES.INTERVIEW}/analysis`)}
+            inactiveTintColor={drawerTextColor}
+            activeTintColor="#6a96ff"
+            labelStyle={{ fontWeight: "500", fontSize: 13 }}
+          />
+          <DrawerItem
+            label="보이스 인터뷰"
+            onPress={() => router.push(`${ROUTES.INTERVIEW}/voice`)}
+            inactiveTintColor={drawerTextColor}
+            activeTintColor="#6a96ff"
+            labelStyle={{ fontWeight: "500", fontSize: 13 }}
+          />
+        </>
+      ) : null}
+
       {showCommonCsMenu ? (
         <>
           <View className="px-4 py-2 mt-2 border-t border-ink-200 dark:border-ink-700">
-            <Text className="text-xs font-semibold text-ink-400 uppercase tracking-wide dark:text-ink-300">공통 CS 바로가기</Text>
+            <Text className="text-xs font-semibold text-ink-400 uppercase tracking-wide dark:text-ink-300">
+              공통 CS 바로가기
+            </Text>
           </View>
 
           {COMMON_CS_TOPICS.map((topic) => (
@@ -84,7 +125,9 @@ function CustomDrawerContent({ props }: { props: object }) {
       {showPositionMenu ? (
         <>
           <View className="px-4 py-2 mt-2 border-t border-ink-200 dark:border-ink-700">
-            <Text className="text-xs font-semibold text-ink-400 uppercase tracking-wide dark:text-ink-300">포지션 바로가기</Text>
+            <Text className="text-xs font-semibold text-ink-400 uppercase tracking-wide dark:text-ink-300">
+              포지션 바로가기
+            </Text>
           </View>
 
           {INTERVIEW_POSITIONS.map((position) => (
@@ -162,10 +205,25 @@ export default function RootLayout() {
                   }}
                 />
                 <Drawer.Screen
+                  name="privacy"
+                  options={{
+                    title: "개인정보처리방침",
+                    drawerItemStyle: { display: "none" },
+                    drawerLabel: () => null,
+                  }}
+                />
+                <Drawer.Screen
                   name="job-positions"
                   options={{
                     drawerLabel: "JD 포지션",
                     title: "JD 포지션",
+                  }}
+                />
+                <Drawer.Screen
+                  name="interview"
+                  options={{
+                    drawerLabel: "면접",
+                    title: "면접",
                   }}
                 />
                 <Drawer.Screen

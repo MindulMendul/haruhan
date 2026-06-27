@@ -7,7 +7,12 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type BottomNavItem = {
-  href: typeof ROUTES.HOME | typeof ROUTES.CS | typeof ROUTES.SETTINGS;
+  href:
+    | typeof ROUTES.CS
+    | typeof ROUTES.HOME
+    | typeof ROUTES.INTERVIEW_PRACTICE
+    | typeof ROUTES.INTERVIEW_ANALYSIS
+    | typeof ROUTES.INTERVIEW_VOICE;
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
   match: (pathname: string) => boolean;
@@ -19,7 +24,13 @@ const NAV_ITEMS: BottomNavItem[] = [
     href: ROUTES.CS,
     label: "공부",
     icon: "book-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.CS) || pathname.startsWith(ROUTES.JOB_POSITIONS),
+    match: (pathname) => pathname.startsWith(ROUTES.CS),
+  },
+  {
+    href: ROUTES.INTERVIEW_PRACTICE,
+    label: "문제",
+    icon: "help-circle-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_PRACTICE),
   },
   {
     href: ROUTES.HOME,
@@ -29,10 +40,16 @@ const NAV_ITEMS: BottomNavItem[] = [
     featured: true,
   },
   {
-    href: ROUTES.SETTINGS,
-    label: "설정",
-    icon: "settings-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.SETTINGS),
+    href: ROUTES.INTERVIEW_ANALYSIS,
+    label: "복기",
+    icon: "clipboard-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
+  },
+  {
+    href: ROUTES.INTERVIEW_VOICE,
+    label: "면접",
+    icon: "mic-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_VOICE),
   },
 ];
 
@@ -66,11 +83,7 @@ export function BottomNavBar() {
               accessibilityState={{ selected: active }}
               onPress={() => router.push(item.href)}
             >
-              <View
-                className={`items-center justify-center ${
-                  item.featured ? "h-11 w-11 rounded-full" : ""
-                }`}
-              >
+              <View className={`items-center justify-center ${item.featured ? "h-11 w-11 rounded-full" : ""}`}>
                 <Ionicons
                   name={item.icon}
                   size={item.featured ? 23 : 20}

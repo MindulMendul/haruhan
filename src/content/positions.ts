@@ -7,6 +7,7 @@ export interface InterviewPosition {
   keywords: string[];
   focusAreas: string[];
   questions: string[];
+  mcq?: { question: string; options: string[]; answerIndex: number }[];
   conceptGroups?: InterviewPositionConceptGroup[];
   topicIds?: string[];
 }
@@ -58,6 +59,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "folder-structure-architecture",
       "cicd-cdn",
     ],
+    mcq: [
+      {
+        question: "LCP를 개선하기 위해 먼저 확인해야 할 항목은 무엇인가요?",
+        options: [
+          "이미지 최적화 및 사이즈 조정",
+          "서버 로그 로테이션 설정",
+          "데이터베이스 인덱스 재구성",
+          "사용자 인증 토큰 만료 시간",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "CSR 대신 SSR을 선택할 타당한 이유는 무엇인가요?",
+        options: [
+          "초기 랜더링 성능과 SEO 개선이 필요할 때",
+          "프론트엔드 번들 크기를 늘리기 위해",
+          "클라이언트에서 상태를 전부 관리하기 위해",
+          "브라우저의 JavaScript를 완전히 비활성화하기 위해",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "React 컴포넌트에서 useMemo를 사용하는 주된 목적은 무엇인가요?",
+        options: [
+          "스타일을 적용하기 위해",
+          "계산된 값을 메모이제이션하여 성능을 개선하기 위해",
+          "라우터를 구성하기 위해",
+          "컴포넌트가 렌더링되지 않도록 하기 위해",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "웹 애플리케이션의 렌더링 속도를 올리기 위해 가장 먼저 확인할 것은 무엇인가요?",
+        options: [
+          "서버 로그 파일 크기",
+          "Critical Rendering Path와 리소스 로딩 순서",
+          "데이터베이스 쿼리 실행 시간",
+          "사용자 세션 만료 시간",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "상태 관리 라이브러리를 도입할 때 가장 중요한 기준은 무엇인가요?",
+        options: ["스타일시트 크기", "상태 공유 범위와 복잡도", "API 호출 수", "서버 CPU 사용량"],
+        answerIndex: 1,
+      },
+    ],
   },
   {
     id: "be",
@@ -79,6 +127,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "JWT와 세션 기반 인증의 장단점은 무엇인가요?",
     ],
     topicIds: ["general-cs-practical-deep-dive", "security-question-map", "authn-authz", "data-structure-question-map"],
+    mcq: [
+      {
+        question: "API에서 멱등성이 중요한 경우는 언제인가요?",
+        options: [
+          "결제과정 같은 요청이 중복 수신될 수 있는 경우",
+          "순수 읽기전용 리소스를 조회할 때",
+          "로그를 단순히 수집할 때",
+          "정적 파일을 제공할 때",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "데이터베이스 인덱스가 항상 성능을 향상시키지 않는 이유는?",
+        options: [
+          "인덱스 유지에 쓰기 비용이 추가되기 때문에",
+          "쿼리 결과가 항상 정렬되기 때문에",
+          "트랜잭션 격리 수준 때문에",
+          "네트워크 지연시간 때문에",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "캐시를 사용할 때 일관성을 유지하려면 어떤 요소를 먼저 고려해야 하나요?",
+        options: ["데이터 만료 정책과 갱신 전략", "클라이언트 화면 크기", "로그 출력 형식", "서버 메모리 주소"],
+        answerIndex: 0,
+      },
+      {
+        question: "트랜잭션 격리 수준이 높으면 어떤 효과가 있나요?",
+        options: [
+          "동시성 제어가 강화되지만 성능 저하가 있을 수 있다",
+          "모든 쿼리가 캐시된다",
+          "데이터베이스 백업 시간이 짧아진다",
+          "응답 본문이 암호화된다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "JWT와 세션 기반 인증의 차이로 올바른 것은?",
+        options: [
+          "JWT는 상태 비저장 인증이고, 세션은 서버에 상태를 유지한다",
+          "JWT는 항상 안전하고, 세션은 안전하지 않다",
+          "세션은 API 전용이고 JWT는 웹 전용이다",
+          "JWT는 데이터베이스 없이 작동하지 않는다",
+        ],
+        answerIndex: 0,
+      },
+    ],
   },
   {
     id: "fullstack",
@@ -100,13 +195,56 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "기술 부채를 언제 갚아야 한다고 판단하나요?",
     ],
     topicIds: ["web-fe-question-map", "general-cs-practical-deep-dive", "authn-authz", "cicd-cdn"],
+    mcq: [
+      {
+        question: "FE와 BE의 책임 경계로 가장 적절한 것은?",
+        options: [
+          "모든 검증은 FE에서만 처리한다",
+          "BE가 화면 렌더링까지 담당한다",
+          "권한·정합성 최종 검증은 BE, UI 상태와 사용자 흐름은 FE가 담당한다",
+          "FE가 DB 트랜잭션을 직접 제어한다",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "MVP를 빠르게 출시할 때 합리적인 전략은?",
+        options: [
+          "핵심 가치 검증에 집중하고 기술 부채를 의도적으로 기록·관리한다",
+          "처음부터 모든 엣지 케이스를 구현한다",
+          "테스트를 전부 생략한다",
+          "모든 기능을 마이크로서비스로 분리한다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "API 계약(contract)을 먼저 합의하면 좋은 이유는?",
+        options: [
+          "서버 비용이 줄어들어서",
+          "FE/BE가 병렬로 개발하고 통합 비용을 줄일 수 있어서",
+          "DB 인덱스가 자동 생성돼서",
+          "번들 크기가 작아져서",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "기술 부채를 갚을 우선순위 기준으로 적절한 것은?",
+        options: ["코드 줄 수", "파일 이름 길이", "커밋 횟수", "변경 빈도와 장애 위험, 사용자 영향"],
+        answerIndex: 3,
+      },
+      {
+        question: "기능 하나를 처음부터 배포까지 설계할 때 놓치기 쉬운 단계는?",
+        options: ["모니터링·롤백 같은 운영 관점", "버튼 색상 결정", "변수명 컨벤션", "로고 위치"],
+        answerIndex: 0,
+      },
+    ],
   },
   {
     id: "mobile",
     label: "Mobile",
     title: "Mobile Engineer",
     subtitle: "iOS/Android 앱의 생명주기, 성능, 배포를 다루는 역할",
-    summary: "앱 생명주기, 네이티브 권한, 스토어 배포, 오프라인 처리, React Native/Flutter/Native 성능 질문이 나옵니다.",
+    summary:
+      "앱 생명주기, 네이티브 권한, 스토어 배포, 오프라인 처리, React Native/Flutter/Native 성능 질문이 나옵니다.",
     keywords: ["iOS", "Android", "React Native", "권한", "스토어", "오프라인"],
     focusAreas: [
       "앱 생명주기와 백그라운드 동작",
@@ -121,6 +259,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "스토어 배포 시 버전 관리는 어떻게 하나요?",
     ],
     topicIds: ["general-cs-practical-deep-dive", "authn-authz", "security-question-map"],
+    mcq: [
+      {
+        question: "앱 권한 요청 시점으로 가장 좋은 것은?",
+        options: [
+          "앱을 처음 켜자마자 모든 권한을 한 번에 요청한다",
+          "기능을 실제로 사용하는 직전에 맥락과 함께 요청한다",
+          "앱 삭제 직전에 요청한다",
+          "권한 없이 강제로 기능을 실행한다",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "React Native에서 성능 병목을 찾는 합리적인 방법은?",
+        options: [
+          "프로파일러로 렌더링/브릿지 비용을 측정한다",
+          "콘솔 로그만 보고 추측한다",
+          "무조건 네이티브로 재작성한다",
+          "이미지를 모두 제거한다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "오프라인 상태에서 데이터를 다루는 적절한 전략은?",
+        options: [
+          "오프라인이면 앱을 종료한다",
+          "모든 데이터를 매번 서버에서만 읽는다",
+          "로컬 캐시와 쓰기 큐를 두고 복귀 시 동기화한다",
+          "데이터를 저장하지 않는다",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "스토어 배포 시 버전 관리로 올바른 것은?",
+        options: [
+          "배포마다 versionCode를 증가시켜 충돌을 막는다",
+          "항상 같은 versionCode를 사용한다",
+          "버전을 내려서 업로드한다",
+          "버전을 비워둔다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "앱이 background로 전환될 때 고려할 점은?",
+        options: ["화면 색을 변경한다", "앱 아이콘을 교체한다", "사용자 비밀번호를 변경한다", "진행 중 작업 저장과 네트워크/타이머 정리"],
+        answerIndex: 3,
+      },
+    ],
   },
   {
     id: "infra",
@@ -142,6 +327,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "클라우드 비용을 줄이기 위해 무엇을 확인하나요?",
     ],
     topicIds: ["os-question-map", "general-cs-practical-deep-dive", "cicd-cdn", "security-question-map"],
+    mcq: [
+      {
+        question: "Kubernetes에서 Deployment의 주된 역할은?",
+        options: [
+          "원하는 수의 Pod 상태를 유지하고 롤링 업데이트를 관리한다",
+          "DNS 레코드를 생성한다",
+          "TLS 인증서를 발급한다",
+          "로그를 수집한다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "Service(또는 Ingress)가 담당하는 것은?",
+        options: [
+          "컨테이너 이미지를 빌드한다",
+          "Pod에 대한 안정적인 네트워크 엔드포인트를 제공한다",
+          "소스 코드를 컴파일한다",
+          "DB를 백업한다",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "Blue-Green과 Canary 배포의 차이로 옳은 것은?",
+        options: [
+          "둘은 완전히 동일하다",
+          "Blue-Green은 트래픽을 1%씩 보낸다",
+          "Canary는 일부 트래픽에 점진 노출, Blue-Green은 환경 전체를 전환한다",
+          "Canary는 롤백이 불가능하다",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "Terraform state가 중요한 이유는?",
+        options: [
+          "실제 인프라와 코드의 매핑을 추적하기 때문에",
+          "로그를 저장하기 때문에",
+          "컨테이너를 실행하기 때문에",
+          "DNS를 캐싱하기 때문에",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "private subnet의 리소스를 인터넷에 직접 노출하지 않는 이유는?",
+        options: ["비용이 더 들기 때문에", "DNS가 동작하지 않아서", "IP가 부족해서", "공격 표면을 줄이고 접근을 통제하기 위해"],
+        answerIndex: 3,
+      },
+    ],
   },
   {
     id: "devops",
@@ -162,7 +394,59 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "DevOps와 SRE의 차이를 어떻게 설명하나요?",
       "운영 자동화를 도입할 때 주의할 점은 무엇인가요?",
     ],
-    topicIds: ["cicd-cdn", "software-engineering-question-map", "general-cs-practical-deep-dive", "security-question-map"],
+    topicIds: [
+      "cicd-cdn",
+      "software-engineering-question-map",
+      "general-cs-practical-deep-dive",
+      "security-question-map",
+    ],
+    mcq: [
+      {
+        question: "좋은 CI/CD 파이프라인에 일반적으로 포함되는 단계는?",
+        options: [
+          "lint·test·build·배포·스모크 테스트 자동화",
+          "수동 FTP 업로드",
+          "배포 후 테스트 생략",
+          "빌드 없이 소스 직접 복사",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "롤백 가능한 배포 전략으로 적절한 것은?",
+        options: [
+          "DB를 매번 새로 생성한다",
+          "이전 버전을 즉시 되돌릴 수 있는 무중단 배포 + 버전 보관",
+          "배포 후 백업을 삭제한다",
+          "수동으로 서버 파일을 교체한다",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "관측성(Observability)을 구성하는 세 가지 축은?",
+        options: ["로그·메트릭·트레이스", "CPU·RAM·디스크", "HTML·CSS·JS", "FE·BE·DB"],
+        answerIndex: 0,
+      },
+      {
+        question: "배포 자동화를 도입할 때 주의할 점은?",
+        options: [
+          "테스트를 모두 끈다",
+          "권한을 모두에게 부여한다",
+          "실패 시 멈춤 지점과 알림·롤백을 함께 설계한다",
+          "로그를 남기지 않는다",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "DevOps와 SRE의 관계로 적절한 설명은?",
+        options: [
+          "SRE는 신뢰성을 지표로 운영하는 구체적 구현 방식 중 하나다",
+          "둘은 서로 무관하다",
+          "DevOps는 보안만 담당한다",
+          "SRE는 프론트엔드 전담이다",
+        ],
+        answerIndex: 0,
+      },
+    ],
   },
   {
     id: "sre",
@@ -184,6 +468,48 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "알람 피로를 줄이려면 어떻게 해야 하나요?",
     ],
     topicIds: ["general-cs-practical-deep-dive", "os-question-map", "cicd-cdn"],
+    mcq: [
+      {
+        question: "SLO와 SLA의 차이로 옳은 것은?",
+        options: [
+          "SLO는 내부 목표, SLA는 외부 약속과 보상 조건이다",
+          "SLO가 법적 계약이다",
+          "둘은 동일하다",
+          "SLA는 측정 지표 그 자체다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "Error Budget의 역할은?",
+        options: [
+          "서버 비용 예산이다",
+          "허용 실패량을 정해 개발 속도와 안정성의 균형을 잡는다",
+          "광고 예산이다",
+          "테스트 커버리지 목표다",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "장애 대응(Incident Response)에서 우선순위가 높은 것은?",
+        options: ["영향 완화와 사용자 영향 최소화", "보고서 양식 정리", "비난 대상 찾기", "코드 리팩터링"],
+        answerIndex: 0,
+      },
+      {
+        question: "알람 피로(alert fatigue)를 줄이는 방법은?",
+        options: [
+          "모든 지표에 알람을 설정한다",
+          "알람을 모두 끈다",
+          "임계값을 0으로 설정한다",
+          "실행 가능하고 증상 기반인 알람만 남긴다",
+        ],
+        answerIndex: 3,
+      },
+      {
+        question: "SLI로 적절한 예시는?",
+        options: ["성공 요청 비율, p99 지연 시간", "직원 수", "코드 줄 수", "배포 횟수만"],
+        answerIndex: 0,
+      },
+    ],
   },
   {
     id: "devsecops",
@@ -205,6 +531,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "컨테이너 이미지를 안전하게 운영하려면 무엇을 확인하나요?",
     ],
     topicIds: ["security-question-map", "authn-authz", "general-cs-practical-deep-dive", "cicd-cdn"],
+    mcq: [
+      {
+        question: "Shift-left security의 의미는?",
+        options: [
+          "개발 초기에 보안 검사를 통합해 빨리 발견한다",
+          "배포 직전에만 보안을 점검한다",
+          "보안을 운영팀에만 맡긴다",
+          "보안 검사를 생략한다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "시크릿이 Git에 올라갔을 때 우선 대응은?",
+        options: [
+          "커밋 메시지만 수정한다",
+          "즉시 revoke/rotate 후 영향 범위를 점검한다",
+          "그대로 둔다",
+          "리포지토리 이름을 변경한다",
+        ],
+        answerIndex: 1,
+      },
+      {
+        question: "SAST와 DAST의 차이는?",
+        options: [
+          "둘은 동일하다",
+          "SAST는 런타임 분석이다",
+          "SAST는 소스 코드 정적 분석, DAST는 실행 중 동적 분석이다",
+          "DAST는 컴파일 단계 분석이다",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "컨테이너 이미지를 안전하게 운영하려면?",
+        options: [
+          "취약점 스캔·최소 베이스 이미지·이미지 서명",
+          "root 사용자로 항상 실행",
+          "모든 포트 개방",
+          "패키지를 최신으로 두지 않음",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "최소 권한 원칙(least privilege)의 목적은?",
+        options: ["관리 편의를 위해 모두 admin 부여", "감사 로그 제거", "MFA 비활성화", "필요한 권한만 부여해 피해 범위를 줄임"],
+        answerIndex: 3,
+      },
+    ],
   },
   {
     id: "ai-ml",
@@ -229,6 +602,53 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "프롬프트 인젝션이나 민감정보 유출을 어떻게 막나요?",
     ],
     topicIds: ["ai-prompt-engineering-practical-interview", "algorithm-question-map", "data-structure-question-map"],
+    mcq: [
+      {
+        question: "Precision과 Recall 중 Recall이 더 중요한 상황은?",
+        options: [
+          "놓치면 안 되는 경우(질병·사기 탐지 등)",
+          "오탐 비용만 큰 경우",
+          "데이터가 균형일 때만",
+          "항상 Precision이 우선",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "좋은 프롬프트의 핵심 구성 요소는?",
+        options: ["긴 문장 하나", "역할·목표·제약·출력 형식·예시", "이모지 다수", "무작위 키워드 나열"],
+        answerIndex: 1,
+      },
+      {
+        question: "RAG를 설계할 때 핵심 고려사항은?",
+        options: [
+          "검색 품질(chunking·임베딩·reranking)과 근거 제시",
+          "모델 파라미터 수만 늘리기",
+          "프롬프트를 짧게만 유지",
+          "캐시 비활성화",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "LLM 답변 품질을 평가하는 합리적인 방법은?",
+        options: [
+          "느낌으로 판단",
+          "응답 길이로만 평가",
+          "golden set과 LLM-as-judge에 샘플 검수를 병행",
+          "지연 시간만 측정",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "프롬프트 인젝션을 완화하는 방법은?",
+        options: [
+          "입력 분리·권한 제한·출력 검증 가드레일",
+          "사용자 입력을 그대로 신뢰",
+          "시스템 프롬프트 공개",
+          "모든 도구 호출 자동 허용",
+        ],
+        answerIndex: 0,
+      },
+    ],
   },
   {
     id: "data",
@@ -250,6 +670,43 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "데이터 품질을 어떻게 모니터링하나요?",
     ],
     topicIds: ["data-structure-question-map", "algorithm-question-map", "general-cs-practical-deep-dive"],
+    mcq: [
+      {
+        question: "ETL과 ELT의 차이는?",
+        options: [
+          "ETL은 적재 전 변환, ELT는 적재 후 웨어하우스에서 변환한다",
+          "둘은 동일하다",
+          "ELT는 변환을 하지 않는다",
+          "ETL은 항상 실시간이다",
+        ],
+        answerIndex: 0,
+      },
+      {
+        question: "데이터 파이프라인 실패 시 재처리를 위해 중요한 것은?",
+        options: ["로그 삭제", "멱등성과 체크포인트, 재실행 가능한 설계", "수동 복사", "스키마 무시"],
+        answerIndex: 1,
+      },
+      {
+        question: "A/B 테스트에서 p-value의 의미로 옳은 것은?",
+        options: [
+          "효과 크기 그 자체",
+          "표본 수",
+          "귀무가설이 맞다고 가정할 때 관측 결과가 나올 확률",
+          "신뢰구간의 폭",
+        ],
+        answerIndex: 2,
+      },
+      {
+        question: "데이터 품질 모니터링 항목으로 적절한 것은?",
+        options: ["null 비율·중복·freshness·분포 드리프트", "파일 색상", "서버 위치", "변수명 길이"],
+        answerIndex: 0,
+      },
+      {
+        question: "스트리밍과 배치 처리의 선택 기준은?",
+        options: ["개발자 취향", "지연 허용도와 데이터 도착 패턴", "파일 확장자", "회사 규모만"],
+        answerIndex: 1,
+      },
+    ],
   },
 ];
 
@@ -407,7 +864,8 @@ const POSITION_CONCEPT_GROUPS: Record<string, InterviewPositionConceptGroup[]> =
       concepts: [
         {
           term: "VPC/Subnet/Routing",
-          summary: "서비스 네트워크 경계를 나누고 public/private 접근, routing table, NAT, 보안 그룹으로 흐름을 제어합니다.",
+          summary:
+            "서비스 네트워크 경계를 나누고 public/private 접근, routing table, NAT, 보안 그룹으로 흐름을 제어합니다.",
           answerHint: "인터넷 노출 리소스와 내부 리소스를 왜 분리하는지부터 설명합니다.",
           topicId: "general-cs-practical-deep-dive",
         },
@@ -552,4 +1010,3 @@ export const INTERVIEW_POSITIONS: InterviewPosition[] = BASE_INTERVIEW_POSITIONS
   ...position,
   conceptGroups: POSITION_CONCEPT_GROUPS[position.id] ?? [],
 }));
-

@@ -38,6 +38,8 @@ Thumbs.db
 # local env files
 .env
 .env*.local
+credentials.json
+credentials/
 *.pem
 
 # typescript

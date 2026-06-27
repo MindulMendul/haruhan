@@ -16,9 +16,11 @@ export const SEO_PATHS = {
   HOME: ROUTES.HOME,
   CS: ROUTES.CS,
   JOB_POSITIONS: ROUTES.JOB_POSITIONS,
+  INTERVIEW: ROUTES.INTERVIEW,
   NETWORK: ROUTES.NETWORK,
   SETTINGS: ROUTES.SETTINGS,
   FEEDBACK: ROUTES.FEEDBACK,
+  PRIVACY: ROUTES.PRIVACY,
   NOT_FOUND: ROUTES.NOT_FOUND,
 } as const;
 
@@ -41,6 +43,12 @@ export const PAGE_SEO = {
     path: SEO_PATHS.JOB_POSITIONS,
     keywords: ["개발자 면접", "포지션별 면접"],
   },
+  INTERVIEW: {
+    title: "면접 연습",
+    description: "기술 면접 문제 풀이, 면접 복기 분석, 보이스 인터뷰 연습을 한 곳에서 제공합니다.",
+    path: SEO_PATHS.INTERVIEW,
+    keywords: ["면접 연습", "복기 분석", "보이스 인터뷰", "기술 면접", "인성 면접"],
+  },
   NETWORK: {
     title: "네트워크 용어",
     description: "네트워크 면접과 개발 실무에서 자주 만나는 핵심 용어를 카드 형태로 정리합니다.",
@@ -56,6 +64,11 @@ export const PAGE_SEO = {
     title: "Feedback UI",
     description: "하루한 앱에서 사용하는 Toast, Alert, Modal 컴포넌트를 확인하는 개발용 UI 데모 화면입니다.",
     path: SEO_PATHS.FEEDBACK,
+  },
+  PRIVACY: {
+    title: "개인정보처리방침",
+    description: "하루한 앱과 웹 서비스의 개인정보 처리 기준을 안내합니다.",
+    path: SEO_PATHS.PRIVACY,
   },
   NOT_FOUND: {
     title: "페이지를 찾을 수 없습니다",

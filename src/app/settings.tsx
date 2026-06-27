@@ -5,7 +5,7 @@ import { Seo, buildWebPageJsonLd } from "@/lib/seo";
 import { APP_COLOR_SCHEME_KEY, type AppColorScheme } from "@/lib/theme";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React from "react";
 import { Switch, Text, View } from "react-native";
@@ -67,26 +67,9 @@ export default function SettingsScreen() {
         </View>
       </Section>
 
-      <Section title="탐색 구조">
-        <View className="gap-3">
-          <View className="rounded-2xl bg-ink-50 p-4 dark:bg-ink-700">
-            <Text className="text-sm font-extrabold text-ink-900 dark:text-white">오른쪽 사이드바</Text>
-            <Text className="mt-1 text-xs leading-5 text-ink-500 dark:text-ink-300">
-              사이드바는 오른쪽에서 열리며, 세부 주제 바로가기용으로 사용합니다.
-            </Text>
-          </View>
-          <View className="rounded-2xl bg-ink-50 p-4 dark:bg-ink-700">
-            <Text className="text-sm font-extrabold text-ink-900 dark:text-white">하단 Nav</Text>
-            <Text className="mt-1 text-xs leading-5 text-ink-500 dark:text-ink-300">
-              홈, 공통 CS, 포지션, 설정처럼 자주 쓰는 화면 이동을 담당합니다.
-            </Text>
-          </View>
-        </View>
-      </Section>
-
-      <Section title="개발용 UI 샘플" description="Toast, Alert, Modal 컴포넌트를 확인하는 숨김 데모 페이지입니다.">
-        <Button variant="outline" onPress={() => router.push(ROUTES.FEEDBACK)}>
-          UI 컴포넌트 샘플 보기
+      <Section title="정책">
+        <Button variant="outline" onPress={() => router.push(ROUTES.PRIVACY as Href)}>
+          개인정보처리방침 보기
         </Button>
       </Section>
       </Screen>
