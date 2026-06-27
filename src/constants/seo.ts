@@ -16,6 +16,7 @@ export const SEO_PATHS = {
   HOME: ROUTES.HOME,
   CS: ROUTES.CS,
   JOB_POSITIONS: ROUTES.JOB_POSITIONS,
+  INTERVIEW: ROUTES.INTERVIEW,
   NETWORK: ROUTES.NETWORK,
   SETTINGS: ROUTES.SETTINGS,
   FEEDBACK: ROUTES.FEEDBACK,
@@ -41,6 +42,12 @@ export const PAGE_SEO = {
     description: "포지션별 개발자 면접 질문과 함께 이어서 보면 좋은 CS 노트를 정리합니다.",
     path: SEO_PATHS.JOB_POSITIONS,
     keywords: ["개발자 면접", "포지션별 면접"],
+  },
+  INTERVIEW: {
+    title: "면접 연습",
+    description: "기술 면접 문제 풀이, 면접 복기 분석, 보이스 인터뷰 연습을 한 곳에서 제공합니다.",
+    path: SEO_PATHS.INTERVIEW,
+    keywords: ["면접 연습", "복기 분석", "보이스 인터뷰", "기술 면접", "인성 면접"],
   },
   NETWORK: {
     title: "네트워크 용어",

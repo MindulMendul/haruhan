@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Screen } from "@/components/ui/Screen";
 import { ROUTES } from "@/constants/routes";
@@ -14,32 +14,34 @@ function QuickCard({
   description,
   icon,
   href,
-  accent,
 }: {
   title: string;
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
-  href: typeof ROUTES.CS | typeof ROUTES.JOB_POSITIONS;
-  accent: string;
+  href:
+    | typeof ROUTES.CS
+    | typeof ROUTES.INTERVIEW_PRACTICE
+    | typeof ROUTES.INTERVIEW_ANALYSIS
+    | typeof ROUTES.INTERVIEW_VOICE
+    | typeof ROUTES.SETTINGS;
 }) {
   return (
     <Link href={href} asChild>
       <TouchableOpacity
-        className="mb-3 rounded-[28px] border border-ink-200 bg-white p-5 shadow-sm active:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:active:bg-ink-700"
+        className="mb-3 rounded-[24px] border border-ink-200 bg-white px-5 py-4 shadow-sm transition active:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:active:bg-ink-700"
         activeOpacity={0.86}
         accessibilityRole="link"
         accessibilityLabel={`${title}. ${description}`}
         accessibilityHint="해당 화면으로 이동합니다."
       >
-        <View className="flex-row items-start gap-4">
-          <View className={`h-12 w-12 items-center justify-center rounded-2xl ${accent}`}>
-            <Ionicons name={icon} size={23} color="#ffffff" />
+        <View className="flex-row items-center gap-4">
+          <View className="h-11 w-11 items-center justify-center rounded-2xl bg-ink-900 dark:bg-white">
+            <Ionicons name={icon} size={22} color="#ffffff" />
           </View>
           <View className="flex-1">
-            <Text className="text-lg font-extrabold text-ink-900 dark:text-white">{title}</Text>
+            <Text className="text-base font-bold text-ink-900 dark:text-white">{title}</Text>
             <Text className="mt-1 text-sm leading-5 text-ink-500 dark:text-ink-300">{description}</Text>
           </View>
-          <Ionicons name="chevron-forward" size={18} color="#94a3b8" />
         </View>
       </TouchableOpacity>
     </Link>
@@ -65,51 +67,57 @@ export default function Home() {
         ]}
       />
       <Screen>
-        <Card tone="inverted" className="overflow-hidden p-6">
-          <Badge variant="inverse">
-            INTERVIEW PREP
-          </Badge>
-          <Text className="mt-6 text-[42px] font-extrabold leading-[48px] text-white">하루한</Text>
-          <Text className="mt-3 text-base leading-6 text-ink-200 dark:text-ink-300">
-            공통 CS는 기본기로, 포지션별 질문은 실무 맥락으로 나눠 준비해요.
-          </Text>
+        <View className="space-y-5">
+          <Card className="rounded-[32px] border border-ink-200 bg-white p-6 shadow-sm dark:border-ink-700 dark:bg-ink-900">
+            <Text className="text-xs font-semibold uppercase tracking-[0.3em] text-ink-500 dark:text-ink-300">
+              하루한
+            </Text>
+            <Text className="mt-4 text-3xl font-extrabold text-ink-900 dark:text-white">면접 준비를 더 간결하게</Text>
+            <Text className="mt-3 text-sm leading-6 text-ink-600 dark:text-ink-300">
+              필요한 기능만 깔끔하게 보여줍니다.
+            </Text>
+          </Card>
 
-          <View className="mt-6 flex-row gap-2">
-            <View className="rounded-full bg-white/10 px-3 py-2">
-              <Text className="text-xs font-bold text-white">공통 CS</Text>
-            </View>
-            <View className="rounded-full bg-white/10 px-3 py-2">
-              <Text className="text-xs font-bold text-white">JD 포지션</Text>
-            </View>
-            <View className="rounded-full bg-white/10 px-3 py-2">
-              <Text className="text-xs font-bold text-white">꼬리 개념</Text>
+          <View className="space-y-3">
+            <QuickCard
+              title="공부"
+              description="한 번에 하나씩, CS 객관식 문제를 풉니다."
+              icon="book-outline"
+              href={ROUTES.CS}
+            />
+            <QuickCard
+              title="문제"
+              description="포지션 문제를 빠르게 확인하고 연습합니다."
+              icon="help-circle-outline"
+              href={ROUTES.INTERVIEW_PRACTICE}
+            />
+            <QuickCard
+              title="복기"
+              description="면접 후 느낀 점을 입력하고 개선 포인트를 확인합니다."
+              icon="clipboard-outline"
+              href={ROUTES.INTERVIEW_ANALYSIS}
+            />
+            <QuickCard
+              title="면접"
+              description="인성 질문을 말로 연습하고 다음 질문으로 자동 이동합니다."
+              icon="mic-outline"
+              href={ROUTES.INTERVIEW_VOICE}
+            />
+          </View>
+
+          <View className="rounded-[28px] border border-ink-200 bg-ink-50 p-4 dark:border-ink-700 dark:bg-ink-800">
+            <Text className="text-sm font-semibold text-ink-900 dark:text-white">설정</Text>
+            <Text className="mt-2 text-sm leading-6 text-ink-600 dark:text-ink-300">
+              설정은 홈에서 빠르게 이동할 수 있습니다.
+            </Text>
+            <View className="mt-4">
+              <Link href={ROUTES.SETTINGS} asChild>
+                <Button variant="secondary" className="w-full">
+                  설정 열기
+                </Button>
+              </Link>
             </View>
           </View>
-        </Card>
-
-        <View className="mt-5">
-          <QuickCard
-            title="공통 CS"
-            description="네트워크, OS, 자료구조, 보안처럼 모든 포지션에 걸리는 기본기를 봅니다."
-            icon="library-outline"
-            href={ROUTES.CS}
-            accent="bg-brand-600"
-          />
-
-          <QuickCard
-            title="포지션별 면접"
-            description="FE, BE, Infra, SRE, AI/ML 등 JD별로 자주 물어보는 영역을 정리합니다."
-            icon="briefcase-outline"
-            href={ROUTES.JOB_POSITIONS}
-            accent="bg-ink-900"
-          />
-        </View>
-
-        <View className="mt-2 rounded-[28px] border border-brand-100 bg-brand-50 p-5 dark:border-brand-600/40 dark:bg-brand-600/20">
-          <Text className="text-sm font-extrabold text-brand-700 dark:text-brand-100">오늘의 학습 흐름</Text>
-          <Text className="mt-2 text-sm leading-6 text-ink-700 dark:text-ink-200">
-            먼저 공통 CS에서 기본 개념을 잡고, 포지션 탭에서 내 JD에 맞는 질문과 관련 노트를 이어서 확인해보세요.
-          </Text>
         </View>
       </Screen>
     </>
