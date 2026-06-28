@@ -11,7 +11,12 @@ function cleanHeading(value: string) {
 /** 마크다운 본문에서 ##(h2), ###(h3) 제목만 추출해 목차 항목으로 만든다. */
 export function getWikiHeadings(body: string): WikiHeading[] {
   const headings = body.split("\n").flatMap((line) => {
-    const level = line.startsWith("### ") ? 3 : line.startsWith("## ") ? 2 : 0;
+    let level = 0;
+    if (line.startsWith("### ")) {
+      level = 3;
+    } else if (line.startsWith("## ")) {
+      level = 2;
+    }
     if (level === 0) return [];
 
     const title = cleanHeading(line.slice(level + 1));

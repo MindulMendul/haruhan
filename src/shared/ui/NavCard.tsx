@@ -22,13 +22,16 @@ export function NavCard({
   iconTone = "brand",
   showChevron = false,
   accessibilityHint,
-}: NavCardProps) {
+}: Readonly<NavCardProps>) {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
 
   const iconTileClass = iconTone === "ink" ? "bg-ink-900 dark:bg-white" : "bg-brand-600";
   // ink 톤은 라이트=어두운 타일/흰 아이콘, 다크=흰 타일/어두운 아이콘으로 대비를 맞춘다.
-  const iconColor = iconTone === "ink" ? (isDark ? "#0f172a" : "#ffffff") : "#ffffff";
+  let iconColor = "#ffffff";
+  if (iconTone === "ink" && isDark) {
+    iconColor = "#0f172a";
+  }
 
   return (
     <Link href={href} asChild>

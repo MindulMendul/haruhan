@@ -5,5 +5,5 @@ import { useMemo } from "react";
  * 무한 스크롤 훅마다 반복되던 flatMap + useMemo 보일러플레이트를 통합한다.
  */
 export function useFlattenedPages<TItem>(pages: TItem[][] | undefined): TItem[] {
-  return useMemo(() => pages?.flatMap((page) => page) ?? [], [pages]);
+  return useMemo(() => pages?.flat() ?? [], [pages]);
 }

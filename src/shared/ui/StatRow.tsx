@@ -6,7 +6,7 @@ interface StatRowProps {
   value: string;
 }
 
-export function StatRow({ label, value }: StatRowProps) {
+export function StatRow({ label, value }: Readonly<StatRowProps>) {
   return (
     <View className="flex-row items-center justify-between">
       <Text className="text-sm text-ink-700 dark:text-ink-200">{label}</Text>

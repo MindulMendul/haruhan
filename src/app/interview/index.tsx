@@ -5,7 +5,6 @@ import { ROUTES } from "@/shared/config/routes";
 import { PAGE_SEO } from "@/shared/config/seo";
 import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
-import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";

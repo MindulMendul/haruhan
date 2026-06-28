@@ -8,7 +8,7 @@ interface RelatedConceptsProps {
   compact?: boolean;
 }
 
-export function RelatedConcepts({ topicId, compact = false }: RelatedConceptsProps) {
+export function RelatedConcepts({ topicId, compact = false }: Readonly<RelatedConceptsProps>) {
   const relatedTopics = getRelatedTopics(topicId, compact ? 2 : 3);
 
   if (relatedTopics.length === 0) return null;

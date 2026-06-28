@@ -6,7 +6,7 @@ interface BulletListProps {
   className?: string;
 }
 
-export function BulletList({ items, className = "gap-2" }: BulletListProps) {
+export function BulletList({ items, className = "gap-2" }: Readonly<BulletListProps>) {
   return (
     <View className={className}>
       {items.map((item) => (
