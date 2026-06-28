@@ -1,10 +1,11 @@
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { BulletList } from "@/shared/ui/BulletList";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";
@@ -66,31 +67,25 @@ export default function InterviewPracticeScreen() {
           <View className="space-y-3">
             <Card className="rounded-[28px] p-5">
               <Text className="text-sm font-extrabold text-ink-900 dark:text-white">기술 면접 질문 예시</Text>
-              <View className="mt-3 space-y-2">
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • 이 시스템에서 병목이 발생하면 가장 먼저 어디를 확인하겠습니까?
-                </Text>
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • API 성능 문제를 실제로 경험했다면 어떤 지표를 우선 보셨나요?
-                </Text>
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • 이 포지션에서 중요하게 생각하는 아키텍처 결정 기준은 무엇인가요?
-                </Text>
-              </View>
+              <BulletList
+                className="mt-3 gap-2"
+                items={[
+                  "이 시스템에서 병목이 발생하면 가장 먼저 어디를 확인하겠습니까?",
+                  "API 성능 문제를 실제로 경험했다면 어떤 지표를 우선 보셨나요?",
+                  "이 포지션에서 중요하게 생각하는 아키텍처 결정 기준은 무엇인가요?",
+                ]}
+              />
             </Card>
             <Card className="rounded-[28px] p-5">
               <Text className="text-sm font-extrabold text-ink-900 dark:text-white">인성 면접 질문 예시</Text>
-              <View className="mt-3 space-y-2">
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • 힘들었던 협업 상황을 어떻게 풀어냈나요?
-                </Text>
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • 실패한 프로젝트에서 어떤 교훈을 얻었나요?
-                </Text>
-                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  • 이 회사에 합류하면 어떤 기여를 하고 싶나요?
-                </Text>
-              </View>
+              <BulletList
+                className="mt-3 gap-2"
+                items={[
+                  "힘들었던 협업 상황을 어떻게 풀어냈나요?",
+                  "실패한 프로젝트에서 어떤 교훈을 얻었나요?",
+                  "이 회사에 합류하면 어떤 기여를 하고 싶나요?",
+                ]}
+              />
             </Card>
           </View>
         </Section>

@@ -1,10 +1,10 @@
-import { ErrorFallback } from "@/components/common/ErrorFallback";
-import { BottomNavBar } from "@/components/navigation/BottomNavBar";
-import { ThemeBootstrap } from "@/components/theme/ThemeBootstrap";
-import { ToastProvider } from "@/components/ui";
-import { ROUTES, getCsTopicRoute, getJobPositionRoute } from "@/constants/routes";
-import { COMMON_CS_TOPICS } from "@/content/cs";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
+import { ErrorFallback } from "@/shared/ui/ErrorFallback";
+import { BottomNavBar } from "@/widgets/bottom-nav/BottomNavBar";
+import { ThemeBootstrap } from "@/widgets/theme/ThemeBootstrap";
+import { ToastProvider } from "@/shared/ui";
+import { ROUTES, getCsTopicRoute, getJobPositionRoute } from "@/shared/config/routes";
+import { COMMON_CS_TOPICS } from "@/entities/cs-topic/content";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname, useRouter } from "expo-router";

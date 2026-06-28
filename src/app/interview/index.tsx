@@ -1,47 +1,14 @@
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { NavCard } from "@/shared/ui/NavCard";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-
-function FeatureCard({
-  title,
-  description,
-  icon,
-  href,
-}: {
-  title: string;
-  description: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  href: string;
-}) {
-  return (
-    <Link href={href as any} asChild>
-      <TouchableOpacity
-        className="rounded-[28px] border border-ink-200 bg-white p-5 shadow-sm active:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:active:bg-ink-700"
-        activeOpacity={0.86}
-        accessibilityRole="link"
-        accessibilityLabel={`${title} 페이지로 이동`}
-      >
-        <View className="flex-row items-center gap-3">
-          <View className="h-12 w-12 items-center justify-center rounded-2xl bg-brand-600">
-            <Ionicons name={icon} size={22} color="#ffffff" />
-          </View>
-          <View className="flex-1">
-            <Text className="text-base font-extrabold text-ink-900 dark:text-white">{title}</Text>
-            <Text className="mt-1 text-sm leading-6 text-ink-600 dark:text-ink-300">{description}</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color="#94a3b8" />
-        </View>
-      </TouchableOpacity>
-    </Link>
-  );
-}
 
 function PositionCard({ position }: { position: (typeof INTERVIEW_POSITIONS)[number] }) {
   return (
@@ -97,23 +64,26 @@ export default function InterviewIndexScreen() {
       <Screen>
         <Section title="면접 연습 홈" description="문제 풀이, 복기 분석, 보이스 인터뷰를 한 곳에서 시작하세요.">
           <View className="space-y-3">
-            <FeatureCard
+            <NavCard
               title="문제 풀이"
               description="기술 면접과 인성 면접 문제를 준비하고, 실제 질문을 빠르게 확인하세요."
               icon="book-outline"
-              href={`${ROUTES.INTERVIEW}/practice`}
+              href={ROUTES.INTERVIEW_PRACTICE}
+              showChevron
             />
-            <FeatureCard
+            <NavCard
               title="복기 분석"
               description="면접 후 다시 정리한 내용을 입력하면 잘한 점과 개선 포인트를 자동으로 정리해줍니다."
               icon="clipboard-outline"
-              href={`${ROUTES.INTERVIEW}/analysis`}
+              href={ROUTES.INTERVIEW_ANALYSIS}
+              showChevron
             />
-            <FeatureCard
+            <NavCard
               title="보이스 인터뷰"
               description="음성 기반 인터뷰 연습을 통해 답변 흐름과 발화감을 미리 체크해보세요."
               icon="mic-outline"
-              href={`${ROUTES.INTERVIEW}/voice`}
+              href={ROUTES.INTERVIEW_VOICE}
+              showChevron
             />
           </View>
         </Section>

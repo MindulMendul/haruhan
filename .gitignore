@@ -46,5 +46,10 @@ credentials/
 *.tsbuildinfo
 coverage/
 
+# cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
 app-example
 

@@ -1,10 +1,13 @@
-import { RadarChart } from "@/components/interview/RadarChart";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { RadarChart } from "@/shared/ui/RadarChart";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { StatRow } from "@/shared/ui/StatRow";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import { toPercent } from "@/shared/lib/format";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
+import { clamp01, consistencyScore } from "@/shared/lib/stats";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -110,17 +113,12 @@ export default function PositionPracticeScreen() {
   const IDEAL_SECONDS = 20;
 
   const accuracy = answeredCount ? correctCount / answeredCount : 0;
-  const speed = avgSeconds ? Math.min(1, IDEAL_SECONDS / avgSeconds) : 0;
+  const speed = avgSeconds ? clamp01(IDEAL_SECONDS / avgSeconds) : 0;
   const completion = QUIZ_SOURCE.length ? answeredCount / QUIZ_SOURCE.length : 0;
   // 효율: 맞힌 문제 수를 들인 시간으로 나눈 값(빠르게 많이 맞힐수록 높음)
-  const efficiency = totalSeconds ? Math.min(1, (correctCount * IDEAL_SECONDS) / totalSeconds) : 0;
+  const efficiency = totalSeconds ? clamp01((correctCount * IDEAL_SECONDS) / totalSeconds) : 0;
   // 일관성: 응답 시간의 변동(변동계수)이 작을수록 높음
-  let consistency = answeredCount > 0 ? 1 : 0;
-  if (answeredCount > 1 && avgSeconds > 0) {
-    const variance = durations.reduce((sum, value) => sum + (value - avgSeconds) ** 2, 0) / answeredCount;
-    const coefficientOfVariation = Math.sqrt(variance) / avgSeconds;
-    consistency = Math.max(0, Math.min(1, 1 - coefficientOfVariation));
-  }
+  const consistency = consistencyScore(durations);
   // 집중력: 최장 연속 정답 비율
   let longestStreak = 0;
   let currentStreak = 0;
@@ -263,42 +261,12 @@ export default function PositionPracticeScreen() {
                   />
 
                   <View className="mt-4 space-y-3">
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">정확도</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(accuracy * 100)}%
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">속도</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(speed * 100)}% · 평균 {Math.round(avgSeconds)}초
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">완료도</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(completion * 100)}%
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">효율</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(efficiency * 100)}%
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">일관성</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(consistency * 100)}%
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center justify-between">
-                      <Text className="text-sm text-ink-700 dark:text-ink-200">집중력</Text>
-                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                        {Math.round(focus * 100)}%
-                      </Text>
-                    </View>
+                    <StatRow label="정확도" value={toPercent(accuracy)} />
+                    <StatRow label="속도" value={`${toPercent(speed)} · 평균 ${Math.round(avgSeconds)}초`} />
+                    <StatRow label="완료도" value={toPercent(completion)} />
+                    <StatRow label="효율" value={toPercent(efficiency)} />
+                    <StatRow label="일관성" value={toPercent(consistency)} />
+                    <StatRow label="집중력" value={toPercent(focus)} />
                   </View>
                 </View>
 

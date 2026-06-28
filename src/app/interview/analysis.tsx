@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { BulletList } from "@/shared/ui/BulletList";
+import { Button } from "@/shared/ui/Button";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Stack } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { Text, TextInput, View } from "react-native";
@@ -99,52 +100,30 @@ export default function InterviewAnalysisScreen() {
             <View className="space-y-4">
               <Card className="rounded-[28px] p-5">
                 <Text className="text-sm font-extrabold text-ink-900 dark:text-white">잘한 점</Text>
-                <View className="mt-3 space-y-2">
-                  {analysis.highlight.map((item) => (
-                    <Text key={item} className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                      • {item}
-                    </Text>
-                  ))}
-                </View>
+                <BulletList items={analysis.highlight} className="mt-3 gap-2" />
               </Card>
 
               <Card className="rounded-[28px] p-5">
                 <Text className="text-sm font-extrabold text-ink-900 dark:text-white">개선 포인트</Text>
-                <View className="mt-3 space-y-2">
-                  {analysis.improvement.map((item) => (
-                    <Text key={item} className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                      • {item}
-                    </Text>
-                  ))}
-                </View>
+                <BulletList items={analysis.improvement} className="mt-3 gap-2" />
               </Card>
 
               <Card className="rounded-[28px] p-5">
                 <Text className="text-sm font-extrabold text-ink-900 dark:text-white">다음 연습</Text>
-                <View className="mt-3 space-y-2">
-                  {analysis.nextSteps.map((item) => (
-                    <Text key={item} className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-                      • {item}
-                    </Text>
-                  ))}
-                </View>
+                <BulletList items={analysis.nextSteps} className="mt-3 gap-2" />
               </Card>
             </View>
           </Section>
         ) : null}
 
         <Section title="복기 작성 팁" description="더 좋은 복기를 위해 다음 항목을 확인해보세요.">
-          <View className="space-y-2">
-            <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-              • 질문 의도와 내가 전달한 핵심 메시지를 분리해서 써보세요.
-            </Text>
-            <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-              • 행동, 결과, 배운 점을 구조화하면 복기가 명확해집니다.
-            </Text>
-            <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
-              • 다음에는 왜 그렇게 했는지, 왜 다른 선택을 하지 않았는지도 함께 정리해보세요.
-            </Text>
-          </View>
+          <BulletList
+            items={[
+              "질문 의도와 내가 전달한 핵심 메시지를 분리해서 써보세요.",
+              "행동, 결과, 배운 점을 구조화하면 복기가 명확해집니다.",
+              "다음에는 왜 그렇게 했는지, 왜 다른 선택을 하지 않았는지도 함께 정리해보세요.",
+            ]}
+          />
         </Section>
       </Screen>
     </>

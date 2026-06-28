@@ -1,9 +1,9 @@
-import { CsTopicCard } from "@/components/cs/CsTopicCard";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
-import { COMMON_CS_TOPICS } from "@/content/cs";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { CsTopicCard } from "@/entities/cs-topic/ui/CsTopicCard";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { COMMON_CS_TOPICS } from "@/entities/cs-topic/content";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";

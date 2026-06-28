@@ -1,6 +1,6 @@
-import { Alert, AppModal, Button, Screen, Section, useToast } from "@/components/ui";
-import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { Seo, buildWebPageJsonLd } from "@/lib/seo";
+import { Alert, AppModal, Button, Screen, Section, useToast } from "@/shared/ui";
+import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
+import { Seo, buildWebPageJsonLd } from "@/shared/lib/seo";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 

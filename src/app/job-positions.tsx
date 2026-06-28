@@ -1,53 +1,16 @@
-import { AppModal, Button, Card, Section, useToast } from "@/components/ui";
-import { getCsTopicRoute, getJobPositionRoute } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import { getTopicsByIds } from "@/content/cs";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
-import type { CsTopicMeta } from "@/types/cs";
-import type { InterviewPositionConcept, InterviewPositionConceptGroup } from "@/content/positions";
-import { Seo, buildBreadcrumbJsonLd, buildItemListJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { CsTopicRow } from "@/entities/cs-topic/ui/CsTopicRow";
+import { AppModal, BulletList, Button, Card, Section, useToast } from "@/shared/ui";
+import { getCsTopicRoute, getJobPositionRoute } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { getTopicsByIds } from "@/entities/cs-topic/content";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import type { InterviewPositionConcept, InterviewPositionConceptGroup } from "@/entities/position/content/positions";
+import { Seo, buildBreadcrumbJsonLd, buildItemListJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useMemo, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-function BulletList({ items }: { items: string[] }) {
-  return (
-    <View className="gap-2">
-      {items.map((item) => (
-        <View key={item} className="flex-row gap-2">
-          <Text className="text-sm leading-6 text-brand-600 dark:text-brand-200">•</Text>
-          <Text className="flex-1 text-sm leading-6 text-ink-700 dark:text-ink-200">{item}</Text>
-        </View>
-      ))}
-    </View>
-  );
-}
-
-function TopicCard({ topic }: { topic: CsTopicMeta }) {
-  const router = useRouter();
-
-  return (
-    <TouchableOpacity
-      className="mb-2 rounded-2xl border border-ink-200 bg-white px-4 py-3 active:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:active:bg-ink-700"
-      activeOpacity={0.86}
-      accessibilityRole="link"
-      accessibilityLabel={`${topic.title}. ${topic.cardSummary}`}
-      accessibilityHint="관련 학습 노트 상세 문서로 이동합니다."
-      onPress={() => router.push(getCsTopicRoute(topic.id))}
-    >
-      <View className="flex-row items-start gap-3">
-        <Text className="text-xl">{topic.emoji}</Text>
-        <View className="flex-1">
-          <Text className="text-sm font-extrabold text-ink-900 dark:text-white">{topic.title}</Text>
-          <Text className="mt-1 text-xs leading-4 text-ink-500 dark:text-ink-300">{topic.cardSummary}</Text>
-        </View>
-        <Text className="text-lg text-brand-600">›</Text>
-      </View>
-    </TouchableOpacity>
-  );
-}
 
 function ConceptCard({ concept }: { concept: InterviewPositionConcept }) {
   const router = useRouter();
@@ -208,7 +171,7 @@ export default function JobPositionsScreen() {
                   이 포지션에서 이어서 보면 좋은 노트입니다. 탭하면 상세 문서로 이동합니다.
                 </Text>
                 {relatedTopics.map((topic) => (
-                  <TopicCard key={topic.id} topic={topic} />
+                  <CsTopicRow key={topic.id} topic={topic} />
                 ))}
               </View>
             </Section>
