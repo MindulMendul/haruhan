@@ -21,10 +21,10 @@ type BottomNavItem = {
 
 const NAV_ITEMS: BottomNavItem[] = [
   {
-    href: ROUTES.CS,
-    label: "공부",
-    icon: "book-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.CS),
+    href: ROUTES.HOME,
+    label: "홈",
+    icon: "home-outline",
+    match: (pathname) => pathname === ROUTES.HOME,
   },
   {
     href: ROUTES.INTERVIEW_PRACTICE,
@@ -33,23 +33,23 @@ const NAV_ITEMS: BottomNavItem[] = [
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_PRACTICE),
   },
   {
-    href: ROUTES.HOME,
-    label: "홈",
-    icon: "home",
-    match: (pathname) => pathname === ROUTES.HOME,
+    href: ROUTES.CS,
+    label: "공부",
+    icon: "book-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.CS),
     featured: true,
-  },
-  {
-    href: ROUTES.INTERVIEW_ANALYSIS,
-    label: "복기",
-    icon: "clipboard-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
   },
   {
     href: ROUTES.INTERVIEW_VOICE,
     label: "면접",
     icon: "mic-outline",
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_VOICE),
+  },
+  {
+    href: ROUTES.INTERVIEW_ANALYSIS,
+    label: "복기",
+    icon: "clipboard-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
   },
 ];
 
