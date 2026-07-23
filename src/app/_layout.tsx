@@ -1,3 +1,4 @@
+import { GuestAuthBootstrap } from "@/components/auth/GuestAuthBootstrap";
 import { ErrorFallback } from "@/components/common/ErrorFallback";
 import { BottomNavBar } from "@/components/navigation/BottomNavBar";
 import { ThemeBootstrap } from "@/components/theme/ThemeBootstrap";
@@ -162,6 +163,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ThemeBootstrap />
+          <GuestAuthBootstrap />
           <ToastProvider>
             <View className="flex-1">
               <Drawer
