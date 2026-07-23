@@ -12,7 +12,7 @@ export async function sendHaruhanChatMessage(prompt: string): Promise<string> {
 
   let response: Response;
   try {
-    response = await fetch(`${HARUHAN_API_BASE_URL}/api/chat`, {
+    response = await fetch(`${HARUHAN_API_BASE_URL}/api/v1/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
