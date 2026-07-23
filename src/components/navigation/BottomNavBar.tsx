@@ -21,10 +21,10 @@ type BottomNavItem = {
 
 const NAV_ITEMS: BottomNavItem[] = [
   {
-    href: ROUTES.CS,
-    label: "공부",
-    icon: "book-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.CS),
+    href: ROUTES.HOME,
+    label: "홈",
+    icon: "home-outline",
+    match: (pathname) => pathname === ROUTES.HOME,
   },
   {
     href: ROUTES.INTERVIEW_PRACTICE,
@@ -33,23 +33,23 @@ const NAV_ITEMS: BottomNavItem[] = [
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_PRACTICE),
   },
   {
-    href: ROUTES.HOME,
-    label: "홈",
-    icon: "home",
-    match: (pathname) => pathname === ROUTES.HOME,
+    href: ROUTES.CS,
+    label: "공부",
+    icon: "book-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.CS),
     featured: true,
-  },
-  {
-    href: ROUTES.INTERVIEW_ANALYSIS,
-    label: "복기",
-    icon: "clipboard-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
   },
   {
     href: ROUTES.INTERVIEW_VOICE,
     label: "면접",
     icon: "mic-outline",
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_VOICE),
+  },
+  {
+    href: ROUTES.INTERVIEW_ANALYSIS,
+    label: "복기",
+    icon: "clipboard-outline",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
   },
 ];
 
@@ -62,11 +62,11 @@ export function BottomNavBar() {
 
   return (
     <View
-      className="border-t border-ink-200 bg-paper px-4 pt-2 dark:border-ink-700 dark:bg-ink-950"
+      className="w-full border-t border-ink-200 bg-paper px-2 pt-2 dark:border-ink-700 dark:bg-ink-950"
       style={{ paddingBottom: Math.max(insets.bottom, 12) }}
     >
       <View
-        className="mx-auto w-full max-w-[640px] flex-row rounded-[28px] border border-white bg-white p-1.5 shadow-sm dark:border-ink-700 dark:bg-ink-800"
+        className="mx-auto w-full max-w-[640px] flex-row gap-1 rounded-[28px] border border-white bg-white p-1 shadow-sm dark:border-ink-700 dark:bg-ink-800"
         accessibilityRole="tablist"
       >
         {NAV_ITEMS.map((item) => {
@@ -74,7 +74,7 @@ export function BottomNavBar() {
           return (
             <TouchableOpacity
               key={item.href}
-              className={`min-w-[88px] flex-1 items-center justify-center rounded-[22px] px-3 ${
+              className={`min-w-0 flex-1 items-center justify-center rounded-[22px] px-1 ${
                 item.featured ? "-mt-5 py-3" : "py-2.5"
               } ${active ? "bg-brand-600" : item.featured ? "bg-ink-900 dark:bg-brand-600" : "bg-transparent"}`}
               activeOpacity={0.82}
@@ -91,6 +91,7 @@ export function BottomNavBar() {
                 />
               </View>
               <Text
+                numberOfLines={1}
                 className={`mt-1 text-[11px] font-extrabold ${
                   active ? "text-white" : item.featured ? "text-white" : "text-ink-500 dark:text-ink-300"
                 }`}
