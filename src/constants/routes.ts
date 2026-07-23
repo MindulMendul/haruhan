@@ -1,6 +1,7 @@
 export const ROUTES = {
   HOME: "/",
   CS: "/cs",
+  CS_LEGACY: "/cs/legacy",
   INTERVIEW: "/interview",
   INTERVIEW_PRACTICE: "/interview/practice",
   INTERVIEW_ANALYSIS: "/interview/analysis",

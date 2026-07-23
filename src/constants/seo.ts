@@ -15,6 +15,7 @@ export const SEO_ROBOTS = {
 export const SEO_PATHS = {
   HOME: ROUTES.HOME,
   CS: ROUTES.CS,
+  CS_LEGACY: ROUTES.CS_LEGACY,
   JOB_POSITIONS: ROUTES.JOB_POSITIONS,
   INTERVIEW: ROUTES.INTERVIEW,
   NETWORK: ROUTES.NETWORK,
@@ -32,9 +33,15 @@ export const PAGE_SEO = {
     keywords: ["개발자 면접", "CS 면접", "IT 면접", "포지션별 면접", "하루한"],
   },
   CS_INDEX: {
-    title: "공통 CS 면접 노트",
-    description: "네트워크, 운영체제, 자료구조, 알고리즘, 보안처럼 개발자 면접에서 공통으로 묻는 CS 개념을 정리합니다.",
+    title: "공부 AI 채팅",
+    description: "궁금한 CS 개념이나 면접 질문을 하루한 AI에게 바로 물어보고 답을 받아보세요.",
     path: SEO_PATHS.CS,
+    keywords: ["CS 면접", "개발자 면접", "AI 채팅", "학습 도우미"],
+  },
+  CS_LEGACY: {
+    title: "공통 CS 면접 노트 (레거시)",
+    description: "네트워크, 운영체제, 자료구조, 알고리즘, 보안처럼 개발자 면접에서 공통으로 묻는 CS 개념을 정리합니다.",
+    path: SEO_PATHS.CS_LEGACY,
     keywords: ["CS 면접", "개발자 면접", "운영체제", "자료구조", "알고리즘", "보안"],
   },
   JOB_POSITIONS: {
