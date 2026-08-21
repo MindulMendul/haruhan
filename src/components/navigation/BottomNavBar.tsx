@@ -1,4 +1,5 @@
 import { ROUTES } from "@/constants/routes";
+import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
 import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
@@ -64,9 +65,15 @@ export function BottomNavBar() {
   const insets = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
+  const keyboardVisible = useKeyboardVisibilityStore((state) => state.visible);
 
   const activeColor = isDark ? "#5b9aff" : "#245fdb";
   const inactiveColor = isDark ? "#64748b" : "#94a3b8";
+
+  // 키보드가 떠 있는 동안은 입력 중인 화면에 공간을 더 내주기 위해 Nav Bar를 완전히 숨긴다.
+  if (keyboardVisible) {
+    return null;
+  }
 
   return (
     <View

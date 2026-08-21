@@ -1,5 +1,6 @@
 import { GuestAuthBootstrap } from "@/components/auth/GuestAuthBootstrap";
 import { ErrorFallback } from "@/components/common/ErrorFallback";
+import { KeyboardVisibilityBootstrap } from "@/components/keyboard/KeyboardVisibilityBootstrap";
 import { BottomNavBar } from "@/components/navigation/BottomNavBar";
 import { ThemeBootstrap } from "@/components/theme/ThemeBootstrap";
 import { ToastProvider } from "@/components/ui";
@@ -165,6 +166,7 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ThemeBootstrap />
           <GuestAuthBootstrap />
+          <KeyboardVisibilityBootstrap />
           <ToastProvider>
             <View className="flex-1">
               <Drawer

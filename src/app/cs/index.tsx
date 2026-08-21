@@ -2,6 +2,7 @@ import { Button, Screen, useToast } from "@/components/ui";
 import { ROUTES } from "@/constants/routes";
 import { PAGE_SEO } from "@/constants/seo";
 import { useHaruhanChat } from "@/hooks/useHaruhanChat";
+import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
 import { Stack, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -143,6 +144,8 @@ export default function CsIndexScreen() {
                 placeholderTextColor={isDark ? "#cbd5e1" : "#94a3b8"}
                 multiline
                 accessibilityLabel="채팅 메시지 입력"
+                onFocus={() => useKeyboardVisibilityStore.getState().show()}
+                onBlur={() => useKeyboardVisibilityStore.getState().hide()}
                 className="max-h-28 flex-1 rounded-2xl border border-ink-200 bg-white px-4 py-2.5 text-sm text-ink-900 dark:border-ink-700 dark:bg-ink-800 dark:text-white"
               />
               <Button
