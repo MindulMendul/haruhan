@@ -1,18 +1,12 @@
 import { http, HttpResponse } from "msw";
+import { MOCK_CHAT_RESULT, MOCK_GUEST_AUTH_RESPONSE } from "./fixtures";
 
 export const handlers = [
   http.post("*/api/v1/chat", async () => {
-    return HttpResponse.json({ result: "테스트용 목 응답입니다." });
+    return HttpResponse.json({ result: MOCK_CHAT_RESULT });
   }),
 
   http.post("*/api/v1/auth/guest", async () => {
-    return HttpResponse.json(
-      {
-        access_token: "mock-access-token",
-        refresh_token: "mock-refresh-token",
-        token_type: "bearer",
-      },
-      { status: 201 }
-    );
+    return HttpResponse.json(MOCK_GUEST_AUTH_RESPONSE, { status: 201 });
   }),
 ];

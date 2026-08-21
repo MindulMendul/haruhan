@@ -22,6 +22,14 @@ export default defineConfig({
         "src/lib/supabase.ts",
         "src/lib/theme.ts",
       ],
+      // 회귀 감지용 하한선. 현재 실측치(대략 stmts 95%/branch 87%)보다 살짝 낮게 잡아,
+      // 사소한 변동으로 CI가 깨지진 않으면서 큰 커버리지 하락은 잡아낸다.
+      thresholds: {
+        statements: 90,
+        branches: 80,
+        functions: 90,
+        lines: 95,
+      },
     },
   },
 });

@@ -29,6 +29,30 @@ npm run ios
 npm run web
 ```
 
+## 테스트
+
+4개 레이어로 구성된 테스트 하네스를 사용합니다.
+
+1. **단위 테스트** (Vitest + MSW) — `src/**/*.test.ts`. 외부 API 호출은 `src/mocks/`의 MSW 핸들러로 목킹합니다.
+2. **컴포넌트 개발/문서화** (Storybook) — `src/components/**/*.stories.tsx`.
+3. **시각 회귀 테스트** (Chromatic) — Storybook 빌드를 기준으로 UI 변경을 감지합니다.
+4. **E2E 테스트** (Playwright) — `e2e/`. 앱의 모든 페이지에 대한 시나리오이며, 백엔드 API는 `e2e/fixtures.ts`에서 `page.route`로 목킹합니다.
+
+Vitest와 Playwright 양쪽이 참조하는 목 응답 데이터는 `src/mocks/fixtures.ts` 한 곳에서만 관리합니다 — 새 API 응답 형태를 추가/변경할 때 이 파일만 고치면 둘 다 반영됩니다.
+
+```bash
+# 개별 실행
+pnpm typecheck        # 타입 체크
+pnpm lint             # ESLint
+pnpm test             # 단위 테스트
+pnpm test:coverage    # 커버리지 포함 (임계값 미달 시 실패)
+pnpm e2e              # Playwright E2E (chromium/firefox/webkit)
+pnpm storybook        # Storybook dev 서버 (:6006)
+
+# 전체 한 번에
+pnpm test:all
+```
+
 ## Android 빌드 설정
 
 ### 방법 1: EAS Build (권장)

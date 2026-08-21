@@ -1,4 +1,5 @@
 import { test as base, expect, type Page } from "@playwright/test";
+import { MOCK_CHAT_RESULT, MOCK_GUEST_AUTH_RESPONSE, MOCK_WORDS } from "@/mocks/fixtures";
 
 /**
  * 모든 페이지가 부팅 시 게스트 토큰을 발급받으려 하므로(GuestAuthBootstrap),
@@ -10,11 +11,7 @@ export const test = base.extend({
       route.fulfill({
         status: 201,
         contentType: "application/json",
-        body: JSON.stringify({
-          access_token: "mock-access-token",
-          refresh_token: "mock-refresh-token",
-          token_type: "bearer",
-        }),
+        body: JSON.stringify(MOCK_GUEST_AUTH_RESPONSE),
       })
     );
 
@@ -42,7 +39,7 @@ export const test = base.extend({
 
 export { expect };
 
-export async function mockChatResponse(page: Page, result = "테스트용 목 응답입니다.", delayMs = 0) {
+export async function mockChatResponse(page: Page, result: string = MOCK_CHAT_RESULT, delayMs = 0) {
   await page.route("**/api/v1/chat", async (route) => {
     if (delayMs > 0) {
       await new Promise((resolve) => setTimeout(resolve, delayMs));
@@ -55,13 +52,7 @@ export async function mockChatFailure(page: Page, status = 500) {
   await page.route("**/api/v1/chat", (route) => route.fulfill({ status, body: "Internal Server Error" }));
 }
 
-export const SAMPLE_WORDS = [
-  { id: 1, term: "TCP", definition: "**전송 제어 프로토콜**. 신뢰성 있는 연결 지향 통신을 보장합니다.", created_at: "2024-01-01" },
-  { id: 2, term: "UDP", definition: "**비연결형 프로토콜**. 빠르지만 신뢰성은 낮습니다.", created_at: "2024-01-02" },
-  { id: 3, term: "DNS", definition: "**도메인 네임 시스템**. 도메인을 IP 주소로 변환합니다.", created_at: "2024-01-03" },
-];
-
-export async function mockNetworkWords(page: Page, words: unknown[] = SAMPLE_WORDS) {
+export async function mockNetworkWords(page: Page, words: readonly unknown[] = MOCK_WORDS) {
   await page.route("**/rest/v1/**", (route) =>
     route.fulfill({ contentType: "application/json", body: JSON.stringify(words) })
   );
