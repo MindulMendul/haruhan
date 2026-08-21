@@ -19,7 +19,10 @@
     "ios": "expo run:ios",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --exit-zero-on-changes"
+    "chromatic": "chromatic --exit-zero-on-changes",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -72,6 +75,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
+    "@playwright/test": "^1.62.1",
     "@storybook/addon-a11y": "^10.5.10",
     "@storybook/react-native-web-vite": "^10.5.10",
     "@types/react": "~19.1.17",

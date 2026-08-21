@@ -185,6 +185,9 @@ export default function PositionPracticeScreen() {
                         key={opt}
                         activeOpacity={0.86}
                         onPress={() => selectOption(i)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`보기: ${opt}`}
+                        accessibilityState={{ selected, disabled: answered }}
                         className={`rounded-3xl border px-4 py-4 ${optionClass}`}
                       >
                         <Text
@@ -214,6 +217,8 @@ export default function PositionPracticeScreen() {
                   <TouchableOpacity
                     onPress={nextQuiz}
                     disabled={!answered}
+                    accessibilityRole="button"
+                    accessibilityLabel="다음 문제로"
                     className="rounded-full bg-ink-100 px-4 py-2 dark:bg-ink-700"
                   >
                     <Text className="text-sm text-ink-900 dark:text-white">다음</Text>
@@ -235,6 +240,8 @@ export default function PositionPracticeScreen() {
                       setResults([]);
                       setQuestionStartTime(Date.now());
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="문제 다시 시작"
                     className="rounded-full bg-brand-600 px-4 py-2"
                   >
                     <Text className="text-sm text-white">다시 시작</Text>
