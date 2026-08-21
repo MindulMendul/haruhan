@@ -2,19 +2,28 @@ import { RelatedConcepts } from "@/components/cs/RelatedConcepts";
 import { WikiMarkdown } from "@/components/cs/WikiMarkdown";
 import { getCsTopicRoute } from "@/constants/routes";
 import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { getCsMarkdown, getTopicById } from "@/content/cs";
+import { useCsTopicDetail } from "@/hooks/useCsTopics";
 import { Seo, buildArticleJsonLd, buildBreadcrumbJsonLd, toSeoDescription } from "@/lib/seo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 
 export default function CsTopicDetailScreen() {
   const { id: rawId } = useLocalSearchParams<{ id: string | string[] }>();
   const id = Array.isArray(rawId) ? rawId[0] : rawId;
-  const topic = id ? getTopicById(id) : undefined;
-  const body = id ? getCsMarkdown(id) : "";
+  const { data, isLoading, isError } = useCsTopicDetail(id);
+  const topic = data?.topic;
+  const body = data?.body ?? "";
 
-  if (!id || !topic) {
+  if (id && isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center p-6 bg-paper dark:bg-ink-900">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (!id || isError || !topic) {
     return (
       <>
         <Seo title="존재하지 않는 CS 노트" description="요청한 CS 면접 노트를 찾을 수 없습니다." path={PAGE_SEO.CS_INDEX.path} robots={SEO_ROBOTS.NO_INDEX} />
