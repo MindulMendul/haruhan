@@ -9,6 +9,8 @@
     "and": "npx expo start --dev-client --tunnel",
     "apk": "eas build -p android --profile development --clear-cache",
     "content:cs": "node scripts/bundle-cs-content.mjs",
+    "scaffold:page": "node scripts/scaffold.mjs page",
+    "scaffold:component": "node scripts/scaffold.mjs component",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
