@@ -5,6 +5,7 @@ import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
 import { COMMON_CS_TOPIC_IDS } from "@/content/cs";
 import { useCsTopics } from "@/hooks/useCsTopics";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { pickByIds } from "@/lib/utils";
 import { Stack } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Text, View } from "react-native";
@@ -13,7 +14,9 @@ const COMMON_IDS: readonly string[] = COMMON_CS_TOPIC_IDS;
 
 export default function CsLegacyScreen() {
   const { data: topics, isLoading, isError } = useCsTopics();
-  const commonTopics = (topics ?? []).filter((topic) => COMMON_IDS.includes(topic.id));
+  // COMMON_IDS 순서(큐레이션된 순서)를 그대로 유지해야 한다 — topics 배열 순서로
+  // 단순 filter()하면 manifest 순서로 뒤섞여 카드 노출 순서가 바뀐다.
+  const commonTopics = pickByIds(topics ?? [], COMMON_IDS);
 
   return (
     <>

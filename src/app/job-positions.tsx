@@ -5,16 +5,13 @@ import type { InterviewPositionConcept, InterviewPositionConceptGroup } from "@/
 import { useCsTopics } from "@/hooks/useCsTopics";
 import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildItemListJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { pickByIds } from "@/lib/utils";
 import type { CsTopicMeta } from "@/types/cs";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-function pickTopicsByIds(topics: CsTopicMeta[], ids: readonly string[]): CsTopicMeta[] {
-  return ids.map((id) => topics.find((topic) => topic.id === id)).filter((topic): topic is CsTopicMeta => Boolean(topic));
-}
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -120,7 +117,7 @@ export default function JobPositionsScreen() {
   }, [positions, selectedId]);
 
   const relatedTopics = useMemo(
-    () => pickTopicsByIds(csTopics ?? [], selectedPosition?.topicIds ?? []),
+    () => pickByIds(csTopics ?? [], selectedPosition?.topicIds ?? []),
     [csTopics, selectedPosition]
   );
 
