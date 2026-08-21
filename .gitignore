@@ -46,5 +46,8 @@ credentials/
 *.tsbuildinfo
 coverage/
 
+# storybook
+storybook-static/
+
 app-example
 
