@@ -1,3 +1,4 @@
+import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
 import { cn } from "@/lib/cn";
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
@@ -10,7 +11,7 @@ interface SearchFieldProps extends TextInputProps {
   className?: string;
 }
 
-export function SearchField({ value, onChangeText, className, ...props }: SearchFieldProps) {
+export function SearchField({ value, onChangeText, className, onFocus, onBlur, ...props }: SearchFieldProps) {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
 
@@ -31,6 +32,14 @@ export function SearchField({ value, onChangeText, className, ...props }: Search
         className="min-h-[34px] flex-1 text-sm font-semibold text-ink-900 dark:text-white"
         autoCapitalize="none"
         autoCorrect={false}
+        onFocus={(event) => {
+          useKeyboardVisibilityStore.getState().show();
+          onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          useKeyboardVisibilityStore.getState().hide();
+          onBlur?.(event);
+        }}
         {...props}
       />
       {value.length > 0 ? (

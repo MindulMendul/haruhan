@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const HARUHAN_API_BASE_URL = process.env.EXPO_PUBLIC_HARUHAN_API_URL ?? "http://132.226.238.218:18000";
+import { HARUHAN_API_BASE_URL } from "./apiConfig";
 
 export const ACCESS_TOKEN_KEY = "access_token";
 export const REFRESH_TOKEN_KEY = "refresh_token";

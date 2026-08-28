@@ -1,16 +1,17 @@
 import { AppModal, Button, Card, Section, useToast } from "@/components/ui";
 import { getCsTopicRoute, getJobPositionRoute } from "@/constants/routes";
 import { PAGE_SEO } from "@/constants/seo";
-import { getTopicsByIds } from "@/content/cs";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
-import type { CsTopicMeta } from "@/types/cs";
 import type { InterviewPositionConcept, InterviewPositionConceptGroup } from "@/content/positions";
+import { useCsTopics } from "@/hooks/useCsTopics";
+import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildItemListJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { pickByIds } from "@/lib/utils";
+import type { CsTopicMeta } from "@/types/cs";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useMemo, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -103,32 +104,56 @@ export default function JobPositionsScreen() {
   const { colorScheme } = useColorScheme();
   const { position: rawPosition } = useLocalSearchParams<{ position?: string | string[] }>();
   const positionParam = Array.isArray(rawPosition) ? rawPosition[0] : rawPosition;
-  const initialPositionId = typeof positionParam === "string" && INTERVIEW_POSITIONS.some((position) => position.id === positionParam)
-    ? positionParam
-    : INTERVIEW_POSITIONS[0].id;
-  const [selectedId, setSelectedId] = useState(initialPositionId);
+
+  const { data: positions, isLoading: positionsLoading, isError: positionsError } = usePositions();
+  const { data: csTopics } = useCsTopics();
+
+  const [selectedId, setSelectedId] = useState<string | undefined>(typeof positionParam === "string" ? positionParam : undefined);
   const [positionPickerOpen, setPositionPickerOpen] = useState(false);
-  const selectedPosition = useMemo(
-    () => INTERVIEW_POSITIONS.find((position) => position.id === selectedId) ?? INTERVIEW_POSITIONS[0],
-    [selectedId]
+
+  const selectedPosition = useMemo(() => {
+    if (!positions || positions.length === 0) return undefined;
+    return positions.find((position) => position.id === selectedId) ?? positions[0];
+  }, [positions, selectedId]);
+
+  const relatedTopics = useMemo(
+    () => pickByIds(csTopics ?? [], selectedPosition?.topicIds ?? []),
+    [csTopics, selectedPosition]
   );
-  const relatedTopics = useMemo(() => getTopicsByIds(selectedPosition.topicIds ?? []), [selectedPosition.topicIds]);
-  const seoTitle = `${selectedPosition.title} 면접 질문`;
-  const seoDescription = `${selectedPosition.subtitle}. ${selectedPosition.summary}`;
-  const seoPath = getJobPositionRoute(selectedPosition.id);
+
   const floatingIconColor = colorScheme === "dark" ? "#d9e9ff" : "#ffffff";
 
   useEffect(() => {
-    if (positionParam && INTERVIEW_POSITIONS.some((position) => position.id === positionParam)) {
+    if (positionParam && positions?.some((position) => position.id === positionParam)) {
       setSelectedId(positionParam);
     }
-  }, [positionParam]);
+  }, [positionParam, positions]);
 
   function selectPosition(positionId: string) {
     setSelectedId(positionId);
     router.setParams({ position: positionId });
     setPositionPickerOpen(false);
   }
+
+  if (positionsLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-paper dark:bg-ink-900">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (positionsError || !positions || positions.length === 0 || !selectedPosition) {
+    return (
+      <View className="flex-1 items-center justify-center p-6 bg-paper dark:bg-ink-900">
+        <Text className="text-ink-600 dark:text-ink-300">포지션 정보를 불러오지 못했습니다.</Text>
+      </View>
+    );
+  }
+
+  const seoTitle = `${selectedPosition.title} 면접 질문`;
+  const seoDescription = `${selectedPosition.subtitle}. ${selectedPosition.summary}`;
+  const seoPath = getJobPositionRoute(selectedPosition.id);
 
   return (
     <>
@@ -149,7 +174,7 @@ export default function JobPositionsScreen() {
             { name: selectedPosition.title, path: seoPath },
           ]),
           buildItemListJsonLd(
-            INTERVIEW_POSITIONS.map((position) => ({
+            positions.map((position) => ({
               name: position.title,
               description: position.summary,
               path: getJobPositionRoute(position.id),
@@ -250,7 +275,7 @@ export default function JobPositionsScreen() {
           onClose={() => setPositionPickerOpen(false)}
         >
           <View className="gap-2">
-            {INTERVIEW_POSITIONS.map((position) => {
+            {positions.map((position) => {
               const selected = position.id === selectedPosition.id;
               return (
                 <TouchableOpacity
@@ -284,4 +309,3 @@ export default function JobPositionsScreen() {
     </>
   );
 }
-

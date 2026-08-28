@@ -1,11 +1,13 @@
 import { GuestAuthBootstrap } from "@/components/auth/GuestAuthBootstrap";
 import { ErrorFallback } from "@/components/common/ErrorFallback";
+import { KeyboardVisibilityBootstrap } from "@/components/keyboard/KeyboardVisibilityBootstrap";
 import { BottomNavBar } from "@/components/navigation/BottomNavBar";
 import { ThemeBootstrap } from "@/components/theme/ThemeBootstrap";
 import { ToastProvider } from "@/components/ui";
 import { ROUTES, getCsTopicRoute, getJobPositionRoute } from "@/constants/routes";
 import { COMMON_CS_TOPICS } from "@/content/cs";
 import { INTERVIEW_POSITIONS } from "@/content/positions";
+import { PortalHost } from "@rn-primitives/portal";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname, useRouter } from "expo-router";
@@ -164,6 +166,7 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ThemeBootstrap />
           <GuestAuthBootstrap />
+          <KeyboardVisibilityBootstrap />
           <ToastProvider>
             <View className="flex-1">
               <Drawer
@@ -246,6 +249,7 @@ export default function RootLayout() {
               <BottomNavBar />
             </View>
           </ToastProvider>
+          <PortalHost />
         </GestureHandlerRootView>
       </QueryClientProvider>
     </ErrorBoundary>

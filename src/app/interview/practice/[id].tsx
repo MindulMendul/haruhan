@@ -3,11 +3,11 @@ import { Card } from "@/components/ui/Card";
 import { Screen } from "@/components/ui/Screen";
 import { Section } from "@/components/ui/Section";
 import { PAGE_SEO } from "@/constants/seo";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
+import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 // 간단한 객관식 예시 데이터 (문제 탭에서 즉시 사용 가능)
 const SAMPLE_QUIZ = [
@@ -41,7 +41,8 @@ const SAMPLE_QUIZ = [
 export default function PositionPracticeScreen() {
   const params = useLocalSearchParams<{ id: string }>();
   const id = params.id || "";
-  const position = INTERVIEW_POSITIONS.find((p) => p.id === id) || INTERVIEW_POSITIONS[0];
+  const { data: positions, isLoading, isError } = usePositions();
+  const position = positions?.find((p) => p.id === id) ?? positions?.[0];
 
   // 객관식 상태 — 포지션별 MCQ가 있으면 사용, 없으면 SAMPLE_QUIZ 사용
   interface QuizResult {
@@ -58,7 +59,7 @@ export default function PositionPracticeScreen() {
   const [results, setResults] = useState<QuizResult[]>([]);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
-  const QUIZ_SOURCE = position.mcq && position.mcq.length ? position.mcq : SAMPLE_QUIZ;
+  const QUIZ_SOURCE = position?.mcq && position.mcq.length ? position.mcq : SAMPLE_QUIZ;
   const completed = quizIndex >= QUIZ_SOURCE.length;
 
   useEffect(() => {
@@ -66,6 +67,22 @@ export default function PositionPracticeScreen() {
       setQuestionStartTime(Date.now());
     }
   }, [quizIndex, completed]);
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-paper dark:bg-ink-900">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (isError || !position) {
+    return (
+      <View className="flex-1 items-center justify-center p-6 bg-paper dark:bg-ink-900">
+        <Text className="text-ink-600 dark:text-ink-300">포지션 정보를 불러오지 못했습니다.</Text>
+      </View>
+    );
+  }
 
   function selectOption(i: number) {
     if (answered || completed) return;
@@ -185,6 +202,9 @@ export default function PositionPracticeScreen() {
                         key={opt}
                         activeOpacity={0.86}
                         onPress={() => selectOption(i)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`보기: ${opt}`}
+                        accessibilityState={{ selected, disabled: answered }}
                         className={`rounded-3xl border px-4 py-4 ${optionClass}`}
                       >
                         <Text
@@ -214,6 +234,8 @@ export default function PositionPracticeScreen() {
                   <TouchableOpacity
                     onPress={nextQuiz}
                     disabled={!answered}
+                    accessibilityRole="button"
+                    accessibilityLabel="다음 문제로"
                     className="rounded-full bg-ink-100 px-4 py-2 dark:bg-ink-700"
                   >
                     <Text className="text-sm text-ink-900 dark:text-white">다음</Text>
@@ -235,6 +257,8 @@ export default function PositionPracticeScreen() {
                       setResults([]);
                       setQuestionStartTime(Date.now());
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="문제 다시 시작"
                     className="rounded-full bg-brand-600 px-4 py-2"
                   >
                     <Text className="text-sm text-white">다시 시작</Text>

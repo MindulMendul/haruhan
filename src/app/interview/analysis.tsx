@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { Screen } from "@/components/ui/Screen";
 import { Section } from "@/components/ui/Section";
 import { PAGE_SEO } from "@/constants/seo";
+import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
 import { Stack } from "expo-router";
 import React, { useMemo, useState } from "react";
@@ -86,6 +87,8 @@ export default function InterviewAnalysisScreen() {
             value={recap}
             onChangeText={setRecap}
             placeholder="무엇을 물어봤고, 어떻게 답변했는지, 다음에는 무엇을 다르게 말할지 적어보세요."
+            onFocus={() => useKeyboardVisibilityStore.getState().show()}
+            onBlur={() => useKeyboardVisibilityStore.getState().hide()}
             className="min-h-[180px] rounded-3xl border border-ink-200 bg-white px-4 py-4 text-sm leading-6 text-ink-900 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-100"
             placeholderTextColor="#94a3b8"
           />

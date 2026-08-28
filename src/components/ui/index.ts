@@ -6,5 +6,8 @@ export { Card } from "./Card";
 export { SearchField } from "./SearchField";
 export { Screen } from "./Screen";
 export { Section } from "./Section";
+export { Separator } from "./separator";
+export { Skeleton } from "./skeleton";
+export { Text, TextClassContext } from "./text";
 export { ToastProvider, useToast } from "./Toast";
 

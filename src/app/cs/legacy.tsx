@@ -2,13 +2,22 @@ import { CsTopicCard } from "@/components/cs/CsTopicCard";
 import { Screen } from "@/components/ui/Screen";
 import { Section } from "@/components/ui/Section";
 import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { COMMON_CS_TOPICS } from "@/content/cs";
+import { COMMON_CS_TOPIC_IDS } from "@/content/cs";
+import { useCsTopics } from "@/hooks/useCsTopics";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { pickByIds } from "@/lib/utils";
 import { Stack } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
+
+const COMMON_IDS: readonly string[] = COMMON_CS_TOPIC_IDS;
 
 export default function CsLegacyScreen() {
+  const { data: topics, isLoading, isError } = useCsTopics();
+  // COMMON_IDS 순서(큐레이션된 순서)를 그대로 유지해야 한다 — topics 배열 순서로
+  // 단순 filter()하면 manifest 순서로 뒤섞여 카드 노출 순서가 바뀐다.
+  const commonTopics = pickByIds(topics ?? [], COMMON_IDS);
+
   return (
     <>
       <Seo
@@ -35,11 +44,17 @@ export default function CsLegacyScreen() {
           title="공통 CS (레거시)"
           description="핵심 개념과 실전 질문을 문서로 정리했습니다. 각 카드를 눌러 자세한 내용을 확인하세요."
         >
-          <View className="space-y-3">
-            {COMMON_CS_TOPICS.map((topic) => (
-              <CsTopicCard key={topic.id} topic={topic} />
-            ))}
-          </View>
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : isError ? (
+            <Text className="text-sm text-ink-500 dark:text-ink-300">목록을 불러오지 못했습니다.</Text>
+          ) : (
+            <View className="space-y-3">
+              {commonTopics.map((topic) => (
+                <CsTopicCard key={topic.id} topic={topic} />
+              ))}
+            </View>
+          )}
         </Section>
       </Screen>
     </>
