@@ -24,7 +24,7 @@ type BottomNavItem = {
 const NAV_ITEMS: BottomNavItem[] = [
   {
     href: ROUTES.HOME,
-    label: "홈",
+    label: "공부",
     icon: "home-outline",
     activeIcon: "home",
     match: (pathname) => pathname === ROUTES.HOME,
@@ -38,7 +38,7 @@ const NAV_ITEMS: BottomNavItem[] = [
   },
   {
     href: ROUTES.CS,
-    label: "공부",
+    label: "AI",
     icon: "book-outline",
     activeIcon: "book",
     match: (pathname) => pathname.startsWith(ROUTES.CS),
@@ -52,7 +52,7 @@ const NAV_ITEMS: BottomNavItem[] = [
   },
   {
     href: ROUTES.INTERVIEW_ANALYSIS,
-    label: "복기",
+    label: "기록",
     icon: "clipboard-outline",
     activeIcon: "clipboard",
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),

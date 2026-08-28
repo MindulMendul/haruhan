@@ -7,9 +7,9 @@ test.describe("면접 연습 홈 (/interview)", () => {
     await expect(page).toHaveURL(/\/interview\/practice$/);
   });
 
-  test("복기 분석 카드가 /interview/analysis로 이동한다", async ({ page }) => {
+  test("기록 카드가 /interview/analysis로 이동한다", async ({ page }) => {
     await page.goto("/interview");
-    await page.getByRole("link", { name: "복기 분석 페이지로 이동" }).click();
+    await page.getByRole("link", { name: "기록 페이지로 이동" }).click();
     await expect(page).toHaveURL(/\/interview\/analysis$/);
   });
 

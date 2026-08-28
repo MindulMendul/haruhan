@@ -5,6 +5,7 @@ export const ROUTES = {
   INTERVIEW: "/interview",
   INTERVIEW_PRACTICE: "/interview/practice",
   INTERVIEW_ANALYSIS: "/interview/analysis",
+  INTERVIEW_RECAP: "/interview/analysis/interview-recap",
   INTERVIEW_VOICE: "/interview/voice",
   JOB_POSITIONS: "/job-positions",
   NETWORK: "/network",

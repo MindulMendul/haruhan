@@ -95,7 +95,7 @@ export default function InterviewIndexScreen() {
       />
       <Stack.Screen options={{ title: "면접 연습" }} />
       <Screen>
-        <Section title="면접 연습 홈" description="문제 풀이, 복기 분석, 보이스 인터뷰를 한 곳에서 시작하세요.">
+        <Section title="면접 연습 홈" description="문제 풀이, 기록, 보이스 인터뷰를 한 곳에서 시작하세요.">
           <View className="space-y-3">
             <FeatureCard
               title="문제 풀이"
@@ -104,8 +104,8 @@ export default function InterviewIndexScreen() {
               href={`${ROUTES.INTERVIEW}/practice`}
             />
             <FeatureCard
-              title="복기 분석"
-              description="면접 후 다시 정리한 내용을 입력하면 잘한 점과 개선 포인트를 자동으로 정리해줍니다."
+              title="기록"
+              description="면접 복기 같은 기록을 남기면 잘한 점과 개선 포인트를 자동으로 정리해줍니다."
               icon="clipboard-outline"
               href={`${ROUTES.INTERVIEW}/analysis`}
             />
