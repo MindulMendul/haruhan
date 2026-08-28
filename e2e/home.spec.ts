@@ -5,16 +5,16 @@ test.describe("홈 화면", () => {
     await page.goto("/");
 
     await expect(page.getByText("면접 준비를 더 간결하게")).toBeVisible();
-    await expect(page.getByRole("link", { name: /^공부\./ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^AI\./ })).toBeVisible();
     await expect(page.getByRole("link", { name: /^문제\./ })).toBeVisible();
-    await expect(page.getByRole("link", { name: /^복기\./ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^기록\./ })).toBeVisible();
     await expect(page.getByRole("link", { name: /^면접\./ })).toBeVisible();
   });
 
-  test("공부 카드를 누르면 /cs로 이동한다", async ({ page }) => {
+  test("AI 카드를 누르면 /cs로 이동한다", async ({ page }) => {
     await page.goto("/");
 
-    await page.getByRole("link", { name: /^공부\./ }).click();
+    await page.getByRole("link", { name: /^AI\./ }).click();
 
     await expect(page).toHaveURL(/\/cs$/);
     await expect(page.getByText("공부 AI 채팅")).toBeVisible();

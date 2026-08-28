@@ -52,9 +52,9 @@ export const PAGE_SEO = {
   },
   INTERVIEW: {
     title: "면접 연습",
-    description: "기술 면접 문제 풀이, 면접 복기 분석, 보이스 인터뷰 연습을 한 곳에서 제공합니다.",
+    description: "기술 면접 문제 풀이, 면접 복기 기록, 보이스 인터뷰 연습을 한 곳에서 제공합니다.",
     path: SEO_PATHS.INTERVIEW,
-    keywords: ["면접 연습", "복기 분석", "보이스 인터뷰", "기술 면접", "인성 면접"],
+    keywords: ["면접 연습", "면접 복기", "기록", "보이스 인터뷰", "기술 면접", "인성 면접"],
   },
   NETWORK: {
     title: "네트워크 용어",

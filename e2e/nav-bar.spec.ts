@@ -1,11 +1,11 @@
 import { expect, test } from "./fixtures";
 
 const TABS: { label: string; urlPattern: RegExp }[] = [
-  { label: "홈", urlPattern: /\/$/ },
+  { label: "공부", urlPattern: /\/$/ },
   { label: "문제", urlPattern: /\/interview\/practice$/ },
-  { label: "공부", urlPattern: /\/cs$/ },
+  { label: "AI", urlPattern: /\/cs$/ },
   { label: "면접", urlPattern: /\/interview\/voice$/ },
-  { label: "복기", urlPattern: /\/interview\/analysis$/ },
+  { label: "기록", urlPattern: /\/interview\/analysis$/ },
 ];
 
 // 활성 탭 라벨 색상(brand-600) / 비활성 탭 라벨 색상(ink-400). react-native-web은
@@ -27,10 +27,10 @@ test.describe("하단 Nav Bar", () => {
   test("현재 화면에 해당하는 탭만 활성 색상으로 표시된다", async ({ page }) => {
     await page.goto("/cs");
 
-    const studyLabel = page.getByRole("tab", { name: "공부 탭" }).getByText("공부");
+    const studyLabel = page.getByRole("tab", { name: "AI 탭" }).getByText("AI");
     await expect(studyLabel).toHaveCSS("color", ACTIVE_COLOR);
 
-    const homeLabel = page.getByRole("tab", { name: "홈 탭" }).getByText("홈");
+    const homeLabel = page.getByRole("tab", { name: "공부 탭" }).getByText("공부");
     await expect(homeLabel).toHaveCSS("color", INACTIVE_COLOR);
   });
 });

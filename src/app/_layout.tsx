@@ -88,7 +88,7 @@ function CustomDrawerContent({ props }: { props: object }) {
             labelStyle={{ fontWeight: "500", fontSize: 13 }}
           />
           <DrawerItem
-            label="복기 분석"
+            label="기록"
             onPress={() => router.push(`${ROUTES.INTERVIEW}/analysis`)}
             inactiveTintColor={drawerTextColor}
             activeTintColor="#6a96ff"

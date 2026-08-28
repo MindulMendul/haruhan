@@ -80,8 +80,8 @@ export default function Home() {
 
           <View className="space-y-3">
             <QuickCard
-              title="공부"
-              description="한 번에 하나씩, CS 객관식 문제를 풉니다."
+              title="AI"
+              description="궁금한 CS 개념이나 면접 질문을 하루한 AI에게 물어보세요."
               icon="book-outline"
               href={ROUTES.CS}
             />
@@ -92,8 +92,8 @@ export default function Home() {
               href={ROUTES.INTERVIEW_PRACTICE}
             />
             <QuickCard
-              title="복기"
-              description="면접 후 느낀 점을 입력하고 개선 포인트를 확인합니다."
+              title="기록"
+              description="면접 복기 같은 기록을 남기고 다시 확인합니다."
               icon="clipboard-outline"
               href={ROUTES.INTERVIEW_ANALYSIS}
             />
