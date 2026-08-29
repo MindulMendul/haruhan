@@ -24,26 +24,25 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.3.0
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Create local Android credentials
         shell: bash
         run: |
           mkdir -p credentials
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > credentials/release.keystore
-          node -e 'require("node:fs").writeFileSync("credentials.json", JSON.stringify({ android: { keystore: { keystorePath: "credentials/release.keystore", keystorePassword: process.env.ANDROID_KEYSTORE_PASSWORD, keyAlias: process.env.ANDROID_KEY_ALIAS, keyPassword: process.env.ANDROID_KEY_PASSWORD } } }))'
+          node -e 'const fs = require("node:fs"); fs.writeFileSync("credentials/release.keystore", Buffer.from(process.env.ANDROID_KEYSTORE_BASE64, "base64")); fs.writeFileSync("credentials.json", JSON.stringify({ android: { keystore: { keystorePath: "credentials/release.keystore", keystorePassword: process.env.ANDROID_KEYSTORE_PASSWORD, keyAlias: process.env.ANDROID_KEY_ALIAS, keyPassword: process.env.ANDROID_KEY_PASSWORD } } }))'
 
       - name: Start production AAB build
-        run: npx eas-cli@latest build --platform android --profile production --non-interactive --wait
+        run: pnpm exec eas build --platform android --profile production --non-interactive --wait
