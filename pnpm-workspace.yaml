@@ -1,7 +1,6 @@
 ignoredBuiltDependencies:
-  - '@sentry/cli'
+  - "@sentry/cli"
 
 onlyBuiltDependencies:
-  - cypress
   - esbuild
   - unrs-resolver
