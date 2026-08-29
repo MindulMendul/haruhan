@@ -1,0 +1,49 @@
+name: Android AAB
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build signed Android App Bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create local Android credentials
+        shell: bash
+        run: |
+          mkdir -p credentials
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > credentials/release.keystore
+          node -e 'require("node:fs").writeFileSync("credentials.json", JSON.stringify({ android: { keystore: { keystorePath: "credentials/release.keystore", keystorePassword: process.env.ANDROID_KEYSTORE_PASSWORD, keyAlias: process.env.ANDROID_KEY_ALIAS, keyPassword: process.env.ANDROID_KEY_PASSWORD } } }))'
+
+      - name: Start production AAB build
+        run: npx eas-cli@latest build --platform android --profile production --non-interactive --wait
