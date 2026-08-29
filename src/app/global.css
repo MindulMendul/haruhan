@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* React Native Reusables(shadcn) 시맨틱 토큰. 값은 tailwind.config.js의 brand/ink 팔레트와
-   src/lib/theme.ts의 THEME 상수와 반드시 동일하게 유지한다. */
+   src/shared/lib/theme.ts의 THEME 상수와 반드시 동일하게 유지한다. */
 @layer base {
   :root {
     --background: 225 100% 99%;

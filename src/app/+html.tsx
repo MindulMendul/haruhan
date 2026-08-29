@@ -1,4 +1,4 @@
-import { GTM_ID, THEME_COLOR } from "@/constants/app";
+import { GTM_ID, THEME_COLOR } from "@/shared/config/app";
 import { ScrollViewStyleReset } from "expo-router/html";
 import React, { type PropsWithChildren } from "react";
 

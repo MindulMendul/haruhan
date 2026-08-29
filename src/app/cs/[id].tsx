@@ -1,9 +1,9 @@
-import { RelatedConcepts } from "@/components/cs/RelatedConcepts";
-import { WikiMarkdown } from "@/components/cs/WikiMarkdown";
-import { getCsTopicRoute } from "@/constants/routes";
-import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
+import { RelatedConcepts } from "@/entities/cs-topic/ui/RelatedConcepts";
+import { WikiMarkdown } from "@/entities/cs-topic/ui/WikiMarkdown";
+import { getCsTopicRoute } from "@/shared/config/routes";
+import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
 import { useCsTopicDetail } from "@/hooks/useCsTopics";
-import { Seo, buildArticleJsonLd, buildBreadcrumbJsonLd, toSeoDescription } from "@/lib/seo";
+import { Seo, buildArticleJsonLd, buildBreadcrumbJsonLd, toSeoDescription } from "@/shared/lib/seo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";

@@ -1,8 +1,8 @@
-import WordCard from "@/components/word/WordCard";
-import { WordCardSkeleton } from "@/components/word/WordCardSkeleton";
-import { PAGE_SEO } from "@/constants/seo";
-import { useInfiniteWords } from "@/hooks/useInfiniteWords";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import WordCard from "@/entities/word/ui/WordCard";
+import { WordCardSkeleton } from "@/entities/word/ui/WordCardSkeleton";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { useInfiniteWords } from "@/entities/word/model/useInfiniteWords";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 

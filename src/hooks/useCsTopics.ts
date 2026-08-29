@@ -1,4 +1,4 @@
-import { fetchCsTopicDetail, fetchCsTopics } from "@/api/csTopics";
+import { fetchCsTopicDetail, fetchCsTopics } from "@/shared/api/csTopics";
 import { useQuery } from "@tanstack/react-query";
 
 export function useCsTopics() {

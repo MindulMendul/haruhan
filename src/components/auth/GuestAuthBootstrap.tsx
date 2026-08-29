@@ -1,4 +1,4 @@
-import { ensureGuestAccessToken } from "@/api/guestAuth";
+import { ensureGuestAccessToken } from "@/shared/api/guestAuth";
 import { useEffect } from "react";
 
 export function GuestAuthBootstrap() {

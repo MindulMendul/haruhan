@@ -1,6 +1,6 @@
-import { Badge, Card, Screen, Section } from "@/components/ui";
-import { PAGE_SEO } from "@/constants/seo";
-import { Seo, buildWebPageJsonLd } from "@/lib/seo";
+import { Badge, Card, Screen, Section } from "@/shared/ui";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { Seo, buildWebPageJsonLd } from "@/shared/lib/seo";
 import React from "react";
 import { Text, View } from "react-native";
 

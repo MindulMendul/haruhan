@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
-import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { Button } from "@/shared/ui/Button";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { useKeyboardVisibilityStore } from "@/shared/lib/keyboardVisibility";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Stack } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { Text, TextInput, View } from "react-native";

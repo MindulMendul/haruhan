@@ -1,10 +1,10 @@
-import { RadarChart } from "@/components/interview/RadarChart";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
+import { RadarChart } from "@/shared/ui/RadarChart";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { PAGE_SEO } from "@/shared/config/seo";
 import { usePositions } from "@/hooks/usePositions";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";

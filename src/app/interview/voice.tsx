@@ -1,10 +1,13 @@
-import { RadarChart } from "@/components/interview/RadarChart";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO } from "@/constants/seo";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { RadarChart } from "@/shared/ui/RadarChart";
+import { Button } from "@/shared/ui/Button";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { StatRow } from "@/shared/ui/StatRow";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { formatDuration, toPercent } from "@/shared/lib/format";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
+import { clamp01, consistencyScore } from "@/shared/lib/stats";
 import { Stack } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
@@ -211,22 +214,17 @@ export default function InterviewVoiceScreen() {
   ).length;
 
   // 발화량: 답변 길이(말한 양)
-  const volumeScore = answeredCount ? Math.min(1, avgLength / 120) : 0;
+  const volumeScore = answeredCount ? clamp01(avgLength / 120) : 0;
   // 충실도: 더 높은 기준의 답변 길이(자세히 답했는지)
-  const depthScore = answeredCount ? Math.min(1, avgLength / 250) : 0;
+  const depthScore = answeredCount ? clamp01(avgLength / 250) : 0;
   // 완료도: 시도한 질문 비율
   const completionScore = answeredCount / BEHAVIORAL_QUESTIONS.length;
   // 적극성: 실제로 내용이 있는 답변 비율
   const engagementScore = answeredCount ? nonEmptyCount / answeredCount : 0;
   // 지속력: 충분히 길게 말했는지(평균 응답 시간 기준)
-  const enduranceScore = avgDuration ? Math.min(1, avgDuration / 45) : 0;
+  const enduranceScore = avgDuration ? clamp01(avgDuration / 45) : 0;
   // 일관성: 답변 시간의 변동(변동계수)이 작을수록 높음
-  let consistencyScore = answeredCount > 0 ? 1 : 0;
-  if (answeredCount > 1 && avgDuration > 0) {
-    const variance = durations.reduce((sum, value) => sum + (value - avgDuration) ** 2, 0) / answeredCount;
-    const coefficientOfVariation = Math.sqrt(variance) / avgDuration;
-    consistencyScore = Math.max(0, Math.min(1, 1 - coefficientOfVariation));
-  }
+  const consistency = consistencyScore(durations);
 
   return (
     <>
@@ -274,7 +272,7 @@ export default function InterviewVoiceScreen() {
                     </Button>
                   ) : null}
                   {listening ? (
-                    <Text className="text-sm font-mono text-ink-900 dark:text-white">{`${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`}</Text>
+                    <Text className="text-sm font-mono text-ink-900 dark:text-white">{formatDuration(elapsed)}</Text>
                   ) : (
                     <Text className="text-sm text-ink-500 dark:text-ink-400">{recorded ? "녹음 완료" : "준비"}</Text>
                   )}
@@ -359,48 +357,24 @@ export default function InterviewVoiceScreen() {
                     completionScore,
                     engagementScore,
                     enduranceScore,
-                    consistencyScore,
+                    consistency,
                   ]}
                   average={[0.7, 0.5, 1, 0.8, 0.6, 0.7]}
                 />
 
                 <View className="mt-4 space-y-3">
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">발화량</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(volumeScore * 100)}% · 평균 {Math.round(avgLength)}자
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">충실도</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(depthScore * 100)}%
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">완료도</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(completionScore * 100)}%
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">적극성</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(engagementScore * 100)}%
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">지속력</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(enduranceScore * 100)}% · 평균 {Math.round(avgDuration)}초
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center justify-between">
-                    <Text className="text-sm text-ink-700 dark:text-ink-200">일관성</Text>
-                    <Text className="text-sm font-semibold text-ink-900 dark:text-white">
-                      {Math.round(consistencyScore * 100)}%
-                    </Text>
-                  </View>
+                  <StatRow
+                    label="발화량"
+                    value={`${toPercent(volumeScore)} · 평균 ${Math.round(avgLength)}자`}
+                  />
+                  <StatRow label="충실도" value={toPercent(depthScore)} />
+                  <StatRow label="완료도" value={toPercent(completionScore)} />
+                  <StatRow label="적극성" value={toPercent(engagementScore)} />
+                  <StatRow
+                    label="지속력"
+                    value={`${toPercent(enduranceScore)} · 평균 ${Math.round(avgDuration)}초`}
+                  />
+                  <StatRow label="일관성" value={toPercent(consistency)} />
                 </View>
               </View>
 
@@ -414,7 +388,7 @@ export default function InterviewVoiceScreen() {
                     <Text className="mt-1 text-sm text-ink-700 dark:text-ink-200">{response.question}</Text>
                     <Text className="mt-2 text-sm text-ink-600 dark:text-ink-300">답변: {response.transcript}</Text>
                     <Text className="mt-2 text-sm text-ink-600 dark:text-ink-300">
-                      소요 시간: {Math.floor(response.duration / 60)}:{String(response.duration % 60).padStart(2, "0")}
+                      소요 시간: {formatDuration(response.duration)}
                     </Text>
                   </View>
                 ))}

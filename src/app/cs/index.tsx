@@ -1,9 +1,9 @@
-import { Button, Screen, useToast } from "@/components/ui";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
+import { Button, Screen, useToast } from "@/shared/ui";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
 import { useHaruhanChat } from "@/hooks/useHaruhanChat";
-import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { useKeyboardVisibilityStore } from "@/shared/lib/keyboardVisibility";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Stack, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useRef, useState } from "react";

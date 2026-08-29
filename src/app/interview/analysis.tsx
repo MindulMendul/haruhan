@@ -1,8 +1,8 @@
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";

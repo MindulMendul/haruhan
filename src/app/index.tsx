@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import { Seo, buildOrganizationJsonLd, buildWebPageJsonLd, buildWebSiteJsonLd } from "@/lib/seo";
+import { Button } from "@/shared/ui/Button";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import { Seo, buildOrganizationJsonLd, buildWebPageJsonLd, buildWebSiteJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";

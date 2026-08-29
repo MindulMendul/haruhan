@@ -1,4 +1,4 @@
-import { fetchPositionDetail, fetchPositions } from "@/api/positions";
+import { fetchPositionDetail, fetchPositions } from "@/shared/api/positions";
 import { useQuery } from "@tanstack/react-query";
 
 export function usePositions() {

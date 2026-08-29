@@ -1,5 +1,5 @@
-import { CS_TOPICS, getCsMarkdown } from "@/content/cs";
-import { INTERVIEW_POSITIONS } from "@/content/positions";
+import { CS_TOPICS, getCsMarkdown } from "@/entities/cs-topic/content";
+import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
 import { http, HttpResponse } from "msw";
 import { MOCK_CHAT_RESULT, MOCK_GUEST_AUTH_RESPONSE } from "./fixtures";
 

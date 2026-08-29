@@ -1,5 +1,5 @@
-import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { Seo } from "@/lib/seo";
+import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
+import { Seo } from "@/shared/lib/seo";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";

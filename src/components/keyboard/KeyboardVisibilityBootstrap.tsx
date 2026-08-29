@@ -1,4 +1,4 @@
-import { useKeyboardVisibilityStore } from "@/lib/keyboardVisibility";
+import { useKeyboardVisibilityStore } from "@/shared/lib/keyboardVisibility";
 import { useEffect } from "react";
 import { Keyboard } from "react-native";
 

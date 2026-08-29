@@ -1,11 +1,11 @@
-import { Card } from "@/components/ui/Card";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO } from "@/constants/seo";
-import type { InterviewPosition } from "@/content/positions";
+import { Card } from "@/shared/ui/Card";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO } from "@/shared/config/seo";
+import type { InterviewPosition } from "@/entities/position/content/positions";
 import { usePositions } from "@/hooks/usePositions";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";

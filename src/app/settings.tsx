@@ -1,8 +1,8 @@
-import { Badge, Button, Card, Screen, Section } from "@/components/ui";
-import { ROUTES } from "@/constants/routes";
-import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { Seo, buildWebPageJsonLd } from "@/lib/seo";
-import { APP_COLOR_SCHEME_KEY, type AppColorScheme } from "@/lib/theme";
+import { Badge, Button, Card, Screen, Section } from "@/shared/ui";
+import { ROUTES } from "@/shared/config/routes";
+import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
+import { Seo, buildWebPageJsonLd } from "@/shared/lib/seo";
+import { APP_COLOR_SCHEME_KEY, type AppColorScheme } from "@/shared/lib/theme";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, type Href } from "expo-router";

@@ -1,11 +1,11 @@
-import { CsTopicCard } from "@/components/cs/CsTopicCard";
-import { Screen } from "@/components/ui/Screen";
-import { Section } from "@/components/ui/Section";
-import { PAGE_SEO, SEO_ROBOTS } from "@/constants/seo";
-import { COMMON_CS_TOPIC_IDS } from "@/content/cs";
+import { CsTopicCard } from "@/entities/cs-topic/ui/CsTopicCard";
+import { Screen } from "@/shared/ui/Screen";
+import { Section } from "@/shared/ui/Section";
+import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
+import { COMMON_CS_TOPIC_IDS } from "@/entities/cs-topic/content";
 import { useCsTopics } from "@/hooks/useCsTopics";
-import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo";
-import { pickByIds } from "@/lib/utils";
+import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
+import { pickByIds } from "@/shared/lib/utils";
 import { Stack } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Text, View } from "react-native";
