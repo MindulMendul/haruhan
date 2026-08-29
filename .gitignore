@@ -46,10 +46,14 @@ credentials/
 *.tsbuildinfo
 coverage/
 
-# cypress
-cypress/videos/
-cypress/screenshots/
-cypress/downloads/
+# storybook
+storybook-static/
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 app-example
 

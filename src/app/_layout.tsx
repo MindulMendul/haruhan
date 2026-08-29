@@ -1,10 +1,13 @@
+import { GuestAuthBootstrap } from "@/components/auth/GuestAuthBootstrap";
 import { ErrorFallback } from "@/shared/ui/ErrorFallback";
+import { KeyboardVisibilityBootstrap } from "@/components/keyboard/KeyboardVisibilityBootstrap";
 import { BottomNavBar } from "@/widgets/bottom-nav/BottomNavBar";
 import { ThemeBootstrap } from "@/widgets/theme/ThemeBootstrap";
 import { ToastProvider } from "@/shared/ui";
 import { ROUTES, getCsTopicRoute, getJobPositionRoute } from "@/shared/config/routes";
 import { COMMON_CS_TOPICS } from "@/entities/cs-topic/content";
 import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import { PortalHost } from "@rn-primitives/portal";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname, useRouter } from "expo-router";
@@ -85,7 +88,7 @@ function CustomDrawerContent({ props }: { props: object }) {
             labelStyle={{ fontWeight: "500", fontSize: 13 }}
           />
           <DrawerItem
-            label="복기 분석"
+            label="기록"
             onPress={() => router.push(`${ROUTES.INTERVIEW}/analysis`)}
             inactiveTintColor={drawerTextColor}
             activeTintColor="#6a96ff"
@@ -162,6 +165,8 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ThemeBootstrap />
+          <GuestAuthBootstrap />
+          <KeyboardVisibilityBootstrap />
           <ToastProvider>
             <View className="flex-1">
               <Drawer
@@ -244,6 +249,7 @@ export default function RootLayout() {
               <BottomNavBar />
             </View>
           </ToastProvider>
+          <PortalHost />
         </GestureHandlerRootView>
       </QueryClientProvider>
     </ErrorBoundary>

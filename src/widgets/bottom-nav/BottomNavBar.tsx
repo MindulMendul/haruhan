@@ -1,4 +1,6 @@
 import { ROUTES } from "@/shared/config/routes";
+import { useKeyboardVisibilityStore } from "@/shared/lib/keyboardVisibility";
+import { cn } from "@/shared/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -15,41 +17,45 @@ type BottomNavItem = {
     | typeof ROUTES.INTERVIEW_VOICE;
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
+  activeIcon: keyof typeof Ionicons.glyphMap;
   match: (pathname: string) => boolean;
-  featured?: boolean;
 };
 
 const NAV_ITEMS: BottomNavItem[] = [
   {
-    href: ROUTES.CS,
+    href: ROUTES.HOME,
     label: "공부",
-    icon: "book-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.CS),
+    icon: "home-outline",
+    activeIcon: "home",
+    match: (pathname) => pathname === ROUTES.HOME,
   },
   {
     href: ROUTES.INTERVIEW_PRACTICE,
     label: "문제",
     icon: "help-circle-outline",
+    activeIcon: "help-circle",
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_PRACTICE),
   },
   {
-    href: ROUTES.HOME,
-    label: "홈",
-    icon: "home",
-    match: (pathname) => pathname === ROUTES.HOME,
-    featured: true,
-  },
-  {
-    href: ROUTES.INTERVIEW_ANALYSIS,
-    label: "복기",
-    icon: "clipboard-outline",
-    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
+    href: ROUTES.CS,
+    label: "AI",
+    icon: "book-outline",
+    activeIcon: "book",
+    match: (pathname) => pathname.startsWith(ROUTES.CS),
   },
   {
     href: ROUTES.INTERVIEW_VOICE,
     label: "면접",
     icon: "mic-outline",
+    activeIcon: "mic",
     match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_VOICE),
+  },
+  {
+    href: ROUTES.INTERVIEW_ANALYSIS,
+    label: "기록",
+    icon: "clipboard-outline",
+    activeIcon: "clipboard",
+    match: (pathname) => pathname.startsWith(ROUTES.INTERVIEW_ANALYSIS),
   },
 ];
 
@@ -59,42 +65,42 @@ export function BottomNavBar() {
   const insets = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
+  const keyboardVisible = useKeyboardVisibilityStore((state) => state.visible);
+
+  const activeColor = isDark ? "#5b9aff" : "#245fdb";
+  const inactiveColor = isDark ? "#64748b" : "#94a3b8";
+
+  // 키보드가 떠 있는 동안은 입력 중인 화면에 공간을 더 내주기 위해 Nav Bar를 완전히 숨긴다.
+  if (keyboardVisible) {
+    return null;
+  }
 
   return (
     <View
-      className="border-t border-ink-200 bg-paper px-4 pt-2 dark:border-ink-700 dark:bg-ink-950"
-      style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+      className="w-full flex-row border-t border-ink-200 bg-paper dark:border-ink-800 dark:bg-ink-950"
+      style={{ paddingBottom: Math.max(insets.bottom, 8) }}
+      accessibilityRole="tablist"
     >
-      <View
-        className="mx-auto w-full max-w-[560px] flex-row items-center rounded-[28px] border border-white bg-white p-1.5 shadow-sm dark:border-ink-700 dark:bg-ink-800"
-        accessibilityRole="tablist"
-      >
+      <View className="mx-auto w-full max-w-[640px] flex-row">
         {NAV_ITEMS.map((item) => {
           const active = item.match(pathname);
           return (
             <TouchableOpacity
               key={item.href}
-              className={`min-w-0 flex-1 items-center justify-center rounded-[22px] px-0.5 ${
-                item.featured ? "-mt-6 py-3" : "py-2"
-              } ${active ? "bg-brand-600" : item.featured ? "bg-ink-900 dark:bg-brand-600" : "bg-transparent"}`}
-              activeOpacity={0.82}
+              className="min-w-0 flex-1 items-center justify-center gap-1 py-2"
+              activeOpacity={0.6}
               accessibilityRole="tab"
               accessibilityLabel={`${item.label} 탭`}
               accessibilityState={{ selected: active }}
               onPress={() => router.push(item.href)}
             >
-              <View className={`items-center justify-center ${item.featured ? "h-11 w-11 rounded-full" : ""}`}>
-                <Ionicons
-                  name={item.icon}
-                  size={item.featured ? 23 : 20}
-                  color={active || item.featured ? "#ffffff" : isDark ? "#cbd5e1" : "#64748b"}
-                />
-              </View>
+              <Ionicons name={active ? item.activeIcon : item.icon} size={22} color={active ? activeColor : inactiveColor} />
               <Text
                 numberOfLines={1}
-                className={`mt-1 text-[11px] font-extrabold ${
-                  active ? "text-white" : item.featured ? "text-white" : "text-ink-500 dark:text-ink-300"
-                }`}
+                className={cn(
+                  "text-[11px]",
+                  active ? "font-bold text-brand-600 dark:text-brand-400" : "font-medium text-ink-400 dark:text-ink-500"
+                )}
               >
                 {item.label}
               </Text>

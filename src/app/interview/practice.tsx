@@ -1,17 +1,17 @@
-import { BulletList } from "@/shared/ui/BulletList";
 import { Card } from "@/shared/ui/Card";
 import { Screen } from "@/shared/ui/Screen";
 import { Section } from "@/shared/ui/Section";
 import { ROUTES } from "@/shared/config/routes";
 import { PAGE_SEO } from "@/shared/config/seo";
-import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
+import type { InterviewPosition } from "@/entities/position/content/positions";
+import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
-function PracticeCard({ position }: { position: (typeof INTERVIEW_POSITIONS)[number] }) {
+function PracticeCard({ position }: { position: InterviewPosition }) {
   return (
     <View className="px-2">
       <Link href={`${ROUTES.INTERVIEW_PRACTICE}/${position.id}` as any} asChild>
@@ -33,6 +33,8 @@ function PracticeCard({ position }: { position: (typeof INTERVIEW_POSITIONS)[num
 }
 
 export default function InterviewPracticeScreen() {
+  const { data: positions, isLoading, isError } = usePositions();
+
   return (
     <>
       <Seo
@@ -56,36 +58,48 @@ export default function InterviewPracticeScreen() {
       <Stack.Screen options={{ title: "문제 풀이" }} />
       <Screen>
         <Section title="기술" description="JD 기반 문제와 함께 진짜 면접 분위기를 빠르게 확인해보세요.">
-          <View className="space-y-4">
-            {INTERVIEW_POSITIONS.map((position) => (
-              <PracticeCard key={position.id} position={position} />
-            ))}
-          </View>
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : isError || !positions ? (
+            <Text className="text-sm text-ink-500 dark:text-ink-300">포지션 목록을 불러오지 못했습니다.</Text>
+          ) : (
+            <View className="space-y-4">
+              {positions.map((position) => (
+                <PracticeCard key={position.id} position={position} />
+              ))}
+            </View>
+          )}
         </Section>
 
         <Section title="빠르게 풀어보는 문제 유형" description="기술/인성 질문을 자연스럽게 섞어서 연습해보세요.">
           <View className="space-y-3">
             <Card className="rounded-[28px] p-5">
               <Text className="text-sm font-extrabold text-ink-900 dark:text-white">기술 면접 질문 예시</Text>
-              <BulletList
-                className="mt-3 gap-2"
-                items={[
-                  "이 시스템에서 병목이 발생하면 가장 먼저 어디를 확인하겠습니까?",
-                  "API 성능 문제를 실제로 경험했다면 어떤 지표를 우선 보셨나요?",
-                  "이 포지션에서 중요하게 생각하는 아키텍처 결정 기준은 무엇인가요?",
-                ]}
-              />
+              <View className="mt-3 space-y-2">
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • 이 시스템에서 병목이 발생하면 가장 먼저 어디를 확인하겠습니까?
+                </Text>
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • API 성능 문제를 실제로 경험했다면 어떤 지표를 우선 보셨나요?
+                </Text>
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • 이 포지션에서 중요하게 생각하는 아키텍처 결정 기준은 무엇인가요?
+                </Text>
+              </View>
             </Card>
             <Card className="rounded-[28px] p-5">
               <Text className="text-sm font-extrabold text-ink-900 dark:text-white">인성 면접 질문 예시</Text>
-              <BulletList
-                className="mt-3 gap-2"
-                items={[
-                  "힘들었던 협업 상황을 어떻게 풀어냈나요?",
-                  "실패한 프로젝트에서 어떤 교훈을 얻었나요?",
-                  "이 회사에 합류하면 어떤 기여를 하고 싶나요?",
-                ]}
-              />
+              <View className="mt-3 space-y-2">
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • 힘들었던 협업 상황을 어떻게 풀어냈나요?
+                </Text>
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • 실패한 프로젝트에서 어떤 교훈을 얻었나요?
+                </Text>
+                <Text className="text-sm leading-6 text-ink-700 dark:text-ink-200">
+                  • 이 회사에 합류하면 어떤 기여를 하고 싶나요?
+                </Text>
+              </View>
             </Card>
           </View>
         </Section>

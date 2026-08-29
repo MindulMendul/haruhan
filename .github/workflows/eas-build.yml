@@ -1,0 +1,59 @@
+name: EAS Build (Android)
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "eas.json build profile to run"
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
+          - preview
+          - development
+
+jobs:
+  build:
+    name: EAS Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      # eas-credentials.ci-template.json(레포에 커밋된 템플릿)이
+      # $ANDROID_KEYSTORE_PASSWORD 등을 환경 변수로 참조하므로, 실제 비밀 값은
+      # 여기서만 파일/환경으로 주입되고 레포에는 절대 남지 않는다.
+      # (credentials.json은 로컬 개발자의 실제 비밀이 든 파일이라 .gitignore
+      # 대상이라, CI 전용 템플릿은 다른 이름으로 커밋해두고 빌드 직전에 복사한다.)
+      - name: Decode Android keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android-release.keystore.jks
+
+      - name: Prepare EAS local credentials file
+        run: cp eas-credentials.ci-template.json credentials.json
+
+      - name: Run EAS build
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: eas build -p android --profile ${{ inputs.profile }} --non-interactive --wait
+
+      - name: Clean up keystore
+        if: always()
+        run: rm -f android-release.keystore.jks credentials.json

@@ -2,15 +2,12 @@ import { RadarChart } from "@/shared/ui/RadarChart";
 import { Card } from "@/shared/ui/Card";
 import { Screen } from "@/shared/ui/Screen";
 import { Section } from "@/shared/ui/Section";
-import { StatRow } from "@/shared/ui/StatRow";
 import { PAGE_SEO } from "@/shared/config/seo";
-import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
-import { toPercent } from "@/shared/lib/format";
+import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
-import { clamp01, consistencyScore } from "@/shared/lib/stats";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 // 간단한 객관식 예시 데이터 (문제 탭에서 즉시 사용 가능)
 const SAMPLE_QUIZ = [
@@ -44,7 +41,8 @@ const SAMPLE_QUIZ = [
 export default function PositionPracticeScreen() {
   const params = useLocalSearchParams<{ id: string }>();
   const id = params.id || "";
-  const position = INTERVIEW_POSITIONS.find((p) => p.id === id) || INTERVIEW_POSITIONS[0];
+  const { data: positions, isLoading, isError } = usePositions();
+  const position = positions?.find((p) => p.id === id) ?? positions?.[0];
 
   // 객관식 상태 — 포지션별 MCQ가 있으면 사용, 없으면 SAMPLE_QUIZ 사용
   interface QuizResult {
@@ -61,7 +59,7 @@ export default function PositionPracticeScreen() {
   const [results, setResults] = useState<QuizResult[]>([]);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
-  const QUIZ_SOURCE = position.mcq && position.mcq.length ? position.mcq : SAMPLE_QUIZ;
+  const QUIZ_SOURCE = position?.mcq && position.mcq.length ? position.mcq : SAMPLE_QUIZ;
   const completed = quizIndex >= QUIZ_SOURCE.length;
 
   useEffect(() => {
@@ -69,6 +67,22 @@ export default function PositionPracticeScreen() {
       setQuestionStartTime(Date.now());
     }
   }, [quizIndex, completed]);
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-paper dark:bg-ink-900">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (isError || !position) {
+    return (
+      <View className="flex-1 items-center justify-center p-6 bg-paper dark:bg-ink-900">
+        <Text className="text-ink-600 dark:text-ink-300">포지션 정보를 불러오지 못했습니다.</Text>
+      </View>
+    );
+  }
 
   function selectOption(i: number) {
     if (answered || completed) return;
@@ -113,12 +127,17 @@ export default function PositionPracticeScreen() {
   const IDEAL_SECONDS = 20;
 
   const accuracy = answeredCount ? correctCount / answeredCount : 0;
-  const speed = avgSeconds ? clamp01(IDEAL_SECONDS / avgSeconds) : 0;
+  const speed = avgSeconds ? Math.min(1, IDEAL_SECONDS / avgSeconds) : 0;
   const completion = QUIZ_SOURCE.length ? answeredCount / QUIZ_SOURCE.length : 0;
   // 효율: 맞힌 문제 수를 들인 시간으로 나눈 값(빠르게 많이 맞힐수록 높음)
-  const efficiency = totalSeconds ? clamp01((correctCount * IDEAL_SECONDS) / totalSeconds) : 0;
+  const efficiency = totalSeconds ? Math.min(1, (correctCount * IDEAL_SECONDS) / totalSeconds) : 0;
   // 일관성: 응답 시간의 변동(변동계수)이 작을수록 높음
-  const consistency = consistencyScore(durations);
+  let consistency = answeredCount > 0 ? 1 : 0;
+  if (answeredCount > 1 && avgSeconds > 0) {
+    const variance = durations.reduce((sum, value) => sum + (value - avgSeconds) ** 2, 0) / answeredCount;
+    const coefficientOfVariation = Math.sqrt(variance) / avgSeconds;
+    consistency = Math.max(0, Math.min(1, 1 - coefficientOfVariation));
+  }
   // 집중력: 최장 연속 정답 비율
   let longestStreak = 0;
   let currentStreak = 0;
@@ -183,6 +202,9 @@ export default function PositionPracticeScreen() {
                         key={opt}
                         activeOpacity={0.86}
                         onPress={() => selectOption(i)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`보기: ${opt}`}
+                        accessibilityState={{ selected, disabled: answered }}
                         className={`rounded-3xl border px-4 py-4 ${optionClass}`}
                       >
                         <Text
@@ -212,6 +234,8 @@ export default function PositionPracticeScreen() {
                   <TouchableOpacity
                     onPress={nextQuiz}
                     disabled={!answered}
+                    accessibilityRole="button"
+                    accessibilityLabel="다음 문제로"
                     className="rounded-full bg-ink-100 px-4 py-2 dark:bg-ink-700"
                   >
                     <Text className="text-sm text-ink-900 dark:text-white">다음</Text>
@@ -233,6 +257,8 @@ export default function PositionPracticeScreen() {
                       setResults([]);
                       setQuestionStartTime(Date.now());
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="문제 다시 시작"
                     className="rounded-full bg-brand-600 px-4 py-2"
                   >
                     <Text className="text-sm text-white">다시 시작</Text>
@@ -261,12 +287,42 @@ export default function PositionPracticeScreen() {
                   />
 
                   <View className="mt-4 space-y-3">
-                    <StatRow label="정확도" value={toPercent(accuracy)} />
-                    <StatRow label="속도" value={`${toPercent(speed)} · 평균 ${Math.round(avgSeconds)}초`} />
-                    <StatRow label="완료도" value={toPercent(completion)} />
-                    <StatRow label="효율" value={toPercent(efficiency)} />
-                    <StatRow label="일관성" value={toPercent(consistency)} />
-                    <StatRow label="집중력" value={toPercent(focus)} />
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">정확도</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(accuracy * 100)}%
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">속도</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(speed * 100)}% · 평균 {Math.round(avgSeconds)}초
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">완료도</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(completion * 100)}%
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">효율</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(efficiency * 100)}%
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">일관성</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(consistency * 100)}%
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-ink-700 dark:text-ink-200">집중력</Text>
+                      <Text className="text-sm font-semibold text-ink-900 dark:text-white">
+                        {Math.round(focus * 100)}%
+                      </Text>
+                    </View>
                   </View>
                 </View>
 

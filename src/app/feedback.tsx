@@ -1,4 +1,4 @@
-import { Alert, AppModal, Button, Screen, Section, useToast } from "@/shared/ui";
+import { Alert, AppModal, Button, Screen, Section, Separator, Skeleton, Text as RNRText, useToast } from "@/shared/ui";
 import { PAGE_SEO, SEO_ROBOTS } from "@/shared/config/seo";
 import { Seo, buildWebPageJsonLd } from "@/shared/lib/seo";
 import React, { useState } from "react";
@@ -60,6 +60,24 @@ export default function FeedbackDemoScreen() {
 
         <Section title="Modal" description="확인/취소가 필요한 작업이나 큰 안내에 사용합니다.">
           <Button onPress={() => setModalVisible(true)}>Modal 열기</Button>
+        </Section>
+
+        <Section
+          title="React Native Reusables"
+          description="새로 도입한 shadcn 스타일 프리미티브(Text/Separator/Skeleton) 확인용입니다."
+        >
+          <View className="gap-3">
+            <RNRText variant="h2">제목 (h2)</RNRText>
+            <RNRText variant="muted">본문 아래 부가 설명에 쓰는 muted 텍스트입니다.</RNRText>
+            <Separator />
+            <View className="flex-row items-center gap-3">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <View className="flex-1 gap-2">
+                <Skeleton className="h-3 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </View>
+            </View>
+          </View>
         </Section>
 
         <AppModal

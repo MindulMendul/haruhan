@@ -1,3 +1,5 @@
+import interviewQuestionsData from "./interviewQuestions.json";
+
 export interface InterviewPosition {
   id: string;
   label: string;
@@ -12,6 +14,10 @@ export interface InterviewPosition {
   topicIds?: string[];
 }
 
+// 포지션별 "대표 질문" 100선. 지면을 차지하는 컴포넌트 로직과 분리해 데이터만
+// 별도로 관리하기 위해 JSON으로 뺐다 (src/content/cs의 contents.json과 같은 패턴).
+const INTERVIEW_QUESTIONS = interviewQuestionsData as Record<string, string[]>;
+
 export interface InterviewPositionConcept {
   term: string;
   summary: string;
@@ -25,7 +31,7 @@ export interface InterviewPositionConceptGroup {
   concepts: InterviewPositionConcept[];
 }
 
-const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
+const BASE_INTERVIEW_POSITIONS: Omit<InterviewPosition, "questions" | "conceptGroups">[] = [
   {
     id: "fe",
     label: "FE",
@@ -38,12 +44,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "Critical Rendering Path, Reflow/Repaint, Web Vitals",
       "상태 관리 범위와 서버 상태/클라이언트 상태 구분",
       "컴포넌트 설계, 디자인 시스템, 테스트 전략",
-    ],
-    questions: [
-      "React에서 리렌더링이 발생하는 조건을 설명해주세요.",
-      "CSR과 SSR 중 어떤 상황에서 무엇을 선택하나요?",
-      "LCP/INP/CLS를 개선해본 경험이 있나요?",
-      "전역 상태를 도입해야 하는 기준은 무엇인가요?",
     ],
     topicIds: [
       "web-fe-question-map",
@@ -120,12 +120,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "캐시 전략과 정합성 문제",
       "비동기 처리, 메시지 큐, 재시도/멱등성",
     ],
-    questions: [
-      "멱등성이 필요한 API는 어떤 경우인가요?",
-      "DB 인덱스가 항상 성능을 좋게 만들지는 않는 이유는 무엇인가요?",
-      "캐시 스탬피드를 어떻게 방지할 수 있나요?",
-      "JWT와 세션 기반 인증의 장단점은 무엇인가요?",
-    ],
     topicIds: ["general-cs-practical-deep-dive", "security-question-map", "authn-authz", "data-structure-question-map"],
     mcq: [
       {
@@ -188,12 +182,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "인증/인가 흐름 전체 설계",
       "DB 스키마와 화면 상태의 연결",
     ],
-    questions: [
-      "FE와 BE 사이의 책임을 어떻게 나누나요?",
-      "빠른 출시와 코드 품질 사이에서 어떻게 균형을 잡나요?",
-      "기능 하나를 처음부터 배포까지 설계해보세요.",
-      "기술 부채를 언제 갚아야 한다고 판단하나요?",
-    ],
     topicIds: ["web-fe-question-map", "general-cs-practical-deep-dive", "authn-authz", "cicd-cdn"],
     mcq: [
       {
@@ -251,12 +239,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "권한 요청 UX와 플랫폼 정책",
       "네이티브 브릿지/렌더링 성능",
       "스토어 배포, 버전 코드, 크래시 리포팅",
-    ],
-    questions: [
-      "앱 권한 요청은 언제 하는 것이 좋나요?",
-      "React Native에서 성능 병목을 어떻게 찾나요?",
-      "오프라인 상태에서 데이터를 어떻게 처리하나요?",
-      "스토어 배포 시 버전 관리는 어떻게 하나요?",
     ],
     topicIds: ["general-cs-practical-deep-dive", "authn-authz", "security-question-map"],
     mcq: [
@@ -320,12 +302,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "Terraform 같은 IaC와 변경 관리",
       "개발자 경험과 셀프서비스 플랫폼",
     ],
-    questions: [
-      "Kubernetes에서 Deployment와 Service의 역할은 무엇인가요?",
-      "Blue-Green과 Canary 배포는 어떻게 다른가요?",
-      "Terraform state는 왜 중요하고 어떻게 관리하나요?",
-      "클라우드 비용을 줄이기 위해 무엇을 확인하나요?",
-    ],
     topicIds: ["os-question-map", "general-cs-practical-deep-dive", "cicd-cdn", "security-question-map"],
     mcq: [
       {
@@ -387,12 +363,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "롤백 가능한 배포 전략",
       "로그/메트릭/트레이싱 기반 관측성",
       "운영 반복 작업 자동화",
-    ],
-    questions: [
-      "좋은 CI/CD 파이프라인에는 어떤 단계가 필요하나요?",
-      "배포 실패 시 롤백 전략은 어떻게 설계하나요?",
-      "DevOps와 SRE의 차이를 어떻게 설명하나요?",
-      "운영 자동화를 도입할 때 주의할 점은 무엇인가요?",
     ],
     topicIds: [
       "cicd-cdn",
@@ -461,12 +431,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "트래픽 증가에 대비한 용량 계획",
       "Toil 제거와 운영 자동화",
     ],
-    questions: [
-      "SLO와 SLA의 차이는 무엇인가요?",
-      "에러 버짓을 어떻게 활용하나요?",
-      "장애가 발생했을 때 어떤 순서로 대응하나요?",
-      "알람 피로를 줄이려면 어떻게 해야 하나요?",
-    ],
     topicIds: ["general-cs-practical-deep-dive", "os-question-map", "cicd-cdn"],
     mcq: [
       {
@@ -523,12 +487,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "권한 최소화와 IAM 정책 설계",
       "시크릿 관리와 키 로테이션",
       "컨테이너 이미지/의존성 취약점 관리",
-    ],
-    questions: [
-      "Shift-left security는 무엇인가요?",
-      "시크릿이 Git에 올라갔을 때 어떻게 대응하나요?",
-      "SAST와 DAST의 차이는 무엇인가요?",
-      "컨테이너 이미지를 안전하게 운영하려면 무엇을 확인하나요?",
     ],
     topicIds: ["security-question-map", "authn-authz", "general-cs-practical-deep-dive", "cicd-cdn"],
     mcq: [
@@ -594,13 +552,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "LLM hallucination 완화, 평가 세트, LLM-as-judge",
       "모델/LLM 서빙, 비용/지연 최적화, 보안 가드레일",
     ],
-    questions: [
-      "Precision과 Recall 중 무엇을 더 봐야 하는 상황인가요?",
-      "좋은 프롬프트의 구성 요소는 무엇인가요?",
-      "RAG를 설계할 때 어떤 요소를 고려하나요?",
-      "LLM 답변 품질을 어떻게 평가하고 회귀 테스트하나요?",
-      "프롬프트 인젝션이나 민감정보 유출을 어떻게 막나요?",
-    ],
     topicIds: ["ai-prompt-engineering-practical-interview", "algorithm-question-map", "data-structure-question-map"],
     mcq: [
       {
@@ -662,12 +613,6 @@ const BASE_INTERVIEW_POSITIONS: InterviewPosition[] = [
       "데이터 웨어하우스/레이크하우스 모델링",
       "데이터 품질, lineage, 재처리 전략",
       "A/B 테스트와 통계적 유의성",
-    ],
-    questions: [
-      "ETL과 ELT는 어떻게 다른가요?",
-      "데이터 파이프라인 실패 시 재처리는 어떻게 설계하나요?",
-      "A/B 테스트에서 p-value를 어떻게 해석하나요?",
-      "데이터 품질을 어떻게 모니터링하나요?",
     ],
     topicIds: ["data-structure-question-map", "algorithm-question-map", "general-cs-practical-deep-dive"],
     mcq: [
@@ -1008,5 +953,6 @@ const POSITION_CONCEPT_GROUPS: Record<string, InterviewPositionConceptGroup[]> =
 
 export const INTERVIEW_POSITIONS: InterviewPosition[] = BASE_INTERVIEW_POSITIONS.map((position) => ({
   ...position,
+  questions: INTERVIEW_QUESTIONS[position.id] ?? [],
   conceptGroups: POSITION_CONCEPT_GROUPS[position.id] ?? [],
 }));

@@ -29,7 +29,11 @@ export default function NotFoundScreen() {
 
         {/* 메인으로 돌아가기 버튼 */}
         <Link href="/" asChild>
-          <TouchableOpacity className="bg-brand-600 px-10 py-4 rounded-full shadow-md active:opacity-80">
+          <TouchableOpacity
+            accessibilityRole="link"
+            accessibilityLabel="홈으로 돌아가기"
+            className="bg-brand-600 px-10 py-4 rounded-full shadow-md active:opacity-80"
+          >
             <Text className="text-white text-base font-bold">홈으로 돌아가기</Text>
           </TouchableOpacity>
         </Link>

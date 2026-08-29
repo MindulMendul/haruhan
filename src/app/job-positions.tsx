@@ -1,16 +1,54 @@
-import { CsTopicRow } from "@/entities/cs-topic/ui/CsTopicRow";
-import { AppModal, BulletList, Button, Card, Section, useToast } from "@/shared/ui";
+import { AppModal, Button, Card, Section, useToast } from "@/shared/ui";
 import { getCsTopicRoute, getJobPositionRoute } from "@/shared/config/routes";
 import { PAGE_SEO } from "@/shared/config/seo";
-import { getTopicsByIds } from "@/entities/cs-topic/content";
-import { INTERVIEW_POSITIONS } from "@/entities/position/content/positions";
 import type { InterviewPositionConcept, InterviewPositionConceptGroup } from "@/entities/position/content/positions";
+import { useCsTopics } from "@/hooks/useCsTopics";
+import { usePositions } from "@/hooks/usePositions";
 import { Seo, buildBreadcrumbJsonLd, buildItemListJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
+import { pickByIds } from "@/shared/lib/utils";
+import type { CsTopicMeta } from "@/shared/types/cs";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useMemo, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <View className="gap-2">
+      {items.map((item) => (
+        <View key={item} className="flex-row gap-2">
+          <Text className="text-sm leading-6 text-brand-600 dark:text-brand-200">•</Text>
+          <Text className="flex-1 text-sm leading-6 text-ink-700 dark:text-ink-200">{item}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function TopicCard({ topic }: { topic: CsTopicMeta }) {
+  const router = useRouter();
+
+  return (
+    <TouchableOpacity
+      className="mb-2 rounded-2xl border border-ink-200 bg-white px-4 py-3 active:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:active:bg-ink-700"
+      activeOpacity={0.86}
+      accessibilityRole="link"
+      accessibilityLabel={`${topic.title}. ${topic.cardSummary}`}
+      accessibilityHint="관련 학습 노트 상세 문서로 이동합니다."
+      onPress={() => router.push(getCsTopicRoute(topic.id))}
+    >
+      <View className="flex-row items-start gap-3">
+        <Text className="text-xl">{topic.emoji}</Text>
+        <View className="flex-1">
+          <Text className="text-sm font-extrabold text-ink-900 dark:text-white">{topic.title}</Text>
+          <Text className="mt-1 text-xs leading-4 text-ink-500 dark:text-ink-300">{topic.cardSummary}</Text>
+        </View>
+        <Text className="text-lg text-brand-600">›</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 function ConceptCard({ concept }: { concept: InterviewPositionConcept }) {
   const router = useRouter();
@@ -66,32 +104,56 @@ export default function JobPositionsScreen() {
   const { colorScheme } = useColorScheme();
   const { position: rawPosition } = useLocalSearchParams<{ position?: string | string[] }>();
   const positionParam = Array.isArray(rawPosition) ? rawPosition[0] : rawPosition;
-  const initialPositionId = typeof positionParam === "string" && INTERVIEW_POSITIONS.some((position) => position.id === positionParam)
-    ? positionParam
-    : INTERVIEW_POSITIONS[0].id;
-  const [selectedId, setSelectedId] = useState(initialPositionId);
+
+  const { data: positions, isLoading: positionsLoading, isError: positionsError } = usePositions();
+  const { data: csTopics } = useCsTopics();
+
+  const [selectedId, setSelectedId] = useState<string | undefined>(typeof positionParam === "string" ? positionParam : undefined);
   const [positionPickerOpen, setPositionPickerOpen] = useState(false);
-  const selectedPosition = useMemo(
-    () => INTERVIEW_POSITIONS.find((position) => position.id === selectedId) ?? INTERVIEW_POSITIONS[0],
-    [selectedId]
+
+  const selectedPosition = useMemo(() => {
+    if (!positions || positions.length === 0) return undefined;
+    return positions.find((position) => position.id === selectedId) ?? positions[0];
+  }, [positions, selectedId]);
+
+  const relatedTopics = useMemo(
+    () => pickByIds(csTopics ?? [], selectedPosition?.topicIds ?? []),
+    [csTopics, selectedPosition]
   );
-  const relatedTopics = useMemo(() => getTopicsByIds(selectedPosition.topicIds ?? []), [selectedPosition.topicIds]);
-  const seoTitle = `${selectedPosition.title} 면접 질문`;
-  const seoDescription = `${selectedPosition.subtitle}. ${selectedPosition.summary}`;
-  const seoPath = getJobPositionRoute(selectedPosition.id);
+
   const floatingIconColor = colorScheme === "dark" ? "#d9e9ff" : "#ffffff";
 
   useEffect(() => {
-    if (positionParam && INTERVIEW_POSITIONS.some((position) => position.id === positionParam)) {
+    if (positionParam && positions?.some((position) => position.id === positionParam)) {
       setSelectedId(positionParam);
     }
-  }, [positionParam]);
+  }, [positionParam, positions]);
 
   function selectPosition(positionId: string) {
     setSelectedId(positionId);
     router.setParams({ position: positionId });
     setPositionPickerOpen(false);
   }
+
+  if (positionsLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-paper dark:bg-ink-900">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (positionsError || !positions || positions.length === 0 || !selectedPosition) {
+    return (
+      <View className="flex-1 items-center justify-center p-6 bg-paper dark:bg-ink-900">
+        <Text className="text-ink-600 dark:text-ink-300">포지션 정보를 불러오지 못했습니다.</Text>
+      </View>
+    );
+  }
+
+  const seoTitle = `${selectedPosition.title} 면접 질문`;
+  const seoDescription = `${selectedPosition.subtitle}. ${selectedPosition.summary}`;
+  const seoPath = getJobPositionRoute(selectedPosition.id);
 
   return (
     <>
@@ -112,7 +174,7 @@ export default function JobPositionsScreen() {
             { name: selectedPosition.title, path: seoPath },
           ]),
           buildItemListJsonLd(
-            INTERVIEW_POSITIONS.map((position) => ({
+            positions.map((position) => ({
               name: position.title,
               description: position.summary,
               path: getJobPositionRoute(position.id),
@@ -171,7 +233,7 @@ export default function JobPositionsScreen() {
                   이 포지션에서 이어서 보면 좋은 노트입니다. 탭하면 상세 문서로 이동합니다.
                 </Text>
                 {relatedTopics.map((topic) => (
-                  <CsTopicRow key={topic.id} topic={topic} />
+                  <TopicCard key={topic.id} topic={topic} />
                 ))}
               </View>
             </Section>
@@ -213,7 +275,7 @@ export default function JobPositionsScreen() {
           onClose={() => setPositionPickerOpen(false)}
         >
           <View className="gap-2">
-            {INTERVIEW_POSITIONS.map((position) => {
+            {positions.map((position) => {
               const selected = position.id === selectedPosition.id;
               return (
                 <TouchableOpacity
@@ -247,4 +309,3 @@ export default function JobPositionsScreen() {
     </>
   );
 }
-
