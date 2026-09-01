@@ -41,6 +41,7 @@ Thumbs.db
 credentials.json
 credentials/
 *.pem
+google-service-account.json
 
 # typescript
 *.tsbuildinfo

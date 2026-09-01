@@ -1,0 +1,52 @@
+name: EAS Submit (Android)
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "eas.json submit profile to run"
+        required: true
+        default: closed-test
+        type: choice
+        options:
+          - closed-test
+          - production
+
+jobs:
+  submit:
+    name: EAS Submit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli@22.6.0
+
+      - name: Decode Google Play service account key
+        run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY_BASE64 }}" | base64 -d > google-service-account.json
+
+      # --latest는 지정한 프로필로 EAS에 업로드된 가장 최근의 완료된
+      # 빌드를 그대로 제출한다. 사람이 eas-build.yml을 먼저 수동으로
+      # 돌려 빌드를 확인한 뒤, 이 워크플로우도 수동으로 돌려 실제 제출
+      # 여부를 별도로 결정하게 한다(빌드 성공 시 자동 제출 안 함).
+      - name: Run EAS submit
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas submit -p android --profile ${{ inputs.profile }} --latest --non-interactive
+
+      - name: Clean up service account key
+        if: always()
+        run: rm -f google-service-account.json
