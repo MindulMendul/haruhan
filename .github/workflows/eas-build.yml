@@ -44,8 +44,20 @@ jobs:
       - name: Decode Android keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android-release.keystore.jks
 
-      - name: Debug keystore checksum
-        run: sha256sum android-release.keystore.jks
+      # 체크섬 확인 결과 ANDROID_KEYSTORE_BASE64는 원본과 완전히 일치했는데도
+      # "alias does not exist"가 계속 나서, keytool로 실제 시크릿 값
+      # (ANDROID_KEYSTORE_PASSWORD/ANDROID_KEY_ALIAS)이 이 파일에서 그대로
+      # 통하는지 EAS 원격 빌드를 기다리지 않고 여기서 먼저 확인한다.
+      - name: Debug keystore alias/password
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          echo "ANDROID_KEY_ALIAS length: ${#ANDROID_KEY_ALIAS}"
+          keytool -list -v \
+            -keystore android-release.keystore.jks \
+            -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+            -alias "$ANDROID_KEY_ALIAS"
 
       - name: Prepare EAS local credentials file
         run: cp eas-credentials.ci-template.json credentials.json
