@@ -15,7 +15,6 @@
       }
     },
     "production": {
-      "credentialsSource": "local",
       "android": {
         "buildType": "app-bundle",
         "credentialsSource": "local"
