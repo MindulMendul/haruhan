@@ -36,38 +36,41 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli@22.6.0
 
-      # eas-credentials.ci-template.json(레포에 커밋된 템플릿)이
-      # $ANDROID_KEYSTORE_PASSWORD 등을 환경 변수로 참조하므로, 실제 비밀 값은
-      # 여기서만 파일/환경으로 주입되고 레포에는 절대 남지 않는다.
-      # (credentials.json은 로컬 개발자의 실제 비밀이 든 파일이라 .gitignore
-      # 대상이라, CI 전용 템플릿은 다른 이름으로 커밋해두고 빌드 직전에 복사한다.)
       - name: Decode Android keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android-release.keystore.jks
 
-      # 체크섬 확인 결과 ANDROID_KEYSTORE_BASE64는 원본과 완전히 일치했는데도
-      # "alias does not exist"가 계속 나서, keytool로 실제 시크릿 값
-      # (ANDROID_KEYSTORE_PASSWORD/ANDROID_KEY_ALIAS)이 이 파일에서 그대로
-      # 통하는지 EAS 원격 빌드를 기다리지 않고 여기서 먼저 확인한다.
-      - name: Debug keystore alias/password
+      # eas-cli는 credentials.json 안의 $VAR 같은 환경 변수 치환 문법을 지원하지
+      # 않는다(공식 문서에 CI용으로는 실제 값이 채워진 credentials.json 전체를
+      # base64로 인코딩해서 쓰라고 되어 있음). 그래서 값을 그대로 파일에 박아넣는
+      # 대신, 시크릿을 여기서 keytool로 먼저 검증해 빠르게 실패하도록 한다.
+      - name: Verify keystore credentials
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          echo "ANDROID_KEY_ALIAS length: ${#ANDROID_KEY_ALIAS}"
           keytool -list -v \
             -keystore android-release.keystore.jks \
             -storepass "$ANDROID_KEYSTORE_PASSWORD" \
-            -alias "$ANDROID_KEY_ALIAS"
+            -alias "$ANDROID_KEY_ALIAS" > /dev/null
 
-      - name: Prepare EAS local credentials file
-        run: cp eas-credentials.ci-template.json credentials.json
+      # credentials.json 자체는 실제 비밀값이 든 파일이라 레포에 커밋하지 않고
+      # (.gitignore 대상), 빌드 직전에 시크릿 값으로 직접 생성한다.
+      - name: Generate EAS local credentials file
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          jq -n \
+            --arg keystorePassword "$ANDROID_KEYSTORE_PASSWORD" \
+            --arg keyAlias "$ANDROID_KEY_ALIAS" \
+            --arg keyPassword "$ANDROID_KEY_PASSWORD" \
+            '{android: {keystore: {keystorePath: "android-release.keystore.jks", keystorePassword: $keystorePassword, keyAlias: $keyAlias, keyPassword: $keyPassword}}}' \
+            > credentials.json
 
       - name: Run EAS build
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: eas build -p android --profile ${{ inputs.profile }} --non-interactive --wait
 
       - name: Clean up keystore
