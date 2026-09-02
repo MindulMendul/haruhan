@@ -31,21 +31,28 @@ export default function CsIndexScreen() {
     const prompt = input.trim();
     if (!prompt || chat.isPending) return;
 
+    // AI가 사용자의 이전 답변을 참고해 후속 질문을 구성할 수 있도록, 지금까지의
+    // 대화를 함께 전달한다.
+    const history = messages.map(({ role, content }) => ({ role, content }));
+
     setMessages((prev) => [...prev, { id: nextMessageId++, role: "user", content: prompt }]);
     setInput("");
 
-    chat.mutate(prompt, {
-      onSuccess: (result) => {
-        setMessages((prev) => [...prev, { id: nextMessageId++, role: "assistant", content: result }]);
-      },
-      onError: () => {
-        toast({
-          title: "응답을 받지 못했습니다",
-          description: "잠시 후 다시 시도해 주세요.",
-          variant: "destructive",
-        });
-      },
-    });
+    chat.mutate(
+      { prompt, history },
+      {
+        onSuccess: (result) => {
+          setMessages((prev) => [...prev, { id: nextMessageId++, role: "assistant", content: result }]);
+        },
+        onError: () => {
+          toast({
+            title: "응답을 받지 못했습니다",
+            description: "잠시 후 다시 시도해 주세요.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
   };
 
   return (
