@@ -2,7 +2,7 @@
   "expo": {
     "name": "HaruHan",
     "slug": "HaruHan",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/haruhan-icon.png",
     "scheme": "haruhan",
@@ -18,7 +18,7 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "mindul.haruhan",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": ["INTERNET"]
     },
     "web": {
