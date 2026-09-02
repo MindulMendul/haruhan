@@ -153,4 +153,24 @@ describe("seo helpers", () => {
       ])
     );
   });
+
+  it("Seo 컴포넌트는 keywords가 없으면 keywords 메타 태그를 생략한다", () => {
+    const element = Seo({ title: "설정", description: "설정 화면", path: "/settings" });
+    const children = getSeoChildren(element);
+
+    expect(children.some((child) => typeof child === "object" && child && "props" in child && (child as { props?: { name?: string } }).props?.name === "keywords")).toBe(false);
+  });
+
+  it("Seo 컴포넌트는 jsonLd로 단일 객체를 전달해도 script 하나로 렌더링한다", () => {
+    const element = Seo({
+      title: "공통 CS",
+      description: "CS 면접 노트",
+      path: "/cs",
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: "공통 CS" },
+    });
+    const children = getSeoChildren(element);
+    const scripts = children.filter((child) => typeof child === "object" && child && "type" in child && child.type === "script");
+
+    expect(scripts).toHaveLength(1);
+  });
 });
