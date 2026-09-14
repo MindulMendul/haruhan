@@ -86,6 +86,9 @@ importers:
       expo-router:
         specifier: ~6.0.24
         version: 6.0.24(73212fb7ec7dca8dfd5b7250dc4b67e1)
+      expo-speech-recognition:
+        specifier: ^3.1.3
+        version: 3.1.3(expo@54.0.37)(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.84.1(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-splash-screen:
         specifier: ~31.0.13
         version: 31.0.13(expo@54.0.37)(typescript@5.9.3)
@@ -971,7 +974,7 @@ packages:
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
 
   '@expo/cli@54.0.27':
     resolution: {integrity: sha512-BxKOr6e8wmUwhGSyEVKY+CHWgS3Cre9ibgx1QWcdCenKTVKAz62qGmYL51q0lCcKg6vQY+4Usw9RK5Il4ZFaIA==}
@@ -4027,6 +4030,13 @@ packages:
   expo-server@1.0.7:
     resolution: {integrity: sha512-mcmyML3oXcqFUXUxtdtCL1O00ztNI2v76d+MdniXRUgHNxIcHZ05zo+DqBaOOT6LQnPk4vA4YHqQl7iGUfRb3g==}
     engines: {node: '>=20.16.0'}
+
+  expo-speech-recognition@3.1.3:
+    resolution: {integrity: sha512-vluXqggfY2AJcazYITvnV6YSE2rVe5SId5TpdjMC/m6JPUgHCOODrcHJtAQF6OUYl4f2T7oZSceGw6fJCC86Xw==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
 
   expo-splash-screen@31.0.13:
     resolution: {integrity: sha512-1epJLC1cDlwwj089R2h8cxaU5uk4ONVAC+vzGiTZH4YARQhL4Stlz1MbR6yAS173GMosvkE6CAeihR7oIbCkDA==}
@@ -9440,9 +9450,7 @@ snapshots:
       metro-runtime: 0.83.8
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 
@@ -11751,6 +11759,12 @@ snapshots:
       - supports-color
 
   expo-server@1.0.7: {}
+
+  expo-speech-recognition@3.1.3(expo@54.0.37)(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.84.1(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
+    dependencies:
+      expo: 54.0.37(@babel/core@7.29.7)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(graphql@16.8.1)(react-native-webview@13.15.0(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.84.1(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.84.1(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.84.1(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0)
 
   expo-splash-screen@31.0.13(expo@54.0.37)(typescript@5.9.3):
     dependencies:

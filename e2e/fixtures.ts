@@ -65,25 +65,39 @@ export async function mockNetworkFailure(page: Page) {
 /**
  * 브라우저의 Web Speech API를 가짜로 대체해서, 실제 마이크/네트워크 음성 인식 없이도
  * 보이스 인터뷰 화면의 전체 플로우(녹음 시작 → 인식 결과 → 종료)를 결정적으로 테스트한다.
+ *
+ * 화면은 expo-speech-recognition을 통해 이 API를 사용하는데, 그 웹 구현체는
+ * (onresult= 같은 프로퍼티 콜백이 아니라) addEventListener/removeEventListener로
+ * 이벤트를 구독하고, result 이벤트의 event.results[event.resultIndex]에 달린
+ * isFinal 값을 읽어 최종/중간 결과를 구분한다. 그래서 이 가짜 구현도 EventTarget을
+ * 상속해 같은 모양의 이벤트를 내보내야 한다.
  */
 export async function mockSpeechRecognition(page: Page, transcript = "테스트 답변입니다.") {
   await page.addInitScript((fakeTranscript) => {
-    class FakeSpeechRecognition {
+    class FakeSpeechRecognition extends EventTarget {
       continuous = true;
       interimResults = true;
       lang = "";
-      onresult: ((event: unknown) => void) | null = null;
-      onend: (() => void) | null = null;
-      onerror: ((event: unknown) => void) | null = null;
+      maxAlternatives = 1;
 
       start() {
         setTimeout(() => {
-          this.onresult?.({ results: [[{ transcript: fakeTranscript }]] });
+          const event = new Event("result");
+          const resultGroup = Object.assign([{ transcript: fakeTranscript, confidence: 0.9 }], {
+            isFinal: true,
+          });
+          Object.defineProperty(event, "results", { value: [resultGroup] });
+          Object.defineProperty(event, "resultIndex", { value: 0 });
+          this.dispatchEvent(event);
         }, 50);
       }
 
       stop() {
-        this.onend?.();
+        this.dispatchEvent(new Event("end"));
+      }
+
+      abort() {
+        this.dispatchEvent(new Event("end"));
       }
     }
 
