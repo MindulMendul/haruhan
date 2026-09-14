@@ -8,6 +8,10 @@ import { PAGE_SEO } from "@/shared/config/seo";
 import { formatDuration, toPercent } from "@/shared/lib/format";
 import { Seo, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/shared/lib/seo";
 import { clamp01, consistencyScore } from "@/shared/lib/stats";
+import {
+  ExpoSpeechRecognitionModule,
+  useSpeechRecognitionEvent,
+} from "expo-speech-recognition";
 import { Stack } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
@@ -37,114 +41,104 @@ export default function InterviewVoiceScreen() {
 
   const addResponse = useCallback((r: VoiceResponse) => setResponses((prev) => [...prev, r]), []);
   const resetResponses = useCallback(() => setResponses([]), []);
-  const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<any>(null);
   // 사용자가 계속 듣기를 원하는지(stop을 누르지 않았는지) 추적
   const shouldListenRef = useRef(false);
   // network 등 일시적 오류로 인한 자동 재시작 횟수
   const retryRef = useRef(0);
+  // 이번 발화 세션에서 확정(final)된 구간들을 이어붙인 텍스트.
+  // expo-speech-recognition은 continuous 모드에서도(특히 Android) 결과를
+  // 세그먼트 단위로 나눠서 보내므로, 원문 Web Speech API처럼 event.results
+  // 전체를 매번 재조립할 수 없어 직접 누적한다.
+  const committedRef = useRef("");
   const [elapsed, setElapsed] = useState(0);
 
   const MAX_RETRIES = 3;
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setSupported(false);
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "ko-KR";
-
-    recognition.onresult = (event: any) => {
-      try {
-        // event.results는 세션 누적 목록이므로, 매번 전체를 다시 조립한다.
-        // (덧붙이면 같은 발화가 중복으로 쌓인다)
-        let full = "";
-        for (let i = 0; i < event.results.length; i++) {
-          const r = event.results[i];
-          if (!r || !r[0]) continue;
-          full += r[0].transcript;
-        }
-        full = full.trim();
-        transcriptRef.current = full;
-        setTranscript(full);
-        // 정상 인식이 들어오면 일시적 오류 카운터를 초기화하고 에러 메시지를 지운다.
-        retryRef.current = 0;
-        setError(null);
-      } catch (e) {
-        // ignore parsing errors
-      }
-    };
-
-    recognition.onend = () => {
-      // 사용자가 멈추지 않았는데 세션이 끝났다면(크롬은 주기적으로 끊는다) 자동 재개한다.
-      if (shouldListenRef.current && retryRef.current <= MAX_RETRIES) {
-        try {
-          recognition.start();
-          return;
-        } catch (e) {
-          // 재시작 실패 시 아래로 떨어져 듣기 상태를 정리한다.
-        }
-      }
-      setListening(false);
-    };
-
-    recognition.onerror = (event: any) => {
-      const code = event?.error;
-      // 무음/중단은 오류로 취급하지 않고, onend의 자동 재개에 맡긴다.
-      if (code === "no-speech" || code === "aborted") {
-        return;
-      }
-      // 네트워크 오류는 일시적인 경우가 많아 몇 번까지는 조용히 재시도한다.
-      if (code === "network") {
-        retryRef.current += 1;
-        if (retryRef.current <= MAX_RETRIES) {
-          return;
-        }
-        shouldListenRef.current = false;
-        setError("음성 인식 서버 연결이 불안정합니다. 네트워크 상태를 확인하고 잠시 후 다시 시도해 주세요.");
-        setListening(false);
-        return;
-      }
-      if (code === "not-allowed" || code === "service-not-allowed") {
-        shouldListenRef.current = false;
-        setError("마이크 권한이 필요합니다. 브라우저에서 마이크 사용을 허용해 주세요.");
-        setListening(false);
-        return;
-      }
-      shouldListenRef.current = false;
-      setError("음성 인식 중 오류가 발생했습니다.");
-      setListening(false);
-    };
-
-    recognitionRef.current = recognition;
-    setSupported(true);
-
+    setSupported(ExpoSpeechRecognitionModule.isRecognitionAvailable());
     return () => {
       shouldListenRef.current = false;
-      recognition.stop?.();
+      try {
+        ExpoSpeechRecognitionModule.abort();
+      } catch (e) {
+        // ignore
+      }
       clearInterval(intervalRef.current);
     };
   }, []);
 
+  useSpeechRecognitionEvent("result", (event) => {
+    const alt = event.results[0];
+    const text = alt?.transcript?.trim();
+    if (!text) return;
+
+    if (event.isFinal) {
+      committedRef.current = committedRef.current ? `${committedRef.current} ${text}` : text;
+    }
+    const full = event.isFinal
+      ? committedRef.current
+      : committedRef.current
+        ? `${committedRef.current} ${text}`
+        : text;
+
+    transcriptRef.current = full;
+    setTranscript(full);
+    // 정상 인식이 들어오면 일시적 오류 카운터를 초기화하고 에러 메시지를 지운다.
+    retryRef.current = 0;
+    setError(null);
+  });
+
+  useSpeechRecognitionEvent("end", () => {
+    // 사용자가 멈추지 않았는데 세션이 끝났다면 자동 재개한다.
+    if (shouldListenRef.current && retryRef.current <= MAX_RETRIES) {
+      try {
+        ExpoSpeechRecognitionModule.start({ lang: "ko-KR", interimResults: true, continuous: true });
+        return;
+      } catch (e) {
+        // 재시작 실패 시 아래로 떨어져 듣기 상태를 정리한다.
+      }
+    }
+    setListening(false);
+  });
+
+  useSpeechRecognitionEvent("error", (event) => {
+    const code = event.error;
+    // 무음/중단은 오류로 취급하지 않고, end의 자동 재개에 맡긴다.
+    if (code === "no-speech" || code === "aborted") {
+      return;
+    }
+    // 네트워크 오류는 일시적인 경우가 많아 몇 번까지는 조용히 재시도한다.
+    if (code === "network") {
+      retryRef.current += 1;
+      if (retryRef.current <= MAX_RETRIES) {
+        return;
+      }
+      shouldListenRef.current = false;
+      setError("음성 인식 서버 연결이 불안정합니다. 네트워크 상태를 확인하고 잠시 후 다시 시도해 주세요.");
+      setListening(false);
+      return;
+    }
+    if (code === "not-allowed" || code === "service-not-allowed") {
+      shouldListenRef.current = false;
+      setError("마이크/음성 인식 권한이 필요합니다. 설정에서 권한을 허용해 주세요.");
+      setListening(false);
+      return;
+    }
+    shouldListenRef.current = false;
+    setError("음성 인식 중 오류가 발생했습니다.");
+    setListening(false);
+  });
+
   // stop listening only; do NOT auto-advance. user will press '다음' to save & advance.
   const stopAndNext = useCallback(() => {
-    if (!recognitionRef.current) return;
     if (!listening) return;
 
     // 사용자가 직접 멈췄으므로 자동 재개를 막는다.
     shouldListenRef.current = false;
 
     try {
-      recognitionRef.current.stop();
+      ExpoSpeechRecognitionModule.stop();
     } catch (e) {
       // ignore
     }
@@ -182,16 +176,24 @@ export default function InterviewVoiceScreen() {
     });
   }, [transcript, currentIndex, elapsed, addResponse]);
 
-  const startListening = useCallback(() => {
-    if (!recognitionRef.current) return;
+  const startListening = useCallback(async () => {
+    if (!supported) return;
     try {
       setError(null);
       setTranscript("");
       transcriptRef.current = "";
+      committedRef.current = "";
       setRecorded(false);
+
+      const permission = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+      if (!permission.granted) {
+        setError("마이크/음성 인식 권한이 필요합니다. 설정에서 권한을 허용해 주세요.");
+        return;
+      }
+
       shouldListenRef.current = true;
       retryRef.current = 0;
-      recognitionRef.current.start();
+      ExpoSpeechRecognitionModule.start({ lang: "ko-KR", interimResults: true, continuous: true });
       setListening(true);
       setElapsed(0);
       clearInterval(intervalRef.current);
@@ -201,7 +203,7 @@ export default function InterviewVoiceScreen() {
     } catch (e) {
       setError("음성 인식 시작에 실패했습니다.");
     }
-  }, []);
+  }, [supported]);
 
   const answeredCount = responses.length;
   const durations = responses.map((item: VoiceResponse) => item.duration);
@@ -311,7 +313,8 @@ export default function InterviewVoiceScreen() {
                 음성 인식이 지원되지 않습니다.
               </Text>
               <Text className="mt-2 text-sm leading-6 text-ink-700 dark:text-ink-200">
-                Chrome 기반 웹 브라우저에서만 동작합니다. 네이티브 앱에서는 다음 버전에서 지원을 확장할 수 있습니다.
+                이 기기에서는 음성 인식을 사용할 수 없습니다. 시스템 설정에서 음성 인식(iOS: Siri 및 받아쓰기, Android:
+                음성 인식 서비스)이 활성화되어 있는지 확인해 주세요.
               </Text>
             </Card>
           ) : null}

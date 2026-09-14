@@ -40,7 +40,14 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "하루한이 음성 인터뷰 연습을 위해 마이크를 사용하도록 허용해주세요.",
+          "speechRecognitionPermission": "하루한이 음성 인터뷰 연습을 위해 음성 인식을 사용하도록 허용해주세요."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
